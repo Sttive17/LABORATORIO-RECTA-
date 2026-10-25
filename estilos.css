@@ -1,0 +1,104 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.contenedor {
+    background: white;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.instruccion {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.seccion-entrada {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100px;
+    padding: 8px;
+    margin: 5px 10px 15px 5px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+#errores {
+    background: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: none;
+}
+
+#resultados {
+    background: #e8f5e9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+#resultados h3 {
+    color: #2e7d32;
+    margin-top: 0;
+}
+
+.grafica {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+}
+
+.grafica h3 {
+    text-align: center;
+    color: #555;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    background: #fafafa;
+    border: 1px solid #ccc;
+}
