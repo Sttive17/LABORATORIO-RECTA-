@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de la Línea Recta - Feria STEAM</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="contenedor">
+        <h1>📐 Laboratorio de la Línea Recta</h1>
+        <p class="instruccion">Ingresa las coordenadas de dos puntos y calcularemos todo automáticamente</p>
+        
+        <div class="seccion-entrada">
+            <h3>📍 Punto A</h3>
+            X₁: <input type="number" id="x1" step="any">
+            Y₁: <input type="number" id="y1" step="any">
+            
+            <h3>📍 Punto B</h3>
+            X₂: <input type="number" id="x2" step="any">
+            Y₂: <input type="number" id="y2" step="any">
+            
+            <br><br>
+            <button onclick="calcular()">✨ Calcular</button>
+            <button onclick="limpiar()">🗑️ Limpiar</button>
+        </div>
+
+        <div id="errores"></div>
+        <div id="resultados"></div>
+
+        <div class="grafica">
+            <h3>📈 Representación Gráfica</h3>
+            <canvas id="plano" width="500" height="500"></canvas>
+        </div>
+    </div>
+
+    <script src="codigo.js"></script>
+</body>
+</html>
