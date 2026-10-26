@@ -1,8 +1,9 @@
 /**
  * Laboratorio de la Elipse - Actividad 2: Analiza una Ecuación
+ * Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
  * Permite ingresar denominadores y centro (con fracciones o decimales),
  * o coeficientes de la forma Ax² + By² = C, deduce orientación,
- * muestra elementos exactos y aproximados, y dibuja en canvas con autoescala.
+ * muestra elementos exactos y aproximados con un banco de 11 ejemplos completos.
  */
 
 var UIAnaliza = (function () {
@@ -11,26 +12,73 @@ var UIAnaliza = (function () {
     var graficador = null;
     var modoForma = 'canonica'; // 'canonica' o 'general'
 
+    // Banco completo de 11 ejemplos representativos del libro de matemáticas
     var ejemplosAnaliza = [
         {
-            nombre: 'Ejemplo 1 (Horizontal)',
+            nombre: 'Ejemplo 1 del libro (Horizontal)',
+            modo: 'canonica',
             h: '2', k: '-3', denX: '9', denY: '5',
-            desc: '(x−2)²/9 + (y+3)²/5 = 1'
+            desc: '(x−2)²/9 + (y+3)²/5 = 1  →  a²=9, b²=5, c²=4 (c=2)'
         },
         {
-            nombre: 'Ejercicio 2b (Vertical)',
+            nombre: 'Ejemplo 2 del libro (Vertical)',
+            modo: 'canonica',
+            h: '-2', k: '5', denX: '16', denY: '25',
+            desc: '(x+2)²/16 + (y−5)²/25 = 1  →  a²=25, b²=16, c²=9 (c=3)'
+        },
+        {
+            nombre: 'Ejercicio 2a (Origen Horizontal)',
+            modo: 'canonica',
+            h: '0', k: '0', denX: '36', denY: '4',
+            desc: 'x²/36 + y²/4 = 1  →  a=6, b=2, c=√32≈5.66'
+        },
+        {
+            nombre: 'Ejercicio 2b (Vertical en (-2, -1))',
+            modo: 'canonica',
             h: '-2', k: '-1', denX: '25', denY: '100',
-            desc: '(x+2)²/25 + (y+1)²/100 = 1'
+            desc: '(x+2)²/25 + (y+1)²/100 = 1  →  a=10, b=5, c=√75≈8.66'
         },
         {
-            nombre: 'Ejercicio 3c (Fracciones en centro)',
+            nombre: 'Ejercicio 3c (Centro Fraccionario)',
+            modo: 'canonica',
             h: '3/2', k: '-1/2', denX: '121', denY: '81',
-            desc: '(x − 3/2)²/121 + (y + 1/2)²/81 = 1'
+            desc: '(x − 3/2)²/121 + (y + 1/2)²/81 = 1  →  a=11, b=9'
         },
         {
-            nombre: 'Caso Especial Circunferencia',
-            h: '0', k: '0', denX: '16', denY: '16',
-            desc: 'x²/16 + y²/16 = 1 (Radio = 4)'
+            nombre: 'Ejercicio 4a (Horizontal canónica)',
+            modo: 'canonica',
+            h: '0', k: '0', denX: '16', denY: '9',
+            desc: 'x²/16 + y²/9 = 1  →  a=4, b=3, c=√7≈2.65'
+        },
+        {
+            nombre: 'Caso Especial Circunferencia (a = b)',
+            modo: 'canonica',
+            h: '0', k: '0', denX: '25', denY: '25',
+            desc: 'x²/25 + y²/25 = 1 (Radio r = 5, c = 0, e = 0)'
+        },
+        {
+            nombre: 'Forma General 1 (4x² + 9y² = 36)',
+            modo: 'general',
+            A: '4', B: '9', C: '36',
+            desc: '4x² + 9y² = 36  →  x²/9 + y²/4 = 1 (a=3, b=2, horizontal)'
+        },
+        {
+            nombre: 'Forma General 2 (16x² + 25y² = 400)',
+            modo: 'general',
+            A: '16', B: '25', C: '400',
+            desc: '16x² + 25y² = 400  →  x²/25 + y²/16 = 1 (a=5, b=4, horizontal)'
+        },
+        {
+            nombre: 'Forma General 3 (9x² + 4y² = 36)',
+            modo: 'general',
+            A: '9', B: '4', C: '36',
+            desc: '9x² + 4y² = 36  →  x²/4 + y²/9 = 1 (a=3, b=2, vertical)'
+        },
+        {
+            nombre: 'Forma General 4 (25x² + 169y² = 4225)',
+            modo: 'general',
+            A: '25', B: '169', C: '4225',
+            desc: '25x² + 169y² = 4225  →  x²/169 + y²/25 = 1 (a=13, b=5, horizontal)'
         }
     ];
     var indiceEjemplo = 0;
@@ -45,7 +93,7 @@ var UIAnaliza = (function () {
         if (btnCalcular) btnCalcular.addEventListener('click', procesarAnalisis);
 
         var btnEjemplo = document.getElementById('btnEjemploAnaliza');
-        if (btnEjemplo) btnEjemplo.addEventListener('click', cargarEjemplo);
+        if (btnEjemplo) btnEjemplo.addEventListener('click', cargarSiguienteEjemplo);
 
         var btnLimpiar = document.getElementById('btnLimpiarAnaliza');
         if (btnLimpiar) btnLimpiar.addEventListener('click', limpiarCampos);
@@ -61,16 +109,16 @@ var UIAnaliza = (function () {
                 modoForma = 'canonica';
                 tabCanonica.classList.add('seleccionado');
                 tabGeneral.classList.remove('seleccionado');
-                secCanonica.style.display = 'block';
-                secGeneral.style.display = 'none';
+                if (secCanonica) secCanonica.style.display = 'block';
+                if (secGeneral) secGeneral.style.display = 'none';
             });
 
             tabGeneral.addEventListener('click', function () {
                 modoForma = 'general';
                 tabGeneral.classList.add('seleccionado');
                 tabCanonica.classList.remove('seleccionado');
-                secCanonica.style.display = 'none';
-                secGeneral.style.display = 'block';
+                if (secCanonica) secCanonica.style.display = 'none';
+                if (secGeneral) secGeneral.style.display = 'block';
             });
         }
 
@@ -80,15 +128,28 @@ var UIAnaliza = (function () {
             var el = document.getElementById(id);
             if (el) {
                 el.addEventListener('change', function () {
-                    if (window.elipseAnalizadaActual) {
-                        graficador.dibujar(window.elipseAnalizadaActual, obtenerToggles());
-                    }
+                    redibujar();
                 });
             }
         });
 
-        // Ejecutar primer ejemplo por defecto
-        cargarEjemplo();
+        // Selector desplegable de ejemplos
+        var selEjemplos = document.getElementById('selectEjemplosAnaliza');
+        if (selEjemplos) {
+            selEjemplos.innerHTML = '';
+            ejemplosAnaliza.forEach(function (ej, idx) {
+                var opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = (idx + 1) + '. ' + ej.nombre;
+                selEjemplos.appendChild(opt);
+            });
+            selEjemplos.addEventListener('change', function () {
+                cargarEjemploPorIndice(parseInt(selEjemplos.value, 10));
+            });
+        }
+
+        // Ejecutar primer ejemplo por defecto para que la gráfica siempre esté viva
+        cargarEjemploPorIndice(0);
     }
 
     function procesarAnalisis() {
@@ -194,6 +255,12 @@ var UIAnaliza = (function () {
         var panel = document.getElementById('panelResultadosAnaliza');
         if (panel) panel.style.display = 'block';
 
+        // Renderizar desarrollo paso a paso
+        var cajaPasos = document.getElementById('cajaPasosAnaliza');
+        if (cajaPasos && res.pasos) {
+            cajaPasos.innerHTML = '<strong>📐 Procedimiento Matemático Detallado:</strong><br><br>' + res.pasos.join('<br>');
+        }
+
         graficador.dibujar(res, obtenerToggles());
     }
 
@@ -213,21 +280,38 @@ var UIAnaliza = (function () {
         };
     }
 
-    function cargarEjemplo() {
-        var ej = ejemplosAnaliza[indiceEjemplo];
-        indiceEjemplo = (indiceEjemplo + 1) % ejemplosAnaliza.length;
+    function cargarEjemploPorIndice(idx) {
+        if (idx < 0 || idx >= ejemplosAnaliza.length) return;
+        indiceEjemplo = idx;
+        var ej = ejemplosAnaliza[idx];
 
-        // Volver a modo canónica si estaba en general
-        var tabCanonica = document.getElementById('tabFormaCanonica');
-        if (tabCanonica) tabCanonica.click();
+        if (ej.modo === 'general') {
+            var tabGeneral = document.getElementById('tabFormaGeneral');
+            if (tabGeneral) tabGeneral.click();
 
-        document.getElementById('inputAnalizaH').value = ej.h;
-        document.getElementById('inputAnalizaK').value = ej.k;
-        document.getElementById('inputAnalizaDenX').value = ej.denX;
-        document.getElementById('inputAnalizaDenY').value = ej.denY;
+            document.getElementById('inputGeneralA').value = ej.A;
+            document.getElementById('inputGeneralB').value = ej.B;
+            document.getElementById('inputGeneralC').value = ej.C;
+        } else {
+            var tabCanonica = document.getElementById('tabFormaCanonica');
+            if (tabCanonica) tabCanonica.click();
+
+            document.getElementById('inputAnalizaH').value = ej.h;
+            document.getElementById('inputAnalizaK').value = ej.k;
+            document.getElementById('inputAnalizaDenX').value = ej.denX;
+            document.getElementById('inputAnalizaDenY').value = ej.denY;
+        }
+
+        var sel = document.getElementById('selectEjemplosAnaliza');
+        if (sel) sel.value = idx;
 
         procesarAnalisis();
         mostrarMensajeMati('Cargado el ' + ej.nombre + ': ' + ej.desc);
+    }
+
+    function cargarSiguienteEjemplo() {
+        var prox = (indiceEjemplo + 1) % ejemplosAnaliza.length;
+        cargarEjemploPorIndice(prox);
     }
 
     function limpiarCampos() {
@@ -241,7 +325,7 @@ var UIAnaliza = (function () {
 
         ocultarAlerta();
         if (graficador) graficador.dibujar(null);
-        mostrarMensajeMati('Ingresa los denominadores para descubrir todos los secretos de la elipse 🔍');
+        mostrarMensajeMati('Ingresa los valores de la ecuación o elige un ejemplo del libro para analizar 🔬');
     }
 
     function mostrarError(msg) {
@@ -282,6 +366,7 @@ var UIAnaliza = (function () {
     return {
         inicializar: inicializar,
         procesarAnalisis: procesarAnalisis,
-        redibujar: redibujar
+        redibujar: redibujar,
+        cargarEjemploPorIndice: cargarEjemploPorIndice
     };
 })();

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Laboratorio de la Elipse - Feria STEAM+ 2026</title>
     <!-- Hojas de estilo modulares con version para evitar cache -->
-    <link rel="stylesheet" href="css/base.css?v=6">
-    <link rel="stylesheet" href="css/animaciones.css?v=6">
-    <link rel="stylesheet" href="css/elipse.css?v=6">
+    <link rel="stylesheet" href="css/base.css?v=7">
+    <link rel="stylesheet" href="css/animaciones.css?v=7">
+    <link rel="stylesheet" href="css/elipse.css?v=7">
 </head>
 <body>
 
@@ -194,9 +194,15 @@
                 <!-- Columna Izquierda: Controles -->
                 <div class="columna-controles">
                     <div class="tarjeta-blanca">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                            <h3 style="color: #0f172a; font-size: 1.25rem;">🎛️ Parámetros de la Elipse</h3>
-                            <button id="btnEjemploExplora" class="btn btn-ejemplo">💡 Probar un ejemplo</button>
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                                <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 800;">⚙️ Parámetros de la Elipse</h3>
+                                <button id="btnEjemploExplora" class="btn btn-ejemplo">💡 Siguiente Ejemplo</button>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label for="selectEjemplosExplora" style="color: #38bdf8; font-size: 0.82rem; font-weight: 700; white-space: nowrap;">📚 10 Ejemplos Guiados:</label>
+                                <select id="selectEjemplosExplora" style="flex: 1; padding: 6px 10px; font-size: 0.85rem; border-radius: 8px; background: #0f172a; color: #ffffff; border: 1.5px solid #334155;"></select>
+                            </div>
                         </div>
 
                         <!-- Centro h -->
@@ -408,6 +414,15 @@
                 <!-- Columna Controles -->
                 <div class="columna-controles">
                     <div class="tarjeta-blanca">
+                        <!-- Banco de 11 Ejemplos del Libro -->
+                        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-borde); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                                <label for="selectEjemplosAnaliza" style="color: #38bdf8; font-size: 0.85rem; font-weight: 700;">📚 Banco de 11 Ejemplos del Libro:</label>
+                                <span style="font-size: 0.75rem; color: #94a3b8;">Canónicas y Generales</span>
+                            </div>
+                            <select id="selectEjemplosAnaliza" style="width: 100%; padding: 8px 10px; font-size: 0.85rem; border-radius: 8px; background: #0f172a; color: #ffffff; border: 1.5px solid #334155;"></select>
+                        </div>
+
                         <!-- Pestañas de modo -->
                         <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
                             <button type="button" id="tabFormaCanonica" class="btn-opcion seleccionado" style="flex: 1; min-width: 140px;">
@@ -583,8 +598,17 @@
             <div class="layout-actividad">
                 <div class="columna-controles">
                     <div class="tarjeta-blanca">
-                        <h3 style="color: #0f172a; margin-bottom: 12px;">¿Qué datos tienes para construir la elipse?</h3>
+                        <h3 style="color: #ffffff; margin-bottom: 12px; font-weight: 800;">¿Qué datos tienes para construir la elipse?</h3>
                         
+                        <!-- Banco de 15 Ejemplos Guiados -->
+                        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-borde); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                                <label for="selectEjemplosArma" style="color: #38bdf8; font-size: 0.85rem; font-weight: 700;">🧩 Ejemplos Guiados para este Caso:</label>
+                                <span style="font-size: 0.75rem; color: #94a3b8;">5 por cada caso (15 total)</span>
+                            </div>
+                            <select id="selectEjemplosArma" style="width: 100%; padding: 8px 10px; font-size: 0.85rem; border-radius: 8px; background: #0f172a; color: #ffffff; border: 1.5px solid #334155;"></select>
+                        </div>
+
                         <!-- Selector de 3 modalidades -->
                         <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
@@ -851,13 +875,13 @@
     </footer>
 
     <!-- SCRIPTS MODULARES (Sin CDN ni librerías externas) -->
-    <script src="js/matematicas/formato.js?v=6"></script>
-    <script src="js/matematicas/elipse.js?v=6"></script>
-    <script src="js/graficador.js?v=6"></script>
-    <script src="js/ui/ui-explora.js?v=6"></script>
-    <script src="js/ui/ui-analiza.js?v=6"></script>
-    <script src="js/ui/ui-arma.js?v=6"></script>
-    <script src="js/ui/ui-retos.js?v=6"></script>
-    <script src="js/main.js?v=6"></script>
+    <script src="js/matematicas/formato.js?v=7"></script>
+    <script src="js/matematicas/elipse.js?v=7"></script>
+    <script src="js/graficador.js?v=7"></script>
+    <script src="js/ui/ui-explora.js?v=7"></script>
+    <script src="js/ui/ui-analiza.js?v=7"></script>
+    <script src="js/ui/ui-arma.js?v=7"></script>
+    <script src="js/ui/ui-retos.js?v=7"></script>
+    <script src="js/main.js?v=7"></script>
 </body>
 </html>

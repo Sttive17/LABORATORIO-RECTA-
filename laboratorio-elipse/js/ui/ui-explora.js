@@ -1,8 +1,8 @@
 /**
  * Laboratorio de la Elipse - Actividad 1: Explora la Elipse
  * Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
- * Controlador interactivo en tiempo real con sliders, medidor de achatamiento,
- * comparador multielipse con salida limpia y ejemplos del libro de texto.
+ * Controlador interactivo en tiempo real con amplio banco de 10 ejemplos guiados,
+ * sliders de alta precisión, medidor de achatamiento y modo comparativo limpio.
  */
 
 var UIExplora = (function () {
@@ -21,21 +21,57 @@ var UIExplora = (function () {
         orientacion: 'horizontal'
     };
 
+    // Banco completo de 10 ejemplos pedagógicos y astronómicos
     var ejemplosLibro = [
         {
-            nombre: 'Ejemplo 1 (Horizontal)',
+            nombre: 'Ejemplo 1 del libro (Horizontal)',
             h: 2, k: -3, a: 3, b: 2.24, orientacion: 'horizontal',
             desc: 'Centro (2, -3), a=3, b=√5≈2.24. Eje focal horizontal y=-3.'
         },
         {
-            nombre: 'Ejemplo 2 (Vertical)',
+            nombre: 'Ejemplo 2 del libro (Vertical)',
             h: -2, k: 5, a: 5, b: 4, orientacion: 'vertical',
             desc: 'Centro (-2, 5), a=5, b=4. Eje focal vertical x=-2.'
         },
         {
-            nombre: 'Ejemplo 3 (Vertical con LR)',
+            nombre: 'Ejemplo 3 del libro (Vertical con LR)',
             h: 3, k: 2, a: 4, b: 3.46, orientacion: 'vertical',
             desc: 'Centro (3, 2), a=4, b=√12≈3.46. Lado recto LR=6.'
+        },
+        {
+            nombre: 'Ejercicio 2a (Horizontal en el origen)',
+            h: 0, k: 0, a: 6, b: 2, orientacion: 'horizontal',
+            desc: 'Centro (0, 0), a=6, b=2, c=√32≈5.66. Ecuación: x²/36 + y²/4 = 1.'
+        },
+        {
+            nombre: 'Ejercicio 2b (Vertical en (-2, -1))',
+            h: -2, k: -1, a: 10, b: 5, orientacion: 'vertical',
+            desc: 'Centro (-2, -1), a=10, b=5, c=√75≈8.66. Ecuación: (x+2)²/25 + (y+1)²/100 = 1.'
+        },
+        {
+            nombre: 'Ejercicio 4a (Horizontal canónica)',
+            h: 0, k: 0, a: 4, b: 3, orientacion: 'horizontal',
+            desc: 'Centro (0, 0), a=4, b=3, c=√7≈2.65. Ecuación: x²/16 + y²/9 = 1.'
+        },
+        {
+            nombre: 'Ejercicio 4b (Horizontal con Centro)',
+            h: -1, k: 2, a: 4, b: 2, orientacion: 'horizontal',
+            desc: 'Centro (-1, 2), a=4, b=2, c=√12≈3.46. Vértices (-5, 2) y (3, 2).'
+        },
+        {
+            nombre: 'Caso Especial Circunferencia (a = b)',
+            h: 0, k: 0, a: 4, b: 4, orientacion: 'horizontal',
+            desc: 'Radio r=4, c=0, e=0. ¡Es una circunferencia perfecta!'
+        },
+        {
+            nombre: 'Órbita Planetaria de la Tierra (Casi Circular)',
+            h: 0, k: 0, a: 7, b: 6.9, orientacion: 'horizontal',
+            desc: 'Poco achatada (e≈0.17). El Sol se ubica en uno de los focos.'
+        },
+        {
+            nombre: 'Cometa Halley (Órbita Súper Achatada)',
+            h: 0, k: 0, a: 9, b: 2.3, orientacion: 'horizontal',
+            desc: 'Muy alargada (e≈0.967). Vértices lejanos y focos en los extremos.'
         }
     ];
     var indiceEjemplo = 0;
@@ -109,6 +145,21 @@ var UIExplora = (function () {
             btnEjemplo.addEventListener('click', cargarSiguienteEjemplo);
         }
 
+        // Selector desplegable de ejemplos guiados
+        var selEjemplos = document.getElementById('selectEjemplosExplora');
+        if (selEjemplos) {
+            selEjemplos.innerHTML = '';
+            ejemplosLibro.forEach(function (ej, idx) {
+                var opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = (idx + 1) + '. ' + ej.nombre;
+                selEjemplos.appendChild(opt);
+            });
+            selEjemplos.addEventListener('change', function () {
+                cargarEjemploPorIndice(parseInt(selEjemplos.value, 10));
+            });
+        }
+
         actualizar();
     }
 
@@ -118,7 +169,6 @@ var UIExplora = (function () {
         if (!slider) return;
 
         slider.addEventListener('input', function () {
-            // Si el usuario mueve un slider mientras estaba en comparación, salir al instante
             if (enModoComparacion) {
                 salirModoComparacion(false);
             }
@@ -146,10 +196,10 @@ var UIExplora = (function () {
 
     function actualizar() {
         if (enModoComparacion) {
-            return; // En modo comparación no sobreescribir con valores de slider individual
+            return;
         }
 
-        // Actualizar badges y sliders físicamente
+        // Actualizar badges y sliders físicamente en pantalla
         ['h', 'k', 'a', 'b'].forEach(function (prop) {
             var badge = document.getElementById('val' + prop.toUpperCase());
             var slider = document.getElementById('slider' + prop.toUpperCase());
@@ -170,7 +220,7 @@ var UIExplora = (function () {
             return;
         }
 
-        // Renderizar ecuación viva
+        // Renderizar ecuación canónica
         var elEcuacion = document.getElementById('ecuacionExplora');
         if (elEcuacion) elEcuacion.textContent = res.ecuacion;
 
@@ -197,7 +247,7 @@ var UIExplora = (function () {
         // Medidor de achatamiento (Excentricidad)
         actualizarMedidor(res);
 
-        // Ocultar banner y tabla de comparación
+        // Ocultar banner y tabla de comparación si estaban visibles
         var bannerComp = document.getElementById('bannerModoComparacion');
         if (bannerComp) bannerComp.style.display = 'none';
 
@@ -294,7 +344,7 @@ var UIExplora = (function () {
 
         datosComparacionElipses = listaElipses;
 
-        // Mostrar banner destacado avisando que está activa la comparación
+        // Mostrar banner de modo comparación
         var bannerComp = document.getElementById('bannerModoComparacion');
         if (bannerComp) bannerComp.style.display = 'flex';
 
@@ -345,14 +395,14 @@ var UIExplora = (function () {
         }
     }
 
-    function cargarSiguienteEjemplo() {
+    function cargarEjemploPorIndice(idx) {
         if (enModoComparacion) {
             salirModoComparacion(false);
         }
+        if (idx < 0 || idx >= ejemplosLibro.length) return;
+        indiceEjemplo = idx;
 
-        var ej = ejemplosLibro[indiceEjemplo];
-        indiceEjemplo = (indiceEjemplo + 1) % ejemplosLibro.length;
-
+        var ej = ejemplosLibro[idx];
         estado.h = ej.h;
         estado.k = ej.k;
         estado.a = ej.a;
@@ -371,14 +421,21 @@ var UIExplora = (function () {
             }
         }
 
-        // Sincronizar controles del DOM explícitamente
         var sH = document.getElementById('sliderH'); if (sH) sH.value = ej.h;
         var sK = document.getElementById('sliderK'); if (sK) sK.value = ej.k;
         var sA = document.getElementById('sliderA'); if (sA) sA.value = ej.a;
         var sB = document.getElementById('sliderB'); if (sB) sB.value = ej.b;
 
+        var sel = document.getElementById('selectEjemplosExplora');
+        if (sel) sel.value = idx;
+
         actualizar();
         mostrarMensajeMati('Cargado el ' + ej.nombre + ': ' + ej.desc);
+    }
+
+    function cargarSiguienteEjemplo() {
+        var prox = (indiceEjemplo + 1) % ejemplosLibro.length;
+        cargarEjemploPorIndice(prox);
     }
 
     function mostrarMensajeMati(msg) {
@@ -389,6 +446,7 @@ var UIExplora = (function () {
     return {
         inicializar: inicializar,
         actualizar: actualizar,
-        redibujar: actualizar
+        redibujar: actualizar,
+        cargarEjemploPorIndice: cargarEjemploPorIndice
     };
 })();
