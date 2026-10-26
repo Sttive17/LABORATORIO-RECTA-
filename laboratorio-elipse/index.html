@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Laboratorio de la Elipse - Feria STEAM+ 2026</title>
     <!-- Hojas de estilo modulares con version para evitar cache -->
-    <link rel="stylesheet" href="css/base.css?v=2">
-    <link rel="stylesheet" href="css/animaciones.css?v=2">
-    <link rel="stylesheet" href="css/elipse.css?v=2">
+    <link rel="stylesheet" href="css/base.css?v=5">
+    <link rel="stylesheet" href="css/animaciones.css?v=5">
+    <link rel="stylesheet" href="css/elipse.css?v=5">
 </head>
 <body>
 
@@ -47,7 +47,7 @@
                     <span class="simbolo-mat" style="top: 15%; left: 45%;">∞</span>
                 </div>
 
-                <!-- Título animado y subtítulo con nombres en blanco brillante -->
+                <!-- Título animado y nombres de autoras en blanco puro brillante -->
                 <h1 class="titulo-rebote">🪐 Laboratorio de la Elipse</h1>
                 <p class="nombres-autoras-portada" style="color: #ffffff !important; font-size: clamp(1.3rem, 3.2vw, 1.65rem); font-weight: 800; text-align: center; margin: 10px 0 6px 0; letter-spacing: 0.5px; text-shadow: 0 0 16px rgba(255, 255, 255, 0.8), 0 2px 10px rgba(56, 189, 248, 0.9); z-index: 3;">
                     Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
@@ -189,6 +189,7 @@
                 </div>
             </div>
 
+            <!-- Fila Principal: Controles (Izquierda) vs Gráfica (Derecha) equilibradas -->
             <div class="layout-actividad">
                 <!-- Columna Izquierda: Controles -->
                 <div class="columna-controles">
@@ -275,97 +276,101 @@
                     </div>
                 </div>
 
-                <!-- Columna Derecha: Gráfica y Resultados -->
+                <!-- Columna Derecha: Gráfica Canvas y Ecuación -->
                 <div class="columna-grafica">
-                    <!-- Toolbar de toggles -->
-                    <div class="toolbar-elementos">
-                        <label class="item-toggle"><input type="checkbox" id="chkCentro" checked> 🟡 Centro C</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkFocos" checked> 🔴 Focos F, F'</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkVertices" checked> 🟣 Vértices A, A'</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkExtremos" checked> 🟢 Extremos B, B'</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkEjeFocal" checked> ➖ Eje focal</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkLadoRecto" checked> 📐 Lado Recto</label>
-                    </div>
-
-                    <!-- Canvas -->
-                    <div class="canvas-contenedor">
-                        <canvas id="canvasExplora" width="500" height="500"></canvas>
-                    </div>
-
-                    <!-- Ecuación en vivo -->
-                    <div class="ecuacion-destacada" id="ecuacionExplora">
-                        (x − 0)²/25 + (y − 0)²/9 = 1
-                    </div>
-
-                    <!-- Cuadro de propiedades detalladas -->
-                    <div class="panel-resultados">
-                        <h4 style="color: #0f172a; margin-bottom: 10px;">📋 Elementos de la Elipse:</h4>
-                        <div class="grilla-propiedades">
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Centro (h, k)</div>
-                                <div class="propiedad-valor" id="propCentro">(0, 0)</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Semieje mayor (a)</div>
-                                <div class="propiedad-valor" id="propA">5</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Semieje menor (b)</div>
-                                <div class="propiedad-valor" id="propB">3</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Distancia focal (c)</div>
-                                <div class="propiedad-valor" id="propC">4</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Eje Mayor (2a)</div>
-                                <div class="propiedad-valor" id="propEjeMayor">10</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Eje Menor (2b)</div>
-                                <div class="propiedad-valor" id="propEjeMenor">6</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Lado Recto (LR)</div>
-                                <div class="propiedad-valor" id="propLadoRecto">3.6</div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Eje Focal</div>
-                                <div class="propiedad-valor" id="propEjeFocal">y = 0</div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Focos F' y F</div>
-                                <div class="propiedad-valor" id="propFocos">(−4, 0) y (4, 0)</div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Vértices A' y A</div>
-                                <div class="propiedad-valor" id="propVertices">(−5, 0) y (5, 0)</div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Extremos Menores B' y B</div>
-                                <div class="propiedad-valor" id="propExtremos">(0, −3) y (0, 3)</div>
-                            </div>
+                    <div class="tarjeta-blanca" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Toolbar de toggles -->
+                        <div class="toolbar-elementos">
+                            <label class="item-toggle"><input type="checkbox" id="chkCentro" checked> 🟡 Centro C</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkFocos" checked> 🔴 Focos F, F'</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkVertices" checked> 🟣 Vértices A, A'</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkExtremos" checked> 🟢 Extremos B, B'</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkEjeFocal" checked> ➖ Eje focal</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkLadoRecto" checked> 📐 Lado Recto</label>
                         </div>
 
-                        <!-- Tabla de comparación multielipse con scroll horizontal responsivo -->
-                        <div id="contenedorComparacion" style="display: none; margin-top: 20px;">
-                            <h4 style="color: #0284c7; margin-bottom: 8px;">🔬 Comparación de Excentricidades con a² = 16 (a = 4):</h4>
-                            <div class="tabla-wrapper">
-                                <table class="tabla-comparacion">
-                                    <thead>
-                                        <tr>
-                                            <th>Elipse</th>
-                                            <th>a²</th>
-                                            <th>b²</th>
-                                            <th>c = √(a²−b²)</th>
-                                            <th>Excentricidad (e)</th>
-                                            <th>Achatamiento</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="cuerpoTablaComparacion"></tbody>
-                                </table>
-                            </div>
+                        <!-- Canvas -->
+                        <div class="canvas-contenedor">
+                            <canvas id="canvasExplora" width="500" height="500"></canvas>
                         </div>
+
+                        <!-- Ecuación en vivo -->
+                        <div class="ecuacion-destacada" id="ecuacionExplora" style="margin-bottom: 0;">
+                            (x − 0)²/25 + (y − 0)²/9 = 1
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila Inferior de Ancho Completo: Elementos y Comparación -->
+            <div class="panel-resultados-ancho-completo">
+                <h4 style="color: #0f172a; margin-bottom: 12px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                    📋 Elementos Calculados de la Elipse:
+                </h4>
+                <div class="grilla-propiedades">
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Centro (h, k)</div>
+                        <div class="propiedad-valor" id="propCentro">(0, 0)</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Semieje mayor (a)</div>
+                        <div class="propiedad-valor" id="propA">5</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Semieje menor (b)</div>
+                        <div class="propiedad-valor" id="propB">3</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Distancia focal (c)</div>
+                        <div class="propiedad-valor" id="propC">4</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Eje Mayor (2a)</div>
+                        <div class="propiedad-valor" id="propEjeMayor">10</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Eje Menor (2b)</div>
+                        <div class="propiedad-valor" id="propEjeMenor">6</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Lado Recto (LR)</div>
+                        <div class="propiedad-valor" id="propLadoRecto">3.6</div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Eje Focal</div>
+                        <div class="propiedad-valor" id="propEjeFocal">y = 0</div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Focos F' y F</div>
+                        <div class="propiedad-valor" id="propFocos">(−4, 0) y (4, 0)</div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Vértices A' y A</div>
+                        <div class="propiedad-valor" id="propVertices">(−5, 0) y (5, 0)</div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Extremos Menores B' y B</div>
+                        <div class="propiedad-valor" id="propExtremos">(0, −3) y (0, 3)</div>
+                    </div>
+                </div>
+
+                <!-- Tabla de comparación multielipse con scroll horizontal responsivo -->
+                <div id="contenedorComparacion" style="display: none; margin-top: 20px;">
+                    <h4 style="color: #0284c7; margin-bottom: 8px;">🔬 Comparación de Excentricidades con a² = 16 (a = 4):</h4>
+                    <div class="tabla-wrapper">
+                        <table class="tabla-comparacion">
+                            <thead>
+                                <tr>
+                                    <th>Elipse</th>
+                                    <th>a²</th>
+                                    <th>b²</th>
+                                    <th>c = √(a²−b²)</th>
+                                    <th>Excentricidad (e)</th>
+                                    <th>Achatamiento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpoTablaComparacion"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -465,81 +470,83 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Panel de Resultados de Analizar -->
-                    <div id="panelResultadosAnaliza" class="panel-resultados" style="display: none;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                            <h4 style="color: #0f172a; margin: 0;">Orientación Detectada:</h4>
-                            <span id="orientacionAnaliza" class="valor-badge">Horizontal</span>
-                        </div>
-
-                        <div class="ecuacion-destacada" id="ecuacionAnaliza"></div>
-
-                        <div class="grilla-propiedades">
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Centro (h, k)</div>
-                                <div class="propiedad-valor" id="resCentro"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Semieje a</div>
-                                <div class="propiedad-valor" id="resA"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Semieje b</div>
-                                <div class="propiedad-valor" id="resB"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Distancia focal c</div>
-                                <div class="propiedad-valor" id="resC"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Eje Mayor (2a)</div>
-                                <div class="propiedad-valor" id="resEjeMayor"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Eje Menor (2b)</div>
-                                <div class="propiedad-valor" id="resEjeMenor"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Lado Recto (LR)</div>
-                                <div class="propiedad-valor" id="resLadoRecto"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Excentricidad (e)</div>
-                                <div class="propiedad-valor" id="resExcentricidad"></div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Eje Focal</div>
-                                <div class="propiedad-valor" id="resEjeFocal"></div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Focos F' y F</div>
-                                <div class="propiedad-valor" id="resFocos"></div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Vértices A' y A</div>
-                                <div class="propiedad-valor" id="resVertices"></div>
-                            </div>
-                            <div class="propiedad-item" style="grid-column: 1 / -1;">
-                                <div class="propiedad-nombre">Extremos Menor B' y B</div>
-                                <div class="propiedad-valor" id="resExtremos"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Columna Gráfica -->
                 <div class="columna-grafica">
-                    <div class="toolbar-elementos">
-                        <label class="item-toggle"><input type="checkbox" id="chkCentroAnaliza" checked> 🟡 Centro C</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkFocosAnaliza" checked> 🔴 Focos</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkVerticesAnaliza" checked> 🟣 Vértices</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkExtremosAnaliza" checked> 🟢 Extremos</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkEjeFocalAnaliza" checked> ➖ Eje focal</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkLadoRectoAnaliza" checked> 📐 Lado Recto</label>
+                    <div class="tarjeta-blanca" style="display: flex; flex-direction: column; gap: 12px;">
+                        <div class="toolbar-elementos">
+                            <label class="item-toggle"><input type="checkbox" id="chkCentroAnaliza" checked> 🟡 Centro C</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkFocosAnaliza" checked> 🔴 Focos</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkVerticesAnaliza" checked> 🟣 Vértices</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkExtremosAnaliza" checked> 🟢 Extremos</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkEjeFocalAnaliza" checked> ➖ Eje focal</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkLadoRectoAnaliza" checked> 📐 Lado Recto</label>
+                        </div>
+                        <div class="canvas-contenedor">
+                            <canvas id="canvasAnaliza" width="500" height="500"></canvas>
+                        </div>
                     </div>
-                    <div class="canvas-contenedor">
-                        <canvas id="canvasAnaliza" width="500" height="500"></canvas>
+                </div>
+            </div>
+
+            <!-- Panel de Resultados de Analizar en ancho completo -->
+            <div id="panelResultadosAnaliza" class="panel-resultados-ancho-completo" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <h4 style="color: #0f172a; margin: 0; font-size: 1.2rem;">Orientación Detectada:</h4>
+                    <span id="orientacionAnaliza" class="valor-badge">Horizontal</span>
+                </div>
+
+                <div class="ecuacion-destacada" id="ecuacionAnaliza"></div>
+
+                <div class="grilla-propiedades">
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Centro (h, k)</div>
+                        <div class="propiedad-valor" id="resCentro"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Semieje a</div>
+                        <div class="propiedad-valor" id="resA"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Semieje b</div>
+                        <div class="propiedad-valor" id="resB"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Distancia focal c</div>
+                        <div class="propiedad-valor" id="resC"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Eje Mayor (2a)</div>
+                        <div class="propiedad-valor" id="resEjeMayor"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Eje Menor (2b)</div>
+                        <div class="propiedad-valor" id="resEjeMenor"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Lado Recto (LR)</div>
+                        <div class="propiedad-valor" id="resLadoRecto"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Excentricidad (e)</div>
+                        <div class="propiedad-valor" id="resExcentricidad"></div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Eje Focal</div>
+                        <div class="propiedad-valor" id="resEjeFocal"></div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Focos F' y F</div>
+                        <div class="propiedad-valor" id="resFocos"></div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Vértices A' y A</div>
+                        <div class="propiedad-valor" id="resVertices"></div>
+                    </div>
+                    <div class="propiedad-item" style="grid-column: span 2;">
+                        <div class="propiedad-nombre">Extremos Menor B' y B</div>
+                        <div class="propiedad-valor" id="resExtremos"></div>
                     </div>
                 </div>
             </div>
@@ -685,55 +692,57 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Panel Resultados y Paso a Paso -->
-                    <div id="panelResultadosArma" class="panel-resultados" style="display: none;">
-                        <h4 style="color: #0f172a; margin-bottom: 8px;">Ecuación Canónica Obtenida:</h4>
-                        <div class="ecuacion-destacada" id="ecuacionArma"></div>
-
-                        <div class="caja-pasos" id="cajaPasosArma"></div>
-
-                        <div class="grilla-propiedades" style="margin-top: 12px;">
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Centro (h, k)</div>
-                                <div class="propiedad-valor" id="resArmaCentro"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Semieje a</div>
-                                <div class="propiedad-valor" id="resArmaA"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Semieje b</div>
-                                <div class="propiedad-valor" id="resArmaB"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Distancia c</div>
-                                <div class="propiedad-valor" id="resArmaC"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Lado Recto (LR)</div>
-                                <div class="propiedad-valor" id="resArmaLR"></div>
-                            </div>
-                            <div class="propiedad-item">
-                                <div class="propiedad-nombre">Excentricidad</div>
-                                <div class="propiedad-valor" id="resArmaE"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Columna Gráfica -->
                 <div class="columna-grafica">
-                    <div class="toolbar-elementos">
-                        <label class="item-toggle"><input type="checkbox" id="chkCentroArma" checked> 🟡 Centro</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkFocosArma" checked> 🔴 Focos</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkVerticesArma" checked> 🟣 Vértices</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkExtremosArma" checked> 🟢 Extremos</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkEjeFocalArma" checked> ➖ Eje focal</label>
-                        <label class="item-toggle"><input type="checkbox" id="chkLadoRectoArma" checked> 📐 Lado Recto</label>
+                    <div class="tarjeta-blanca" style="display: flex; flex-direction: column; gap: 12px;">
+                        <div class="toolbar-elementos">
+                            <label class="item-toggle"><input type="checkbox" id="chkCentroArma" checked> 🟡 Centro</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkFocosArma" checked> 🔴 Focos</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkVerticesArma" checked> 🟣 Vértices</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkExtremosArma" checked> 🟢 Extremos</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkEjeFocalArma" checked> ➖ Eje focal</label>
+                            <label class="item-toggle"><input type="checkbox" id="chkLadoRectoArma" checked> 📐 Lado Recto</label>
+                        </div>
+                        <div class="canvas-contenedor">
+                            <canvas id="canvasArma" width="500" height="500"></canvas>
+                        </div>
                     </div>
-                    <div class="canvas-contenedor">
-                        <canvas id="canvasArma" width="500" height="500"></canvas>
+                </div>
+            </div>
+
+            <!-- Panel Resultados y Paso a Paso en ancho completo -->
+            <div id="panelResultadosArma" class="panel-resultados-ancho-completo" style="display: none;">
+                <h4 style="color: #0f172a; margin-bottom: 8px; font-size: 1.2rem;">Ecuación Canónica Obtenida:</h4>
+                <div class="ecuacion-destacada" id="ecuacionArma"></div>
+
+                <div class="caja-pasos" id="cajaPasosArma"></div>
+
+                <div class="grilla-propiedades" style="margin-top: 14px;">
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Centro (h, k)</div>
+                        <div class="propiedad-valor" id="resArmaCentro"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Semieje a</div>
+                        <div class="propiedad-valor" id="resArmaA"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Semieje b</div>
+                        <div class="propiedad-valor" id="resArmaB"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Distancia c</div>
+                        <div class="propiedad-valor" id="resArmaC"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Lado Recto (LR)</div>
+                        <div class="propiedad-valor" id="resArmaLR"></div>
+                    </div>
+                    <div class="propiedad-item">
+                        <div class="propiedad-nombre">Excentricidad</div>
+                        <div class="propiedad-valor" id="resArmaE"></div>
                     </div>
                 </div>
             </div>
@@ -759,7 +768,7 @@
                 </div>
             </div>
 
-            <!-- Área de Juego -->
+            <!-- Área de Juego equilibrada -->
             <div id="areaJuegoRetos" class="layout-actividad">
                 <div class="columna-controles">
                     <div class="tarjeta-reto">
@@ -801,8 +810,10 @@
                 </div>
 
                 <div class="columna-grafica">
-                    <div class="canvas-contenedor">
-                        <canvas id="canvasRetos" width="500" height="500"></canvas>
+                    <div class="tarjeta-blanca">
+                        <div class="canvas-contenedor">
+                            <canvas id="canvasRetos" width="500" height="500"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
