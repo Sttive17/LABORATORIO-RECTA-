@@ -1,6 +1,8 @@
 /**
- * Laboratorio de la Elipse - Feria STEAM+
- * Controlador Principal: Navegación de pantallas, inicialización de módulos y mascota Mati
+ * Laboratorio de la Elipse - Feria STEAM+ 2026
+ * Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
+ * Controlador Principal: Navegación fluida entre pantallas, inicialización bajo demanda,
+ * redibujado reactivo ante cambios de tamaño y mascota Mati.
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     /**
-     * Cambia la pantalla visible y ejecuta transiciones suaves.
+     * Cambia la pantalla visible y ejecuta redibujado garantizado en el siguiente cuadro.
      * @param {'bienvenida'|'menu'|'explora'|'analiza'|'arma'|'retos'} idDestino
      */
     function navegarA(idDestino) {
@@ -40,32 +42,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        // Inicializar la actividad bajo demanda al entrar por primera vez
-        if (idDestino === 'explora') {
-            if (!inicializados.explora) {
-                UIExplora.inicializar();
-                inicializados.explora = true;
-            } else {
-                UIExplora.actualizar();
+        // Esperar al siguiente cuadro de renderizado para garantizar que el canvas tenga dimensiones CSS reales
+        requestAnimationFrame(function () {
+            if (idDestino === 'explora') {
+                if (!inicializados.explora) {
+                    UIExplora.inicializar();
+                    inicializados.explora = true;
+                } else {
+                    UIExplora.actualizar();
+                }
+            } else if (idDestino === 'analiza') {
+                if (!inicializados.analiza) {
+                    UIAnaliza.inicializar();
+                    inicializados.analiza = true;
+                } else if (UIAnaliza.redibujar) {
+                    UIAnaliza.redibujar();
+                }
+            } else if (idDestino === 'arma') {
+                if (!inicializados.arma) {
+                    UIArma.inicializar();
+                    inicializados.arma = true;
+                } else if (UIArma.redibujar) {
+                    UIArma.redibujar();
+                }
+            } else if (idDestino === 'retos') {
+                if (!inicializados.retos) {
+                    UIRetos.inicializar();
+                    inicializados.retos = true;
+                } else if (UIRetos.redibujar) {
+                    UIRetos.redibujar();
+                }
             }
-        } else if (idDestino === 'analiza') {
-            if (!inicializados.analiza) {
-                UIAnaliza.inicializar();
-                inicializados.analiza = true;
-            }
-        } else if (idDestino === 'arma') {
-            if (!inicializados.arma) {
-                UIArma.inicializar();
-                inicializados.arma = true;
-            }
-        } else if (idDestino === 'retos') {
-            if (!inicializados.retos) {
-                UIRetos.inicializar();
-                inicializados.retos = true;
-            } else {
-                UIRetos.iniciarJuego();
-            }
-        }
+        });
     }
 
     // 1. Botón "¡Empezar!" en Bienvenida
@@ -113,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 4. Botones "🏠 Volver al menú" en todas las actividades
+    // 4. Botones volver al menú en todas las actividades
     var botonesVolverMenu = document.querySelectorAll('.btn-volver-menu');
     botonesVolverMenu.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -121,7 +129,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 5. Generar estrellas titilantes en el fondo cósmico de bienvenida
+    // 5. Redibujado responsivo continuo ante redimensionado o cambio de zoom
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            if (pantallas.explora && pantallas.explora.classList.contains('activa')) {
+                UIExplora.actualizar();
+            } else if (pantallas.analiza && pantallas.analiza.classList.contains('activa') && UIAnaliza.redibujar) {
+                UIAnaliza.redibujar();
+            } else if (pantallas.arma && pantallas.arma.classList.contains('activa') && UIArma.redibujar) {
+                UIArma.redibujar();
+            } else if (pantallas.retos && pantallas.retos.classList.contains('activa') && UIRetos.redibujar) {
+                UIRetos.redibujar();
+            }
+        }, 120);
+    });
+
+    // 6. Generar estrellas titilantes en el fondo cósmico de bienvenida
     generarEstrellasFondo();
 
     function generarEstrellasFondo() {
@@ -149,6 +174,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Exponer función de navegación global si se requiere
+    // Exponer función de navegación global
     window.navegarA = navegarA;
 });

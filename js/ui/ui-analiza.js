@@ -273,8 +273,15 @@ var UIAnaliza = (function () {
         if (globo) globo.textContent = msg;
     }
 
+    function redibujar() {
+        if (graficador && window.elipseAnalizadaActual) {
+            graficador.dibujar(window.elipseAnalizadaActual, obtenerToggles());
+        }
+    }
+
     return {
         inicializar: inicializar,
-        procesarAnalisis: procesarAnalisis
+        procesarAnalisis: procesarAnalisis,
+        redibujar: redibujar
     };
 })();

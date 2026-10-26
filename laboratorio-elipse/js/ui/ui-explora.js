@@ -1,13 +1,18 @@
 /**
  * Laboratorio de la Elipse - Actividad 1: Explora la Elipse
+ * Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
  * Controlador interactivo en tiempo real con sliders, medidor de achatamiento,
- * comparación multielipse y ejemplos del libro.
+ * comparador multielipse con salida limpia y ejemplos del libro de texto.
  */
 
 var UIExplora = (function () {
     'use strict';
 
     var graficador = null;
+    var enModoComparacion = false;
+    var datosComparacionElipses = null;
+    var coloresComparacion = ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
+
     var estado = {
         h: 0,
         k: 0,
@@ -19,7 +24,7 @@ var UIExplora = (function () {
     var ejemplosLibro = [
         {
             nombre: 'Ejemplo 1 (Horizontal)',
-            h: 2, k: -3, a: 3, b: Math.sqrt(5), orientacion: 'horizontal',
+            h: 2, k: -3, a: 3, b: 2.24, orientacion: 'horizontal',
             desc: 'Centro (2, -3), a=3, b=√5≈2.24. Eje focal horizontal y=-3.'
         },
         {
@@ -29,7 +34,7 @@ var UIExplora = (function () {
         },
         {
             nombre: 'Ejemplo 3 (Vertical con LR)',
-            h: 3, k: 2, a: 4, b: Math.sqrt(12), orientacion: 'vertical',
+            h: 3, k: 2, a: 4, b: 3.46, orientacion: 'vertical',
             desc: 'Centro (3, 2), a=4, b=√12≈3.46. Lado recto LR=6.'
         }
     ];
@@ -53,6 +58,7 @@ var UIExplora = (function () {
 
         if (btnHoriz && btnVert) {
             btnHoriz.addEventListener('click', function () {
+                if (enModoComparacion) salirModoComparacion(false);
                 estado.orientacion = 'horizontal';
                 btnHoriz.classList.add('seleccionado');
                 btnVert.classList.remove('seleccionado');
@@ -60,6 +66,7 @@ var UIExplora = (function () {
             });
 
             btnVert.addEventListener('click', function () {
+                if (enModoComparacion) salirModoComparacion(false);
                 estado.orientacion = 'vertical';
                 btnVert.classList.add('seleccionado');
                 btnHoriz.classList.remove('seleccionado');
@@ -73,7 +80,11 @@ var UIExplora = (function () {
             var el = document.getElementById(id);
             if (el) {
                 el.addEventListener('change', function () {
-                    actualizarGrafica();
+                    if (enModoComparacion && datosComparacionElipses) {
+                        graficador.dibujarComparacion(datosComparacionElipses, coloresComparacion, obtenerToggles());
+                    } else {
+                        actualizarGrafica();
+                    }
                 });
             }
         });
@@ -82,6 +93,14 @@ var UIExplora = (function () {
         var btnComp = document.getElementById('btnCompararExplora');
         if (btnComp) {
             btnComp.addEventListener('click', ejecutarComparacion);
+        }
+
+        // Botón Salir de Comparación
+        var btnSalirComp = document.getElementById('btnSalirComparacion');
+        if (btnSalirComp) {
+            btnSalirComp.addEventListener('click', function () {
+                salirModoComparacion(true);
+            });
         }
 
         // Botón Probar Ejemplo
@@ -99,6 +118,11 @@ var UIExplora = (function () {
         if (!slider) return;
 
         slider.addEventListener('input', function () {
+            // Si el usuario mueve un slider mientras estaba en comparación, salir al instante
+            if (enModoComparacion) {
+                salirModoComparacion(false);
+            }
+
             var val = parseFloat(slider.value);
             estado[propiedad] = val;
 
@@ -121,12 +145,16 @@ var UIExplora = (function () {
     }
 
     function actualizar() {
-        // Actualizar badges
+        if (enModoComparacion) {
+            return; // En modo comparación no sobreescribir con valores de slider individual
+        }
+
+        // Actualizar badges y sliders físicamente
         ['h', 'k', 'a', 'b'].forEach(function (prop) {
             var badge = document.getElementById('val' + prop.toUpperCase());
             var slider = document.getElementById('slider' + prop.toUpperCase());
             if (badge) badge.textContent = Number(estado[prop].toFixed(2));
-            if (slider) slider.value = estado[prop];
+            if (slider && document.activeElement !== slider) slider.value = estado[prop];
         });
 
         var res = Elipse.crearElipse({
@@ -142,7 +170,7 @@ var UIExplora = (function () {
             return;
         }
 
-        // Renderizar ecuación
+        // Renderizar ecuación viva
         var elEcuacion = document.getElementById('ecuacionExplora');
         if (elEcuacion) elEcuacion.textContent = res.ecuacion;
 
@@ -169,7 +197,10 @@ var UIExplora = (function () {
         // Medidor de achatamiento (Excentricidad)
         actualizarMedidor(res);
 
-        // Ocultar tabla de comparación si estaba visible
+        // Ocultar banner y tabla de comparación
+        var bannerComp = document.getElementById('bannerModoComparacion');
+        if (bannerComp) bannerComp.style.display = 'none';
+
         var contComp = document.getElementById('contenedorComparacion');
         if (contComp) contComp.style.display = 'none';
 
@@ -245,10 +276,9 @@ var UIExplora = (function () {
     }
 
     function ejecutarComparacion() {
-        // Fijamos a² = 16 (a = 4) y b² = 12, 9, 6, 2
+        enModoComparacion = true;
         var a2 = 16;
         var listaB2 = [12, 9, 6, 2];
-        var colores = ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
         var listaElipses = [];
 
         listaB2.forEach(function (b2) {
@@ -262,8 +292,20 @@ var UIExplora = (function () {
             listaElipses.push(el);
         });
 
+        datosComparacionElipses = listaElipses;
+
+        // Mostrar banner destacado avisando que está activa la comparación
+        var bannerComp = document.getElementById('bannerModoComparacion');
+        if (bannerComp) bannerComp.style.display = 'flex';
+
+        // Actualizar caja de ecuación con aviso
+        var elEcuacion = document.getElementById('ecuacionExplora');
+        if (elEcuacion) {
+            elEcuacion.innerHTML = '🔬 <strong>Modo Comparación de Excentricidades:</strong> a² = 16 constante · b² = 12, 9, 6, 2 variable';
+        }
+
         if (graficador) {
-            graficador.dibujarComparacion(listaElipses, colores);
+            graficador.dibujarComparacion(listaElipses, coloresComparacion, obtenerToggles());
         }
 
         var contComp = document.getElementById('contenedorComparacion');
@@ -273,7 +315,7 @@ var UIExplora = (function () {
             var compData = Elipse.compararExcentricidad(a2, listaB2);
             compData.comparaciones.forEach(function (c, idx) {
                 var fila = document.createElement('tr');
-                fila.innerHTML = '<td><span class="punto-color" style="background:' + colores[idx] + '"></span>' + (idx + 1) + '</td>' +
+                fila.innerHTML = '<td><span class="punto-color" style="background:' + coloresComparacion[idx] + '"></span>' + (idx + 1) + '</td>' +
                                  '<td>16</td>' +
                                  '<td>' + c.b2 + '</td>' +
                                  '<td>' + Formato.formatearExacto(c.c) + '</td>' +
@@ -287,7 +329,27 @@ var UIExplora = (function () {
         mostrarMensajeMati('¡Compara cómo al disminuir b² (el semieje menor), los focos se alejan del centro y la elipse se aplasta más y más! 🔬');
     }
 
+    function salirModoComparacion(notificar) {
+        if (!enModoComparacion) return;
+        enModoComparacion = false;
+
+        var bannerComp = document.getElementById('bannerModoComparacion');
+        if (bannerComp) bannerComp.style.display = 'none';
+
+        var contComp = document.getElementById('contenedorComparacion');
+        if (contComp) contComp.style.display = 'none';
+
+        actualizar();
+        if (notificar !== false) {
+            mostrarMensajeMati('Regresaste a tu elipse interactiva individual. ¡Mueve los controles para seguir explorando! 🔭');
+        }
+    }
+
     function cargarSiguienteEjemplo() {
+        if (enModoComparacion) {
+            salirModoComparacion(false);
+        }
+
         var ej = ejemplosLibro[indiceEjemplo];
         indiceEjemplo = (indiceEjemplo + 1) % ejemplosLibro.length;
 
@@ -309,6 +371,12 @@ var UIExplora = (function () {
             }
         }
 
+        // Sincronizar controles del DOM explícitamente
+        var sH = document.getElementById('sliderH'); if (sH) sH.value = ej.h;
+        var sK = document.getElementById('sliderK'); if (sK) sK.value = ej.k;
+        var sA = document.getElementById('sliderA'); if (sA) sA.value = ej.a;
+        var sB = document.getElementById('sliderB'); if (sB) sB.value = ej.b;
+
         actualizar();
         mostrarMensajeMati('Cargado el ' + ej.nombre + ': ' + ej.desc);
     }
@@ -320,6 +388,7 @@ var UIExplora = (function () {
 
     return {
         inicializar: inicializar,
-        actualizar: actualizar
+        actualizar: actualizar,
+        redibujar: actualizar
     };
 })();

@@ -247,8 +247,15 @@ var UIArma = (function () {
         if (globo) globo.textContent = msg;
     }
 
+    function redibujar() {
+        if (graficador && window.elipseArmadaActual) {
+            graficador.dibujar(window.elipseArmadaActual, obtenerToggles());
+        }
+    }
+
     return {
         inicializar: inicializar,
-        procesarArmado: procesarArmado
+        procesarArmado: procesarArmado,
+        redibujar: redibujar
     };
 })();

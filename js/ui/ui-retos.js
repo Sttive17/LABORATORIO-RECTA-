@@ -262,8 +262,22 @@ var UIRetos = (function () {
         if (globo) globo.textContent = msg;
     }
 
+    function redibujar() {
+        if (graficador && datosPregunta && datosPregunta.elipse) {
+            graficador.dibujar(datosPregunta.elipse, {
+                mostrarCentro: true,
+                mostrarFocos: true,
+                mostrarVertices: true,
+                mostrarExtremosMenor: true,
+                mostrarEjeFocal: true,
+                mostrarLadoRecto: datosPregunta.tipo === 'ladoRecto'
+            });
+        }
+    }
+
     return {
         inicializar: inicializar,
-        iniciarJuego: iniciarJuego
+        iniciarJuego: iniciarJuego,
+        redibujar: redibujar
     };
 })();

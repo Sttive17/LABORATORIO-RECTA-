@@ -1,8 +1,10 @@
 /**
- * Laboratorio de la Elipse - Feria STEAM+
+ * Laboratorio de la Elipse - Feria STEAM+ 2026
+ * Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
  * Módulo de Renderizado Gráfico en HTML5 Canvas
  * Dibuja plano cartesiano interactivo, cuadrícula, ejes numerados, elipses,
  * focos, vértices, extremos, lados rectos y ejes focales.
+ * Alta fidelidad HiDPI, autoescala simétrica y actualización robusta.
  */
 
 (function (raiz, fabrica) {
@@ -37,61 +39,94 @@
         // Configuración visual por defecto
         this.config = {
             fijaEscala: this.opciones.fijaEscala || false,
-            rangoFijo: this.opciones.rangoFijo || 12, // de -12 a 12
+            rangoFijo: this.opciones.rangoFijo || 12,
             mostrarCentro: true,
             mostrarFocos: true,
             mostrarVertices: true,
             mostrarExtremosMenor: true,
             mostrarEjeFocal: true,
             mostrarLadoRecto: true,
-            colorElipse: '#2563eb',
+            colorElipse: '#0284c7',
             colorFocos: '#ef4444',
             colorVertices: '#8b5cf6',
             colorExtremos: '#10b981',
             colorCentro: '#f59e0b',
-            colorEjeFocal: 'rgba(239, 68, 68, 0.5)',
+            colorEjeFocal: 'rgba(239, 68, 68, 0.65)',
             colorLadoRecto: '#06b6d4'
         };
 
-        // Ajustar resolución HiDPI
+        // Ajustar resolución HiDPI inicial
         this.ajustarDPI();
     }
 
+    /**
+     * Ajusta la resolución del canvas según devicePixelRatio de forma idempotente y robusta.
+     * Evita multiplicaciones sucesivas de escala y previene fallos cuando el canvas está oculto.
+     */
     Graficador.prototype.ajustarDPI = function () {
         var dpr = window.devicePixelRatio || 1;
-        var ancho = this.canvas.clientWidth || this.canvas.width || 500;
-        var alto = this.canvas.clientHeight || this.canvas.height || 500;
+        var rect = this.canvas.getBoundingClientRect();
+        var ancho = Math.round(rect.width) || this.canvas.clientWidth || 480;
+        var alto = Math.round(rect.height) || this.canvas.clientHeight || ancho || 480;
 
-        this.canvas.width = ancho * dpr;
-        this.canvas.height = alto * dpr;
+        // Si el elemento está en display: none temporalmente, mantener dimensiones base seguras
+        if (ancho <= 0) ancho = 480;
+        if (alto <= 0) alto = ancho;
+
+        var targetWidth = Math.round(ancho * dpr);
+        var targetHeight = Math.round(alto * dpr);
+
+        if (this.canvas.width !== targetWidth || this.canvas.height !== targetHeight) {
+            this.canvas.width = targetWidth;
+            this.canvas.height = targetHeight;
+        }
+
+        // Restablecer la matriz de transformación limpia y aplicar DPR
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.scale(dpr, dpr);
         this.anchoCSS = ancho;
         this.altoCSS = alto;
     };
 
     /**
-     * Calcula los límites del plano cartesiano (autoescala o fijo).
+     * Calcula los límites del plano cartesiano (autoescala simétrica o escala fija inteligente).
      */
     Graficador.prototype.calcularLimites = function (elipse) {
-        if (this.config.fijaEscala || !elipse || !elipse.ok) {
-            var rf = this.config.rangoFijo;
+        if (!elipse || !elipse.ok) {
+            var rfDefault = this.config.rangoFijo || 12;
+            return { minX: -rfDefault, maxX: rfDefault, minY: -rfDefault, maxY: rfDefault };
+        }
+
+        if (this.config.fijaEscala) {
+            // Escala fija inteligente: mantiene la escala fija (12) a menos que la elipse la sobrepase
+            var maxCoord = Math.max(
+                Math.abs(elipse.centro.x) + elipse.a + 2,
+                Math.abs(elipse.centro.y) + elipse.a + 2,
+                this.config.rangoFijo || 12
+            );
+            var rf = Math.ceil(maxCoord);
             return { minX: -rf, maxX: rf, minY: -rf, maxY: rf };
         }
 
-        // Autoescala que incluye el origen (0,0), el centro, los vértices y extremos con margen
+        // Autoescala que incluye el origen (0,0), el centro, los vértices, extremos y focos con margen
         var puntosX = [0, elipse.centro.x];
         var puntosY = [0, elipse.centro.y];
 
-        elipse.vertices.forEach(function (v) { puntosX.push(v.x); puntosY.push(v.y); });
-        elipse.extremosMenor.forEach(function (b) { puntosX.push(b.x); puntosY.push(b.y); });
-        elipse.focos.forEach(function (f) { puntosX.push(f.x); puntosY.push(f.y); });
+        if (elipse.vertices) {
+            elipse.vertices.forEach(function (v) { puntosX.push(v.x); puntosY.push(v.y); });
+        }
+        if (elipse.extremosMenor) {
+            elipse.extremosMenor.forEach(function (b) { puntosX.push(b.x); puntosY.push(b.y); });
+        }
+        if (elipse.focos) {
+            elipse.focos.forEach(function (f) { puntosX.push(f.x); puntosY.push(f.y); });
+        }
 
         var minX = Math.min.apply(null, puntosX);
         var maxX = Math.max.apply(null, puntosX);
         var minY = Math.min.apply(null, puntosY);
         var maxY = Math.max.apply(null, puntosY);
 
-        // Añadir margen del 25% y mínimo de 4 unidades
         var spanX = Math.max(maxX - minX, 4);
         var spanY = Math.max(maxY - minY, 4);
         var margenX = Math.max(spanX * 0.25, 2);
@@ -105,7 +140,8 @@
             6
         );
 
-        // Hacerlo simétrico y cuadrado para no deformar la elipse
+        radioMax = Math.ceil(radioMax);
+
         return {
             minX: -radioMax,
             maxX: radioMax,
@@ -131,8 +167,8 @@
         var ancho = this.anchoCSS;
         var alto = this.altoCSS;
 
-        // Fondo
-        ctx.fillStyle = '#f8fafc';
+        // Fondo blanco nítido tipo papel milimetrado
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, ancho, alto);
 
         // Calcular paso adecuado de la cuadrícula (1, 2 o 5 según el rango)
@@ -141,7 +177,7 @@
         if (rango > 30) paso = 5;
         else if (rango > 16) paso = 2;
 
-        // Cuadrícula secundaria
+        // Cuadrícula secundaria suave
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#e2e8f0';
 
@@ -185,7 +221,7 @@
         ctx.lineTo(origen.x, alto);
         ctx.stroke();
 
-        // Flechas en los ejes
+        // Flechas en los extremos de los ejes
         ctx.fillStyle = '#334155';
         // Flecha X
         ctx.beginPath();
@@ -209,7 +245,6 @@
         for (var nx = inicioX; nx <= finX; nx += paso) {
             if (nx === 0) continue;
             var posMarcaX = this.aPixel(nx, 0, lim);
-            // Pequeña marca
             ctx.beginPath();
             ctx.moveTo(posMarcaX.x, origen.y - 3);
             ctx.lineTo(posMarcaX.x, origen.y + 3);
@@ -222,7 +257,6 @@
         for (var ny = inicioY; ny <= finY; ny += paso) {
             if (ny === 0) continue;
             var posMarcaY = this.aPixel(0, ny, lim);
-            // Pequeña marca
             ctx.beginPath();
             ctx.moveTo(origen.x - 3, posMarcaY.y);
             ctx.lineTo(origen.x + 3, posMarcaY.y);
@@ -232,7 +266,7 @@
 
         // Rotular nombres de los ejes
         ctx.font = 'bold 12px sans-serif';
-        ctx.fillStyle = '#1e293b';
+        ctx.fillStyle = '#0f172a';
         ctx.fillText('X', ancho - 12, origen.y - 14);
         ctx.fillText('Y', origen.x + 16, 12);
         ctx.fillText('O', origen.x - 8, origen.y + 12);
@@ -246,7 +280,7 @@
         var p = this.aPixel(x, y, lim);
         desplazamiento = desplazamiento || { dx: 10, dy: -10 };
 
-        // Punto exterior
+        // Punto exterior con anillo blanco
         ctx.beginPath();
         ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
         ctx.fillStyle = color;
@@ -255,7 +289,7 @@
         ctx.strokeStyle = '#ffffff';
         ctx.stroke();
 
-        // Etiqueta con fondo semitransparente para legibilidad
+        // Etiqueta con fondo semitransparente para máxima legibilidad
         var texto = etiqueta;
         ctx.font = 'bold 12px sans-serif';
         var anchoTexto = ctx.measureText(texto).width;
@@ -263,7 +297,7 @@
         var tx = p.x + desplazamiento.dx;
         var ty = p.y + desplazamiento.dy;
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.fillRect(tx - 3, ty - 10, anchoTexto + 6, 16);
         ctx.strokeStyle = '#cbd5e1';
         ctx.lineWidth = 1;
@@ -356,31 +390,31 @@
         ctx.closePath();
         ctx.stroke();
 
-        // Relleno suave con transparencia
-        ctx.fillStyle = 'rgba(37, 99, 235, 0.06)';
+        // Relleno suave con transparencia celeste
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.08)';
         ctx.fill();
         ctx.restore();
 
         // 4. Extremos del eje menor B' y B
-        if (config.mostrarExtremosMenor && !elipse.esCircunferencia) {
+        if (config.mostrarExtremosMenor && !elipse.esCircunferencia && elipse.extremosMenor) {
             this.dibujarPunto(elipse.extremosMenor[0].x, elipse.extremosMenor[0].y, "B'", config.colorExtremos, lim, { dx: -24, dy: -8 });
             this.dibujarPunto(elipse.extremosMenor[1].x, elipse.extremosMenor[1].y, 'B', config.colorExtremos, lim, { dx: 10, dy: -8 });
         }
 
         // 5. Vértices del eje mayor A' y A
-        if (config.mostrarVertices) {
+        if (config.mostrarVertices && elipse.vertices) {
             this.dibujarPunto(elipse.vertices[0].x, elipse.vertices[0].y, "A'", config.colorVertices, lim, { dx: -24, dy: 10 });
             this.dibujarPunto(elipse.vertices[1].x, elipse.vertices[1].y, 'A', config.colorVertices, lim, { dx: 10, dy: 10 });
         }
 
         // 6. Focos F' y F (si no es circunferencia)
-        if (config.mostrarFocos && !elipse.esCircunferencia) {
+        if (config.mostrarFocos && !elipse.esCircunferencia && elipse.focos) {
             this.dibujarPunto(elipse.focos[0].x, elipse.focos[0].y, "F'", config.colorFocos, lim, { dx: -24, dy: -12 });
             this.dibujarPunto(elipse.focos[1].x, elipse.focos[1].y, 'F', config.colorFocos, lim, { dx: 10, dy: -12 });
         }
 
         // 7. Centro C
-        if (config.mostrarCentro) {
+        if (config.mostrarCentro && elipse.centro) {
             this.dibujarPunto(elipse.centro.x, elipse.centro.y, 'C', config.colorCentro, lim, { dx: 10, dy: 10 });
         }
     };
@@ -388,13 +422,14 @@
     /**
      * Dibuja varias elipses concéntricas superpuestas con colores distintos para comparar excentricidades.
      */
-    Graficador.prototype.dibujarComparacion = function (listaElipses, colores) {
+    Graficador.prototype.dibujarComparacion = function (listaElipses, colores, toggles) {
         this.ajustarDPI();
         var lim = { minX: -6, maxX: 6, minY: -6, maxY: 6 };
         this.dibujarEjesYCuadricula(lim);
 
         var ctx = this.ctx;
         colores = colores || ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
+        var config = Object.assign({}, this.config, toggles || {});
 
         listaElipses.forEach(function (elipse, idx) {
             if (!elipse || !elipse.ok) return;
@@ -404,7 +439,7 @@
             ctx.lineWidth = 3;
             ctx.strokeStyle = col;
             ctx.beginPath();
-            var nPuntos = 200;
+            var nPuntos = 240;
             for (var i = 0; i <= nPuntos; i++) {
                 var t = (i * 2 * Math.PI) / nPuntos;
                 var ex = elipse.a * Math.cos(t);
@@ -417,7 +452,7 @@
             ctx.stroke();
 
             // Dibujar focos de cada elipse en su color
-            if (!elipse.esCircunferencia) {
+            if (config.mostrarFocos && !elipse.esCircunferencia && elipse.focos) {
                 var f1 = this.aPixel(elipse.focos[0].x, elipse.focos[0].y, lim);
                 var f2 = this.aPixel(elipse.focos[1].x, elipse.focos[1].y, lim);
                 ctx.fillStyle = col;
@@ -426,6 +461,11 @@
             }
             ctx.restore();
         }.bind(this));
+
+        // Dibujar Centro común en (0, 0)
+        if (config.mostrarCentro) {
+            this.dibujarPunto(0, 0, 'C(0,0)', '#f59e0b', lim, { dx: 10, dy: 10 });
+        }
     };
 
     return Graficador;

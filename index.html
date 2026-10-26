@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Laboratorio de la Elipse - Feria STEAM+ 2026</title>
     <!-- Hojas de estilo modulares con version para evitar cache -->
-    <link rel="stylesheet" href="css/base.css?v=5">
-    <link rel="stylesheet" href="css/animaciones.css?v=5">
-    <link rel="stylesheet" href="css/elipse.css?v=5">
+    <link rel="stylesheet" href="css/base.css?v=6">
+    <link rel="stylesheet" href="css/animaciones.css?v=6">
+    <link rel="stylesheet" href="css/elipse.css?v=6">
 </head>
 <body>
 
@@ -223,7 +223,7 @@
                                 <span class="etiqueta-control">Semieje Mayor (a):</span>
                                 <span class="valor-badge" id="valA">5</span>
                             </div>
-                            <input type="range" id="sliderA" min="1" max="10" step="0.5" value="5">
+                            <input type="range" id="sliderA" min="1" max="10" step="0.1" value="5">
                         </div>
 
                         <!-- Semieje b -->
@@ -232,7 +232,7 @@
                                 <span class="etiqueta-control">Semieje Menor (b):</span>
                                 <span class="valor-badge" id="valB">3</span>
                             </div>
-                            <input type="range" id="sliderB" min="1" max="10" step="0.5" value="3">
+                            <input type="range" id="sliderB" min="1" max="10" step="0.1" value="3">
                         </div>
 
                         <!-- Orientación -->
@@ -279,6 +279,12 @@
                 <!-- Columna Derecha: Gráfica Canvas y Ecuación -->
                 <div class="columna-grafica">
                     <div class="tarjeta-blanca" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Banner destacado cuando el modo comparación está activo -->
+                        <div id="bannerModoComparacion" style="display: none; background: rgba(56, 189, 248, 0.15); border: 1.5px solid #38bdf8; border-radius: 10px; padding: 8px 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <span style="color: #38bdf8; font-weight: 700; font-size: 0.88rem;">🔬 Comparando 4 elipses (a² = 16 constante · b² = 12, 9, 6, 2)</span>
+                            <button id="btnSalirComparacion" class="btn" style="padding: 4px 12px; font-size: 0.82rem; background: #0284c7; color: white; border: none; border-radius: 6px; cursor: pointer;">✕ Volver a mi elipse</button>
+                        </div>
+
                         <!-- Toolbar de toggles -->
                         <div class="toolbar-elementos">
                             <label class="item-toggle"><input type="checkbox" id="chkCentro" checked> 🟡 Centro C</label>
@@ -845,13 +851,13 @@
     </footer>
 
     <!-- SCRIPTS MODULARES (Sin CDN ni librerías externas) -->
-    <script src="js/matematicas/formato.js"></script>
-    <script src="js/matematicas/elipse.js"></script>
-    <script src="js/graficador.js"></script>
-    <script src="js/ui/ui-explora.js"></script>
-    <script src="js/ui/ui-analiza.js"></script>
-    <script src="js/ui/ui-arma.js"></script>
-    <script src="js/ui/ui-retos.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/matematicas/formato.js?v=6"></script>
+    <script src="js/matematicas/elipse.js?v=6"></script>
+    <script src="js/graficador.js?v=6"></script>
+    <script src="js/ui/ui-explora.js?v=6"></script>
+    <script src="js/ui/ui-analiza.js?v=6"></script>
+    <script src="js/ui/ui-arma.js?v=6"></script>
+    <script src="js/ui/ui-retos.js?v=6"></script>
+    <script src="js/main.js?v=6"></script>
 </body>
 </html>
