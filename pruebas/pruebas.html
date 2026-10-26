@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Unitarias - Laboratorio de la Elipse</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 24px;
+        }
+        .contenedor {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            color: #38bdf8;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .resumen-tarjeta {
+            background: #0f172a;
+            border: 2px solid #334155;
+            padding: 18px 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .exito { color: #4ade80; }
+        .fallo { color: #f87171; }
+        .lista-pruebas {
+            max-height: 550px;
+            overflow-y: auto;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            background: #090d16;
+            font-family: Consolas, monospace;
+            font-size: 0.95rem;
+        }
+        .item-prueba {
+            padding: 6px 10px;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-volver {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #38bdf8;
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>🧪 Suite de Pruebas Unitarias en el Navegador</h1>
+        <p>Verificación matemática automática del <strong>Laboratorio de la Elipse</strong>.</p>
+        
+        <div class="resumen-tarjeta">
+            <span id="totales">Cargando pruebas...</span>
+            <span class="exito" id="pasadas"></span>
+            <span class="fallo" id="falladas"></span>
+        </div>
+
+        <div class="lista-pruebas" id="consolaPruebas"></div>
+
+        <a href="../index.html" class="btn-volver">🏠 Volver al Laboratorio</a>
+    </div>
+
+    <!-- Cargar módulos matemáticos -->
+    <script src="../js/matematicas/formato.js"></script>
+    <script src="../js/matematicas/elipse.js"></script>
+    <!-- Cargar suite de pruebas -->
+    <script src="pruebas.js"></script>
+    <script>
+        // Renderizar en HTML los resultados
+        document.addEventListener('DOMContentLoaded', function() {
+            var elConsola = document.getElementById('consolaPruebas');
+            var elTotales = document.getElementById('totales');
+            var elPasadas = document.getElementById('pasadas');
+            var elFalladas = document.getElementById('falladas');
+
+            elTotales.textContent = 'Total: ' + totalPruebas + ' pruebas';
+            elPasadas.textContent = '✅ ' + pruebasPasadas + ' superadas';
+            elFalladas.textContent = '❌ ' + pruebasFalladas + ' falladas';
+
+            elConsola.innerHTML = '';
+            resultadosDetalle.forEach(function(item) {
+                var div = document.createElement('div');
+                div.className = 'item-prueba';
+                div.innerHTML = '<span>' + (item.paso ? '✅' : '❌') + ' ' + item.nombre + '</span>' +
+                                '<span style="color:' + (item.paso ? '#4ade80' : '#f87171') + '">' +
+                                (item.paso ? 'OK' : 'FALLÓ') + '</span>';
+                elConsola.appendChild(div);
+            });
+        });
+    </script>
+</body>
+</html>
