@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Laboratorio de la Elipse - Feria STEAM+ 2026</title>
     <!-- Hojas de estilo modulares -->
     <link rel="stylesheet" href="css/base.css">
@@ -11,13 +11,16 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR RESPONSIVE -->
     <header class="barra-navegacion">
         <a href="#" class="logo-sitio" onclick="navegarA('bienvenida'); return false;">
             <span>🪐 Laboratorio de la Elipse</span>
             <span class="insignia-steam">FERIA STEAM+</span>
         </a>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div class="nav-botones">
+            <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+                👩‍🔬 Valeria · Salomé · Gabriela
+            </span>
             <a href="pruebas/pruebas.html" class="btn-volver-menu" title="Ejecutar pruebas unitarias matemáticas">🧪 Pruebas</a>
             <button class="btn-volver-menu" onclick="navegarA('menu')">📋 Menú</button>
         </div>
@@ -44,11 +47,22 @@
                     <span class="simbolo-mat" style="top: 15%; left: 45%;">∞</span>
                 </div>
 
-                <!-- Título animado -->
+                <!-- Título animado y subtítulo -->
                 <h1 class="titulo-rebote">🪐 Laboratorio de la Elipse</h1>
-                <p style="color: #94a3b8; font-size: 1.25rem; text-align: center; z-index: 3; font-weight: 600;">
+                <p style="color: #94a3b8; font-size: clamp(1rem, 2.5vw, 1.25rem); text-align: center; z-index: 3; font-weight: 600;">
                     Feria STEAM+ · Grado Décimo · Tecnología e Informática y Matemáticas
                 </p>
+
+                <!-- TARJETA DESTACADA DE LAS INTEGRANTES -->
+                <div class="tarjeta-equipo-bienvenida">
+                    <span class="titulo-equipo">✨ Proyecto Creado y Desarrollado por:</span>
+                    <div class="chips-integrantes">
+                        <span class="chip-estudiante">👩‍🔬 Valeria Hinestroza</span>
+                        <span class="chip-estudiante">👩‍🔬 Salomé Jiménez</span>
+                        <span class="chip-estudiante">👩‍🔬 Gabriela Muñoz</span>
+                    </div>
+                    <span class="subtitulo-equipo">Grado Décimo (10°) · Matemáticas & Tecnología e Informática · 2026</span>
+                </div>
 
                 <!-- Órbita planetaria SVG interactiva (Sol en un foco, planeta orbitando) -->
                 <div class="contenedor-orbita">
@@ -98,7 +112,7 @@
                         </path>
                     </svg>
                     <div class="globo-mati">
-                        ¡Hola! Soy <strong>Mati</strong> 🚀. ¡Hoy descubriremos la magia de las elipses, como la órbita de los planetas y los satélites!
+                        ¡Hola! Soy <strong>Mati</strong> 🚀. ¡Hoy descubriremos la magia de las elipses con Valeria, Salomé y Gabriela!
                     </div>
                 </div>
 
@@ -113,10 +127,17 @@
              PANTALLA 2: MENÚ DE ACTIVIDADES
         ════════════════════════════════════════════════════════ -->
         <section id="pantallaMenu" class="pantalla">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="background: rgba(255, 255, 255, 0.08); border: 1.5px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 12px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span style="color: #f8fafc; font-weight: 700; font-size: clamp(0.9rem, 2vw, 1.05rem);">
+                    Equipo de Trabajo: <strong style="color: #38bdf8;">Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz</strong>
+                </span>
+                <span style="background: #38bdf8; color: #0f172a; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: 0.8rem;">Grado 10° STEAM+</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
                 <div>
-                    <h2 style="color: #ffffff; font-size: 2rem; font-weight: 800;">🎯 ¿Qué quieres descubrir hoy?</h2>
-                    <p style="color: #94a3b8; font-size: 1.1rem;">Selecciona una actividad para comenzar tu viaje por las elipses.</p>
+                    <h2 style="color: #ffffff; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 800;">🎯 ¿Qué quieres descubrir hoy?</h2>
+                    <p style="color: #94a3b8; font-size: clamp(0.95rem, 2vw, 1.1rem);">Selecciona una actividad para comenzar tu viaje por las elipses.</p>
                 </div>
                 <button id="btnVolverBienvenida" class="btn btn-secundario">← Portada</button>
             </div>
@@ -180,7 +201,7 @@
                 <!-- Columna Izquierda: Controles -->
                 <div class="columna-controles">
                     <div class="tarjeta-blanca">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                             <h3 style="color: #0f172a; font-size: 1.25rem;">🎛️ Parámetros de la Elipse</h3>
                             <button id="btnEjemploExplora" class="btn btn-ejemplo">💡 Probar un ejemplo</button>
                         </div>
@@ -236,7 +257,7 @@
 
                         <!-- Medidor de Achatamiento -->
                         <div class="caja-achatamiento">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                                 <strong style="color: #0f172a;">📏 Medidor de Achatamiento (e = c/a):</strong>
                                 <span id="valorExcentricidad" style="font-weight: 800; color: #0284c7;">e = 0.8000</span>
                             </div>
@@ -334,22 +355,24 @@
                             </div>
                         </div>
 
-                        <!-- Tabla de comparación multielipse (oculta inicialmente) -->
+                        <!-- Tabla de comparación multielipse con scroll horizontal responsivo -->
                         <div id="contenedorComparacion" style="display: none; margin-top: 20px;">
                             <h4 style="color: #0284c7; margin-bottom: 8px;">🔬 Comparación de Excentricidades con a² = 16 (a = 4):</h4>
-                            <table class="tabla-comparacion">
-                                <thead>
-                                    <tr>
-                                        <th>Elipse</th>
-                                        <th>a²</th>
-                                        <th>b²</th>
-                                        <th>c = √(a²−b²)</th>
-                                        <th>Excentricidad (e)</th>
-                                        <th>Achatamiento</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cuerpoTablaComparacion"></tbody>
-                            </table>
+                            <div class="tabla-wrapper">
+                                <table class="tabla-comparacion">
+                                    <thead>
+                                        <tr>
+                                            <th>Elipse</th>
+                                            <th>a²</th>
+                                            <th>b²</th>
+                                            <th>c = √(a²−b²)</th>
+                                            <th>Excentricidad (e)</th>
+                                            <th>Achatamiento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cuerpoTablaComparacion"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -383,11 +406,11 @@
                 <div class="columna-controles">
                     <div class="tarjeta-blanca">
                         <!-- Pestañas de modo -->
-                        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                            <button type="button" id="tabFormaCanonica" class="btn-opcion seleccionado" style="flex: 1;">
+                        <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                            <button type="button" id="tabFormaCanonica" class="btn-opcion seleccionado" style="flex: 1; min-width: 140px;">
                                 Forma Canónica (h, k)
                             </button>
-                            <button type="button" id="tabFormaGeneral" class="btn-opcion" style="flex: 1;">
+                            <button type="button" id="tabFormaGeneral" class="btn-opcion" style="flex: 1; min-width: 140px;">
                                 Forma Ax² + By² = C
                             </button>
                         </div>
@@ -397,7 +420,7 @@
                             <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 12px;">
                                 Ecuación: <code>(x − h)² / denX + (y − k)² / denY = 1</code>
                             </p>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="subgrid-2-cols">
                                 <div>
                                     <label class="etiqueta-control">Centro X (h):</label>
                                     <input type="text" id="inputAnalizaH" value="2" placeholder="ej. 2 o 3/2">
@@ -422,7 +445,7 @@
                             <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 12px;">
                                 Ecuación: <code>A·x² + B·y² = C</code> (con A, B, C > 0)
                             </p>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                            <div class="subgrid-3-cols">
                                 <div>
                                     <label class="etiqueta-control">Coeficiente A:</label>
                                     <input type="text" id="inputGeneralA" value="4" placeholder="ej. 4">
@@ -438,11 +461,11 @@
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 10px; margin-top: 18px;">
-                            <button id="btnCalcularAnaliza" class="btn btn-primario" style="flex: 2;">
+                        <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;">
+                            <button id="btnCalcularAnaliza" class="btn btn-primario" style="flex: 2; min-width: 160px;">
                                 🔍 Analizar Ecuación
                             </button>
-                            <button id="btnEjemploAnaliza" class="btn btn-ejemplo" style="flex: 1;">
+                            <button id="btnEjemploAnaliza" class="btn btn-ejemplo" style="flex: 1; min-width: 100px;">
                                 💡 Ejemplo
                             </button>
                             <button id="btnLimpiarAnaliza" class="btn btn-secundario">
@@ -453,7 +476,7 @@
 
                     <!-- Panel de Resultados de Analizar -->
                     <div id="panelResultadosAnaliza" class="panel-resultados" style="display: none;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                             <h4 style="color: #0f172a; margin: 0;">Orientación Detectada:</h4>
                             <span id="orientacionAnaliza" class="valor-badge">Horizontal</span>
                         </div>
@@ -558,16 +581,16 @@
                         <h3 style="color: #0f172a; margin-bottom: 12px;">¿Qué datos tienes para construir la elipse?</h3>
                         
                         <!-- Selector de 3 modalidades -->
-                        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px;">
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600;">
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
                                 <input type="radio" name="tipoDatosArma" value="a" checked>
                                 a) Centro, longitud del eje mayor, longitud del eje menor y orientación.
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
                                 <input type="radio" name="tipoDatosArma" value="b">
                                 b) Los dos vértices del eje mayor y la longitud del lado recto.
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
                                 <input type="radio" name="tipoDatosArma" value="c">
                                 c) Los dos vértices del eje mayor y un extremo del eje menor.
                             </label>
@@ -575,7 +598,7 @@
 
                         <!-- Formulario Caso A -->
                         <div id="formArmaA">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="subgrid-2-cols">
                                 <div>
                                     <label class="etiqueta-control">Centro X (h):</label>
                                     <input type="text" id="inputArmaH" value="-2">
@@ -604,7 +627,7 @@
 
                         <!-- Formulario Caso B -->
                         <div id="formArmaB" style="display: none;">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="subgrid-2-cols">
                                 <div>
                                     <label class="etiqueta-control">Vértice 1 X (A'):</label>
                                     <input type="text" id="inputArmaV1x" value="3">
@@ -630,7 +653,7 @@
 
                         <!-- Formulario Caso C -->
                         <div id="formArmaC" style="display: none;">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="subgrid-2-cols">
                                 <div>
                                     <label class="etiqueta-control">Vértice 1 X (A'):</label>
                                     <input type="text" id="inputArmaCV1x" value="-5">
@@ -658,11 +681,11 @@
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 10px; margin-top: 18px;">
-                            <button id="btnCalcularArma" class="btn btn-primario" style="flex: 2;">
+                        <div style="display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;">
+                            <button id="btnCalcularArma" class="btn btn-primario" style="flex: 2; min-width: 160px;">
                                 ⚙️ Armar Ecuación
                             </button>
-                            <button id="btnEjemploArma" class="btn btn-ejemplo" style="flex: 1;">
+                            <button id="btnEjemploArma" class="btn btn-ejemplo" style="flex: 1; min-width: 100px;">
                                 💡 Ejemplo
                             </button>
                             <button id="btnLimpiarArma" class="btn btn-secundario">
@@ -768,14 +791,14 @@
                             <input type="text" id="inputRespuestaReto" placeholder="Escribe tu número, fracción o respuesta...">
                         </div>
 
-                        <div style="display: flex; gap: 10px;">
-                            <button id="btnResponderReto" class="btn btn-primario" style="flex: 2;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button id="btnResponderReto" class="btn btn-primario" style="flex: 2; min-width: 160px;">
                                 ✅ Comprobar Respuesta
                             </button>
-                            <button id="btnPistaReto" class="btn btn-ejemplo" style="flex: 1;">
+                            <button id="btnPistaReto" class="btn btn-ejemplo" style="flex: 1; min-width: 90px;">
                                 💡 Pista
                             </button>
-                            <button id="btnSiguienteReto" class="btn btn-primario" style="display: none; flex: 2; background: #10b981;">
+                            <button id="btnSiguienteReto" class="btn btn-primario" style="display: none; flex: 2; min-width: 160px; background: #10b981;">
                                 Siguiente Reto ➔
                             </button>
                         </div>
@@ -795,10 +818,10 @@
             <!-- Tarjeta Fin de Juego -->
             <div id="tarjetaFinRetos" class="tarjeta-blanca" style="display: none; text-align: center; max-width: 650px; margin: 30px auto; padding: 40px 24px;">
                 <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
-                <h2 style="color: #0f172a; font-size: 2.2rem; font-weight: 800;">¡Ronda de Retos Completada!</h2>
-                <div id="estrellasFinales" style="font-size: 2.5rem; margin: 16px 0; color: #f59e0b;"></div>
-                <p id="mensajeFinalMati" style="font-size: 1.2rem; color: #334155; line-height: 1.5; margin-bottom: 24px; font-weight: 600;"></p>
-                <div style="display: flex; gap: 14px; justify-content: center;">
+                <h2 style="color: #0f172a; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800;">¡Ronda de Retos Completada!</h2>
+                <div id="estrellasFinales" style="font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 16px 0; color: #f59e0b;"></div>
+                <p id="mensajeFinalMati" style="font-size: clamp(1rem, 2.5vw, 1.2rem); color: #334155; line-height: 1.5; margin-bottom: 24px; font-weight: 600;"></p>
+                <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
                     <button id="btnReiniciarRetos" class="btn btn-primario">🔄 Jugar otra ronda</button>
                     <button class="btn btn-volver-menu">🏠 Volver al menú</button>
                 </div>
@@ -807,11 +830,15 @@
 
     </main>
 
-    <!-- PIE DE PÁGINA -->
+    <!-- PIE DE PÁGINA ELEGANTE CON CHIPS DE INTEGRANTES -->
     <footer>
-        <p>Laboratorio Matemático Interactivo: <strong>La Elipse</strong> · Feria STEAM+ Grado Décimo 2026</p>
-        <p style="margin-top: 4px; color: #cbd5e1; font-weight: 600;">Equipo: <strong>Valeria Hinestroza</strong> · <strong>Salomé Jiménez</strong> · <strong>Gabriela Muñoz</strong></p>
-        <p style="margin-top: 6px;">Desarrollado con HTML5, CSS3 y JavaScript Puro (Vanilla JS). <a href="pruebas/pruebas.html">Ver suite de pruebas matemáticas</a></p>
+        <div class="chips-integrantes" style="margin-bottom: 14px;">
+            <span class="chip-estudiante" style="font-size: 0.95rem; padding: 6px 16px;">👩‍🔬 Valeria Hinestroza</span>
+            <span class="chip-estudiante" style="font-size: 0.95rem; padding: 6px 16px;">👩‍🔬 Salomé Jiménez</span>
+            <span class="chip-estudiante" style="font-size: 0.95rem; padding: 6px 16px;">👩‍🔬 Gabriela Muñoz</span>
+        </div>
+        <p>Laboratorio Matemático Interactivo: <strong>La Elipse</strong> · Grado Décimo (10°) · Feria STEAM+ 2026</p>
+        <p style="margin-top: 6px; font-size: 0.88rem;">Desarrollado con HTML5, CSS3 y JavaScript Puro (Vanilla JS). <a href="pruebas/pruebas.html">Ver suite de pruebas matemáticas</a></p>
     </footer>
 
     <!-- SCRIPTS MODULARES (Sin CDN ni librerías externas) -->

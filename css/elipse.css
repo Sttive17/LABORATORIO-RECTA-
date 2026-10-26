@@ -1,15 +1,17 @@
 /**
  * Laboratorio de la Elipse - Feria STEAM+
- * Estilos específicos de las 4 Actividades, Controles, Canvas y Retos
+ * Estilos específicos de las 4 Actividades con Sistema Responsivo Completo
  */
 
-/* Encabezado de cada actividad */
+/* ══════════ ENCABEZADO DE ACTIVIDAD RESPONSIVE ══════════ */
 .cabecera-actividad {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     background: #1e293b;
-    padding: 16px 24px;
+    padding: clamp(12px, 2.5vw, 18px) clamp(16px, 3vw, 24px);
     border-radius: var(--radio-borde);
     margin-bottom: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -17,26 +19,28 @@
 }
 
 .cabecera-actividad h2 {
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
     font-weight: 800;
     color: #38bdf8;
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .instruccion-actividad {
     color: #94a3b8;
-    font-size: 1rem;
+    font-size: clamp(0.88rem, 2vw, 1rem);
     margin-top: 4px;
 }
 
-/* Disposición general: Controles a la izquierda, Canvas a la derecha */
+/* ══════════ DISPOSICIÓN PRINCIPAL DE ACTIVIDAD ══════════ */
 .layout-actividad {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: clamp(14px, 2.5vw, 24px);
     align-items: start;
+    width: 100%;
 }
 
 @media (max-width: 900px) {
@@ -49,7 +53,8 @@
 .columna-controles {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+    width: 100%;
 }
 
 /* Grupos de campos y sliders */
@@ -57,7 +62,7 @@
     background: #f8fafc;
     border: 2px solid var(--color-borde);
     border-radius: 14px;
-    padding: 16px;
+    padding: clamp(12px, 2.5vw, 16px);
     transition: border-color 0.2s ease;
 }
 
@@ -69,11 +74,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .etiqueta-control {
-    font-size: 1.05rem;
+    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
     font-weight: 700;
     color: #1e293b;
     display: flex;
@@ -92,26 +99,27 @@
     text-align: center;
 }
 
-/* Sliders estilizados */
+/* Sliders estilizados con soporte táctil */
 input[type="range"] {
     width: 100%;
-    height: 10px;
-    border-radius: 5px;
+    height: 12px;
+    border-radius: 6px;
     background: #cbd5e1;
     outline: none;
     cursor: pointer;
     margin: 8px 0;
+    touch-action: pan-y;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: #0284c7;
     cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    border: 2.5px solid white;
 }
 
 /* Botones selectores de orientación */
@@ -120,6 +128,24 @@ input[type="range"]::-webkit-slider-thumb {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 8px;
+}
+
+.subgrid-2-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.subgrid-3-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .subgrid-2-cols, .subgrid-3-cols, .selector-orientacion {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 .btn-opcion {
@@ -131,6 +157,8 @@ input[type="range"]::-webkit-slider-thumb {
     color: #475569;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-size: clamp(0.88rem, 2vw, 0.98rem);
+    text-align: center;
 }
 
 .btn-opcion.seleccionado {
@@ -145,7 +173,7 @@ input[type="range"]::-webkit-slider-thumb {
     background: #ffffff;
     border: 2px solid #e2e8f0;
     border-radius: 14px;
-    padding: 16px;
+    padding: clamp(12px, 2.5vw, 16px);
     margin-top: 10px;
 }
 
@@ -169,32 +197,36 @@ input[type="range"]::-webkit-slider-thumb {
 .medidor-etiquetas {
     display: flex;
     justify-content: space-between;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: #64748b;
     font-weight: 600;
+    flex-wrap: wrap;
+    gap: 4px;
 }
 
 .achatamiento-diagnostico {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 8px;
-    font-size: 1.05rem;
+    margin-top: 10px;
+    font-size: clamp(0.92rem, 2vw, 1.05rem);
     font-weight: 700;
+    flex-wrap: wrap;
 }
 
 .insignia-achatamiento {
     padding: 4px 12px;
     border-radius: 20px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
 }
 
-/* Columna Gráfica (Canvas y Toolbar) */
+/* ══════════ COLUMNA GRÁFICA Y CANVAS RESPONSIVE ══════════ */
 .columna-grafica {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    width: 100%;
 }
 
 .canvas-contenedor {
@@ -202,31 +234,41 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: var(--radio-borde);
     box-shadow: var(--sombra-tarjeta);
     border: 2px solid #e2e8f0;
-    padding: 12px;
+    padding: clamp(8px, 2vw, 14px);
     position: relative;
     overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 canvas {
     display: block;
-    width: 100%;
-    height: auto;
+    width: 100% !important;
+    height: auto !important;
     aspect-ratio: 1 / 1;
-    max-width: 540px;
+    max-width: 520px;
     margin: 0 auto;
     background: #f8fafc;
     border-radius: 8px;
+    touch-action: manipulation;
 }
 
-/* Toolbar de casillas para mostrar/ocultar elementos */
+/* Toolbar de casillas */
 .toolbar-elementos {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     background: #1e293b;
-    padding: 12px;
+    padding: 10px;
     border-radius: 12px;
     color: white;
+    justify-content: flex-start;
+}
+
+@media (max-width: 500px) {
+    .toolbar-elementos {
+        justify-content: center;
+    }
 }
 
 .item-toggle {
@@ -234,9 +276,9 @@ canvas {
     align-items: center;
     gap: 6px;
     background: rgba(255, 255, 255, 0.08);
-    padding: 6px 10px;
+    padding: 5px 9px;
     border-radius: 8px;
-    font-size: 0.88rem;
+    font-size: clamp(0.78rem, 1.8vw, 0.88rem);
     cursor: pointer;
     user-select: none;
     transition: background 0.15s ease;
@@ -251,64 +293,75 @@ canvas {
     cursor: pointer;
 }
 
-/* Caja de Resultados Analíticos */
+/* ══════════ PANEL DE RESULTADOS Y ECUACIÓN ══════════ */
 .panel-resultados {
     background: #ffffff;
     border-radius: 14px;
     border: 2px solid #e2e8f0;
-    padding: 20px;
+    padding: clamp(14px, 2.5vw, 20px);
     margin-top: 10px;
+    width: 100%;
 }
 
 .ecuacion-destacada {
     background: #f0fdf4;
     border: 2px solid #86efac;
-    padding: 14px;
+    padding: clamp(10px, 2vw, 14px);
     border-radius: 12px;
     text-align: center;
-    font-size: 1.4rem;
+    font-size: clamp(1.05rem, 3vw, 1.35rem);
     font-weight: 800;
     color: #166534;
     font-family: 'Cambria Math', 'Times New Roman', serif;
     margin-bottom: 16px;
+    overflow-x: auto;
+    word-break: break-word;
 }
 
 .grilla-propiedades {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
 }
 
 .propiedad-item {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    padding: 10px 14px;
+    padding: 8px 12px;
     border-radius: 10px;
+    word-break: break-word;
 }
 
 .propiedad-nombre {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #64748b;
 }
 
 .propiedad-valor {
-    font-size: 1.05rem;
+    font-size: clamp(0.92rem, 2vw, 1.02rem);
     font-weight: 700;
     color: #0f172a;
     margin-top: 2px;
 }
 
-/* Tabla de Comparación de Excentricidades */
+/* Tabla de Comparación con scroll horizontal en móvil */
+.tabla-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 12px;
+}
+
 .tabla-comparacion {
     width: 100%;
+    min-width: 480px;
     border-collapse: collapse;
-    margin-top: 14px;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
 }
 
 .tabla-comparacion th, .tabla-comparacion td {
-    padding: 10px 12px;
+    padding: 8px 10px;
     text-align: center;
     border-bottom: 1px solid #e2e8f0;
 }
@@ -325,28 +378,32 @@ canvas {
     height: 12px;
     border-radius: 50%;
     margin-right: 6px;
+    vertical-align: middle;
 }
 
-/* Estilos de Retos (Quiz) */
+/* ══════════ ESTILOS DE RETOS (QUIZ) ══════════ */
 .tarjeta-reto {
     background: #ffffff;
     border-radius: 18px;
-    padding: 24px;
+    padding: clamp(16px, 3vw, 24px);
     box-shadow: var(--sombra-tarjeta);
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .barra-progreso-retos {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #e2e8f0;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .estrellas-acumuladas {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #f59e0b;
     display: flex;
@@ -355,28 +412,29 @@ canvas {
 }
 
 .pregunta-reto {
-    font-size: 1.25rem;
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
     font-weight: 800;
     color: #0f172a;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .caja-pasos {
     background: #f8fafc;
     border-left: 4px solid #3b82f6;
-    padding: 14px;
+    padding: 12px 14px;
     border-radius: 0 10px 10px 0;
     margin: 14px 0;
     font-family: Consolas, monospace;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     line-height: 1.6;
+    overflow-x: auto;
 }
 
 /* Inputs de texto / fracciones amigables */
 input[type="text"], input[type="number"], select {
     width: 100%;
     padding: 10px 14px;
-    font-size: 1.05rem;
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
     border: 2px solid #cbd5e1;
     border-radius: 10px;
     font-family: inherit;
