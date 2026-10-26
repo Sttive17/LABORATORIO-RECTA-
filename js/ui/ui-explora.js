@@ -348,10 +348,29 @@ var UIExplora = (function () {
         var bannerComp = document.getElementById('bannerModoComparacion');
         if (bannerComp) bannerComp.style.display = 'flex';
 
-        // Actualizar caja de ecuación con aviso
+        // Actualizar caja de ecuación con leyenda de colores y botón de salida
         var elEcuacion = document.getElementById('ecuacionExplora');
         if (elEcuacion) {
-            elEcuacion.innerHTML = '🔬 <strong>Modo Comparación de Excentricidades:</strong> a² = 16 constante · b² = 12, 9, 6, 2 variable';
+            elEcuacion.innerHTML = 
+                '<div style="display: flex; flex-direction: column; gap: 8px; text-align: left;">' +
+                    '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">' +
+                        '<span style="color: #38bdf8; font-weight: 800; font-size: 0.95rem;">🔬 Experimento del libro (pág. 195): a² = 16 fijo con b² variable</span>' +
+                        '<button id="btnSalirComparacionEnCaja" class="btn" style="padding: 4px 12px; font-size: 0.82rem; background: #0284c7; color: white; border: none; border-radius: 6px; cursor: pointer;">✕ Volver a mi elipse</button>' +
+                    '</div>' +
+                    '<div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; font-size: 0.84rem; font-family: system-ui, sans-serif;">' +
+                        '<span style="background: rgba(37,99,235,0.2); border: 1px solid #2563eb; color: #93c5fd; padding: 4px 10px; border-radius: 6px;">🔵 b²=12 → e=0.50 (Ovalada)</span>' +
+                        '<span style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 4px 10px; border-radius: 6px;">🟢 b²=9 → e=0.66 (Achatada)</span>' +
+                        '<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fcd34d; padding: 4px 10px; border-radius: 6px;">🟠 b²=6 → e=0.79 (Bien achatada)</span>' +
+                        '<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 4px 10px; border-radius: 6px;">🔴 b²=2 → e=0.94 (Casi plana)</span>' +
+                    '</div>' +
+                '</div>';
+
+            var btnSalirCaja = document.getElementById('btnSalirComparacionEnCaja');
+            if (btnSalirCaja) {
+                btnSalirCaja.addEventListener('click', function () {
+                    salirModoComparacion(true);
+                });
+            }
         }
 
         if (graficador) {
