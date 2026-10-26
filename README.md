@@ -1,6 +1,7 @@
 # 🪐 Laboratorio de la Elipse - Feria STEAM+ 2026
 
-**Proyecto Interactivo de Grado Décimo · Tecnología e Informática y Matemáticas**
+**Proyecto Interactivo de Grado Décimo · Tecnología e Informática y Matemáticas**  
+**Equipo de Trabajo:** Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
 
 Aplicación web educativa interactiva desarrollada en **HTML5, CSS3 y JavaScript Puro (Vanilla JS)** para explorar, analizar y construir elipses con centro en $(h, k)$, con la circunferencia como caso especial cuando $a = b$.
 

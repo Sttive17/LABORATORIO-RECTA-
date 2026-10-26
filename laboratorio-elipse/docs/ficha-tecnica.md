@@ -9,11 +9,11 @@
 * **Fecha de Entrega:** 26 de octubre de 2026
 
 ## 2. Equipo de Trabajo (Estudiantes)
-* **Integrante 1 (Coordinador / Programador):** Johan Sttive Linares Barragán
-* **Integrante 2 (Diseño / Verificador):** [Nombre del Estudiante]
-* **Integrante 3 (Relator / Matemáticas):** [Nombre del Estudiante]
-* **Institución Educativa:** [Nombre de la Institución]
-* **Docente Asesor:** [Nombre del Docente]
+* **Integrante 1:** Valeria Hinestroza
+* **Integrante 2:** Salomé Jiménez
+* **Integrante 3:** Gabriela Muñoz
+* **Grado:** Décimo (10°)
+* **Asignaturas:** Tecnología e Informática y Matemáticas
 
 ## 3. Tecnologías y Arquitectura Técnica
 * **Lenguajes:**
