@@ -1,0 +1,390 @@
+/**
+ * Laboratorio de la Elipse - Feria STEAM+
+ * Estilos específicos de las 4 Actividades, Controles, Canvas y Retos
+ */
+
+/* Encabezado de cada actividad */
+.cabecera-actividad {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e293b;
+    padding: 16px 24px;
+    border-radius: var(--radio-borde);
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.cabecera-actividad h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.instruccion-actividad {
+    color: #94a3b8;
+    font-size: 1rem;
+    margin-top: 4px;
+}
+
+/* Disposición general: Controles a la izquierda, Canvas a la derecha */
+.layout-actividad {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .layout-actividad {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Columna de controles */
+.columna-controles {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Grupos de campos y sliders */
+.grupo-control {
+    background: #f8fafc;
+    border: 2px solid var(--color-borde);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.grupo-control:focus-within {
+    border-color: var(--color-primario);
+}
+
+.fila-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.etiqueta-control {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.valor-badge {
+    background: #0284c7;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    min-width: 48px;
+    text-align: center;
+}
+
+/* Sliders estilizados */
+input[type="range"] {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #cbd5e1;
+    outline: none;
+    cursor: pointer;
+    margin: 8px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #0284c7;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid white;
+}
+
+/* Botones selectores de orientación */
+.selector-orientacion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn-opcion {
+    padding: 12px;
+    border: 2px solid #cbd5e1;
+    background: #ffffff;
+    border-radius: 10px;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-opcion.seleccionado {
+    background: #e0f2fe;
+    border-color: #0284c7;
+    color: #0369a1;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+}
+
+/* Medidor de Achatamiento (Excentricidad) */
+.caja-achatamiento {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 10px;
+}
+
+.barra-achatamiento-contenedor {
+    background: #e2e8f0;
+    height: 18px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+    position: relative;
+}
+
+.barra-achatamiento-progreso {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #10b981, #f59e0b, #8b5cf6);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.medidor-etiquetas {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.achatamiento-diagnostico {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.insignia-achatamiento {
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+/* Columna Gráfica (Canvas y Toolbar) */
+.columna-grafica {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.canvas-contenedor {
+    background: #ffffff;
+    border-radius: var(--radio-borde);
+    box-shadow: var(--sombra-tarjeta);
+    border: 2px solid #e2e8f0;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-width: 540px;
+    margin: 0 auto;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+/* Toolbar de casillas para mostrar/ocultar elementos */
+.toolbar-elementos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #1e293b;
+    padding: 12px;
+    border-radius: 12px;
+    color: white;
+}
+
+.item-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
+
+.item-toggle:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.item-toggle input[type="checkbox"] {
+    accent-color: #38bdf8;
+    cursor: pointer;
+}
+
+/* Caja de Resultados Analíticos */
+.panel-resultados {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.ecuacion-destacada {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #166534;
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    margin-bottom: 16px;
+}
+
+.grilla-propiedades {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.propiedad-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 10px;
+}
+
+.propiedad-nombre {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.propiedad-valor {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 2px;
+}
+
+/* Tabla de Comparación de Excentricidades */
+.tabla-comparacion {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 0.95rem;
+}
+
+.tabla-comparacion th, .tabla-comparacion td {
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.tabla-comparacion th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+}
+
+.punto-color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+/* Estilos de Retos (Quiz) */
+.tarjeta-reto {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--sombra-tarjeta);
+    margin-bottom: 20px;
+}
+
+.barra-progreso-retos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.estrellas-acumuladas {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #f59e0b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pregunta-reto {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 14px;
+}
+
+.caja-pasos {
+    background: #f8fafc;
+    border-left: 4px solid #3b82f6;
+    padding: 14px;
+    border-radius: 0 10px 10px 0;
+    margin: 14px 0;
+    font-family: Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Inputs de texto / fracciones amigables */
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 1.05rem;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
