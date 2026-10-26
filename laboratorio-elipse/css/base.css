@@ -123,6 +123,29 @@ body {
     display: block;
 }
 
+/* ══════════ NOMBRES DE AUTORAS EN PORTADA ══════════ */
+.nombres-autoras-portada {
+    color: #ffffff;
+    font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+    font-weight: 700;
+    text-align: center;
+    z-index: 3;
+    margin-top: 2px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.subtitulo-portada {
+    color: #cbd5e1;
+    font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+    text-align: center;
+    z-index: 3;
+    font-weight: 500;
+    margin-bottom: 12px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
 /* ══════════ TARJETA DE LAS INTEGRANTES DESTACADA ══════════ */
 .tarjeta-equipo-bienvenida {
     background: rgba(15, 23, 42, 0.75);
