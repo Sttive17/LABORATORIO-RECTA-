@@ -253,8 +253,8 @@
         }
         var h = params.h;
         var k = params.k;
-        var ejeMayor = params.ejeMayor;
-        var ejeMenor = params.ejeMenor;
+        var ejeMayor = params.ejeMayor !== undefined ? params.ejeMayor : params.longitudEjeMayor;
+        var ejeMenor = params.ejeMenor !== undefined ? params.ejeMenor : params.longitudEjeMenor;
         var orientacion = params.orientacion;
 
         if (!esNumeroValido(ejeMayor) || ejeMayor <= 0) {
@@ -526,8 +526,11 @@
         analizarEcuacion: analizarEcuacion,
         desdeFormaGeneral: desdeFormaGeneral,
         desdeEjes: desdeEjes,
+        construirDesdeEjes: desdeEjes,
         desdeVerticesYLadoRecto: desdeVerticesYLadoRecto,
+        construirDesdeVerticesYLadoRecto: desdeVerticesYLadoRecto,
         desdeVerticesYExtremoMenor: desdeVerticesYExtremoMenor,
+        construirDesdeVerticesYExtremoMenor: desdeVerticesYExtremoMenor,
         puntosParaDibujar: puntosParaDibujar,
         compararExcentricidad: compararExcentricidad
     };

@@ -190,9 +190,11 @@ var UIArma = (function () {
             if (!rMayor.ok) return mostrarError('Longitud del Eje Mayor: ' + rMayor.error);
             if (!rMenor.ok) return mostrarError('Longitud del Eje Menor: ' + rMenor.error);
 
-            resultado = Elipse.construirDesdeEjes({
+            resultado = (Elipse.desdeEjes || Elipse.construirDesdeEjes)({
                 h: rH.valor,
                 k: rK.valor,
+                ejeMayor: rMayor.valor,
+                ejeMenor: rMenor.valor,
                 longitudEjeMayor: rMayor.valor,
                 longitudEjeMenor: rMenor.valor,
                 orientacion: orientacion
@@ -208,7 +210,7 @@ var UIArma = (function () {
             if (!rV2x.ok || !rV2y.ok) return mostrarError('Vértice A2: ingresa números válidos');
             if (!rLR.ok) return mostrarError('Lado Recto: ' + rLR.error);
 
-            resultado = Elipse.construirDesdeVerticesYLadoRecto({
+            resultado = (Elipse.desdeVerticesYLadoRecto || Elipse.construirDesdeVerticesYLadoRecto)({
                 v1: { x: rV1x.valor, y: rV1y.valor },
                 v2: { x: rV2x.valor, y: rV2y.valor },
                 ladoRecto: rLR.valor
@@ -225,15 +227,15 @@ var UIArma = (function () {
             if (!rV2x.ok || !rV2y.ok) return mostrarError('Vértice A2: números inválidos');
             if (!rBx.ok || !rBy.ok) return mostrarError('Extremo B: números inválidos');
 
-            resultado = Elipse.construirDesdeVerticesYExtremoMenor({
+            resultado = (Elipse.desdeVerticesYExtremoMenor || Elipse.construirDesdeVerticesYExtremoMenor)({
                 v1: { x: rV1x.valor, y: rV1y.valor },
                 v2: { x: rV2x.valor, y: rV2y.valor },
                 extremoMenor: { x: rBx.valor, y: rBy.valor }
             });
         }
 
-        if (!resultado.ok) {
-            return mostrarError(resultado.error);
+        if (!resultado || !resultado.ok) {
+            return mostrarError(resultado ? resultado.error : 'Ocurrió un error al procesar los datos de la elipse.');
         }
 
         window.elipseArmadaActual = resultado;

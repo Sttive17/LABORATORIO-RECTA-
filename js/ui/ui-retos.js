@@ -221,31 +221,46 @@ var UIRetos = (function () {
         var titulo = document.getElementById('tituloRetroalimentacion');
         var textoSol = document.getElementById('solucionReto');
 
-        caja.style.display = 'block';
+        if (caja) caja.style.display = 'block';
+
+        var respuestaMostrar = (typeof datosPregunta.esperada === 'number')
+            ? Formato.formatearExacto(datosPregunta.esperada)
+            : datosPregunta.esperada;
 
         if (esCorrecto) {
             estrellas++;
             actualizarEstrellas();
-            caja.className = 'caja-alerta exito';
-            titulo.innerHTML = '🎉 ¡CORRECTO! ¡Excelente razonamiento!';
+            if (caja) caja.className = 'caja-alerta exito';
+            if (titulo) {
+                titulo.innerHTML = '🎉 ¡CORRECTO! ¡Excelente razonamiento!';
+            }
             mostrarMensajeMati('¡Fantástico! Has ganado una estrella ⭐. ¡Sigue así!');
         } else {
-            caja.className = 'caja-alerta error';
-            var respuestaMostrar = (typeof datosPregunta.esperada === 'number')
-                ? Formato.formatearExacto(datosPregunta.esperada)
-                : datosPregunta.esperada;
-            titulo.innerHTML = '❌ ¡Casi! La respuesta correcta era: <strong>' + respuestaMostrar + '</strong>';
+            if (caja) caja.className = 'caja-alerta error';
+            if (titulo) {
+                titulo.innerHTML = '❌ ¡Casi! La respuesta correcta era: <strong>' + respuestaMostrar + '</strong>';
+            }
             mostrarMensajeMati('No te preocupes, ¡de los errores se aprende! Revisa el paso a paso matemático 👇');
         }
 
-        textoSol.innerHTML = '<strong>Explicación:</strong> ' + datosPregunta.solucion;
+        if (textoSol) {
+            textoSol.innerHTML = '<strong>Explicación:</strong> ' + datosPregunta.solucion;
+        } else if (caja && !titulo) {
+            caja.innerHTML = (esCorrecto ? '🎉 ¡CORRECTO! ¡Excelente razonamiento!' : '❌ ¡Casi! La respuesta correcta era: <strong>' + respuestaMostrar + '</strong>') +
+                '<br><br><strong>Explicación:</strong> ' + datosPregunta.solucion;
+        }
 
         // Desactivar input y preparar botón siguiente
         inputResp.disabled = true;
-        document.getElementById('btnResponderReto').style.display = 'none';
-        document.getElementById('btnPistaReto').disabled = true;
-        document.getElementById('btnSiguienteReto').style.display = 'inline-flex';
-        document.getElementById('btnSiguienteReto').focus();
+        var btnResp = document.getElementById('btnResponderReto');
+        if (btnResp) btnResp.style.display = 'none';
+        var btnPista = document.getElementById('btnPistaReto');
+        if (btnPista) btnPista.disabled = true;
+        var btnSig = document.getElementById('btnSiguienteReto');
+        if (btnSig) {
+            btnSig.style.display = 'inline-flex';
+            btnSig.focus();
+        }
     }
 
     function mostrarPista() {
@@ -262,18 +277,20 @@ var UIRetos = (function () {
     }
 
     function actualizarEstrellas() {
-        var elEstrellas = document.getElementById('estrellasRetos');
+        var elEstrellas = document.getElementById('contadorEstrellas') || document.getElementById('estrellasRetos');
         if (elEstrellas) {
-            elEstrellas.textContent = '⭐ ' + estrellas;
+            elEstrellas.textContent = estrellas + ' / ' + totalRonda;
         }
     }
 
     function finalizarJuego() {
-        document.getElementById('areaJuegoRetos').style.display = 'none';
-        document.getElementById('tarjetaFinRetos').style.display = 'block';
+        var areaJuego = document.getElementById('areaJuegoRetos');
+        if (areaJuego) areaJuego.style.display = 'none';
+        var tarjetaFin = document.getElementById('tarjetaFinRetos');
+        if (tarjetaFin) tarjetaFin.style.display = 'block';
 
-        var elEstrellasFin = document.getElementById('estrellasFinRetos');
-        var textoFelicitacion = document.getElementById('textoFelicitacionRetos');
+        var elEstrellasFin = document.getElementById('estrellasFinales') || document.getElementById('estrellasFinRetos');
+        var textoFelicitacion = document.getElementById('mensajeFinalMati') || document.getElementById('textoFelicitacionRetos');
 
         if (elEstrellasFin) {
             elEstrellasFin.textContent = '⭐'.repeat(estrellas) + ' (' + estrellas + ' de ' + totalRonda + ')';
@@ -281,13 +298,13 @@ var UIRetos = (function () {
 
         var mensaje = '';
         if (estrellas === totalRonda) {
-            mensaje = '🏆 ¡PERFECTO! ¡Puntaje perfecto de 8/8! Eres el Gran Maestro de las Elipses en la Feria STEAM+ 🚀';
+            mensaje = '🏆 ¡PERFECTO! ¡Puntaje perfecto de ' + totalRonda + '/' + totalRonda + '! Eres el Gran Maestro de las Elipses en la Feria STEAM+ 🚀';
         } else if (estrellas >= 6) {
-            mensaje = '🎉 ¡Increíble! Lograste ' + estrellas + ' estrellas. Tienes un dominio excelente de las secciones cónicas.';
+            mensaje = '🎉 ¡Increíble! Lograste ' + estrellas + ' de ' + totalRonda + ' estrellas. Tienes un dominio excelente de las secciones cónicas.';
         } else if (estrellas >= 4) {
-            mensaje = '👏 ¡Muy buen esfuerzo! Lograste ' + estrellas + ' estrellas. ¡Sigue practicando en el explorador!';
+            mensaje = '👏 ¡Muy buen esfuerzo! Lograste ' + estrellas + ' de ' + totalRonda + ' estrellas. ¡Sigue practicando en el explorador!';
         } else {
-            mensaje = '💪 ¡Buen comienzo! Lograste ' + estrellas + ' estrellas. Repasa con el modo "Explora la elipse" y vuelve a intentarlo.';
+            mensaje = '💪 ¡Buen comienzo! Lograste ' + estrellas + ' de ' + totalRonda + ' estrellas. Repasa con el modo "Explora la elipse" y vuelve a intentarlo.';
         }
 
         if (textoFelicitacion) textoFelicitacion.textContent = mensaje;

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Laboratorio de la Elipse - Feria STEAM+ 2026</title>
     <!-- Hojas de estilo modulares con version para evitar cache -->
-    <link rel="stylesheet" href="css/base.css?v=7">
-    <link rel="stylesheet" href="css/animaciones.css?v=7">
-    <link rel="stylesheet" href="css/elipse.css?v=7">
+    <link rel="stylesheet" href="css/base.css?v=8">
+    <link rel="stylesheet" href="css/animaciones.css?v=8">
+    <link rel="stylesheet" href="css/elipse.css?v=8">
 </head>
 <body>
 
@@ -182,9 +182,9 @@
             </div>
 
             <!-- Globo de Mati -->
-            <div class="caja-alerta info" style="background: #ffffff; border-color: #38bdf8;">
+            <div class="caja-alerta info">
                 <span style="font-size: 1.8rem;">🚀</span>
-                <div id="globoMatiExplora" style="color: #0f172a;">
+                <div id="globoMatiExplora">
                     ¡Mueve los deslizadores! Mira qué ocurre con la elipse cuando varias a o b.
                 </div>
             </div>
@@ -257,7 +257,7 @@
                         <!-- Medidor de Achatamiento -->
                         <div class="caja-achatamiento">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-                                <strong style="color: #0f172a;">📏 Medidor de Achatamiento (e = c/a):</strong>
+                                <strong style="color: #38bdf8;">📏 Medidor de Achatamiento (e = c/a):</strong>
                                 <span id="valorExcentricidad" style="font-weight: 800; color: #0284c7;">e = 0.8000</span>
                             </div>
                             <div class="barra-achatamiento-contenedor">
@@ -316,7 +316,7 @@
 
             <!-- Fila Inferior de Ancho Completo: Elementos y Comparación -->
             <div class="panel-resultados-ancho-completo">
-                <h4 style="color: #0f172a; margin-bottom: 12px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <h4 style="color: #ffffff; margin-bottom: 12px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
                     📋 Elementos Calculados de la Elipse:
                 </h4>
                 <div class="grilla-propiedades">
@@ -401,9 +401,9 @@
             </div>
 
             <!-- Mensaje de Mati -->
-            <div class="caja-alerta info" style="background: #ffffff; border-color: #38bdf8;">
+            <div class="caja-alerta info">
                 <span style="font-size: 1.8rem;">🤖</span>
-                <div id="globoMatiAnaliza" style="color: #0f172a;">
+                <div id="globoMatiAnaliza">
                     Ingresa los denominadores. ¡El mayor de los dos siempre corresponde a a²!
                 </div>
             </div>
@@ -514,11 +514,14 @@
             <!-- Panel de Resultados de Analizar en ancho completo -->
             <div id="panelResultadosAnaliza" class="panel-resultados-ancho-completo" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                    <h4 style="color: #0f172a; margin: 0; font-size: 1.2rem;">Orientación Detectada:</h4>
+                    <h4 style="color: #ffffff; margin: 0; font-size: 1.2rem;">Orientación Detectada:</h4>
                     <span id="orientacionAnaliza" class="valor-badge">Horizontal</span>
                 </div>
 
                 <div class="ecuacion-destacada" id="ecuacionAnaliza"></div>
+
+                <!-- Procedimiento matemático detallado paso a paso -->
+                <div class="caja-pasos" id="cajaPasosAnaliza" style="display: none;"></div>
 
                 <div class="grilla-propiedades">
                     <div class="propiedad-item">
@@ -586,9 +589,9 @@
             </div>
 
             <!-- Mensaje de Mati -->
-            <div class="caja-alerta info" style="background: #ffffff; border-color: #38bdf8;">
+            <div class="caja-alerta info">
                 <span style="font-size: 1.8rem;">🚀</span>
-                <div id="globoMatiArma" style="color: #0f172a;">
+                <div id="globoMatiArma">
                     Elige qué datos tienes. Resolveremos paso a paso como en la clase de matemáticas.
                 </div>
             </div>
@@ -744,7 +747,7 @@
 
             <!-- Panel Resultados y Paso a Paso en ancho completo -->
             <div id="panelResultadosArma" class="panel-resultados-ancho-completo" style="display: none;">
-                <h4 style="color: #0f172a; margin-bottom: 8px; font-size: 1.2rem;">Ecuación Canónica Obtenida:</h4>
+                <h4 style="color: #ffffff; margin-bottom: 8px; font-size: 1.2rem;">Ecuación Canónica Obtenida:</h4>
                 <div class="ecuacion-destacada" id="ecuacionArma"></div>
 
                 <div class="caja-pasos" id="cajaPasosArma"></div>
@@ -791,9 +794,9 @@
             </div>
 
             <!-- Globo de Mati -->
-            <div class="caja-alerta info" style="background: #ffffff; border-color: #38bdf8;">
+            <div class="caja-alerta info">
                 <span style="font-size: 1.8rem;">🤖</span>
-                <div id="globoMatiRetos" style="color: #0f172a;">
+                <div id="globoMatiRetos">
                     ¡Bienvenido al desafío! Son 8 preguntas. Si tienes dudas, pulsa el botón "Pista".
                 </div>
             </div>
@@ -835,7 +838,10 @@
                         </div>
 
                         <!-- Caja de Retroalimentación -->
-                        <div id="cajaRetroalimentacion" class="caja-alerta" style="display: none; margin-top: 16px;"></div>
+                        <div id="cajaRetroalimentacion" class="caja-alerta" style="display: none; margin-top: 16px;">
+                            <div id="tituloRetroalimentacion" style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px;"></div>
+                            <div id="solucionReto" style="font-size: 0.95rem; line-height: 1.5;"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -851,9 +857,9 @@
             <!-- Tarjeta Fin de Juego -->
             <div id="tarjetaFinRetos" class="tarjeta-blanca" style="display: none; text-align: center; max-width: 650px; margin: 30px auto; padding: 40px 24px;">
                 <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
-                <h2 style="color: #0f172a; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800;">¡Ronda de Retos Completada!</h2>
+                <h2 style="color: #ffffff; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800;">¡Ronda de Retos Completada!</h2>
                 <div id="estrellasFinales" style="font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 16px 0; color: #f59e0b;"></div>
-                <p id="mensajeFinalMati" style="font-size: clamp(1rem, 2.5vw, 1.2rem); color: #334155; line-height: 1.5; margin-bottom: 24px; font-weight: 600;"></p>
+                <p id="mensajeFinalMati" style="font-size: clamp(1rem, 2.5vw, 1.2rem); color: #cbd5e1; line-height: 1.5; margin-bottom: 24px; font-weight: 600;"></p>
                 <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
                     <button id="btnReiniciarRetos" class="btn btn-primario">🔄 Jugar otra ronda</button>
                     <button class="btn btn-volver-menu">🏠 Volver al menú</button>
@@ -875,13 +881,13 @@
     </footer>
 
     <!-- SCRIPTS MODULARES (Sin CDN ni librerías externas) -->
-    <script src="js/matematicas/formato.js?v=7"></script>
-    <script src="js/matematicas/elipse.js?v=7"></script>
-    <script src="js/graficador.js?v=7"></script>
-    <script src="js/ui/ui-explora.js?v=7"></script>
-    <script src="js/ui/ui-analiza.js?v=7"></script>
-    <script src="js/ui/ui-arma.js?v=7"></script>
-    <script src="js/ui/ui-retos.js?v=7"></script>
-    <script src="js/main.js?v=7"></script>
+    <script src="js/matematicas/formato.js?v=8"></script>
+    <script src="js/matematicas/elipse.js?v=8"></script>
+    <script src="js/graficador.js?v=8"></script>
+    <script src="js/ui/ui-explora.js?v=8"></script>
+    <script src="js/ui/ui-analiza.js?v=8"></script>
+    <script src="js/ui/ui-arma.js?v=8"></script>
+    <script src="js/ui/ui-retos.js?v=8"></script>
+    <script src="js/main.js?v=8"></script>
 </body>
 </html>

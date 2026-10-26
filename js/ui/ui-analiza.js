@@ -257,8 +257,13 @@ var UIAnaliza = (function () {
 
         // Renderizar desarrollo paso a paso
         var cajaPasos = document.getElementById('cajaPasosAnaliza');
-        if (cajaPasos && res.pasos) {
-            cajaPasos.innerHTML = '<strong>📐 Procedimiento Matemático Detallado:</strong><br><br>' + res.pasos.join('<br>');
+        if (cajaPasos) {
+            if (res.pasos && res.pasos.length > 0) {
+                cajaPasos.innerHTML = '<strong>📐 Procedimiento Matemático Detallado:</strong><br><br>' + res.pasos.join('<br>');
+                cajaPasos.style.display = 'block';
+            } else {
+                cajaPasos.style.display = 'none';
+            }
         }
 
         graficador.dibujar(res, obtenerToggles());
@@ -322,6 +327,12 @@ var UIAnaliza = (function () {
 
         var panel = document.getElementById('panelResultadosAnaliza');
         if (panel) panel.style.display = 'none';
+
+        var cajaPasos = document.getElementById('cajaPasosAnaliza');
+        if (cajaPasos) {
+            cajaPasos.innerHTML = '';
+            cajaPasos.style.display = 'none';
+        }
 
         ocultarAlerta();
         if (graficador) graficador.dibujar(null);
