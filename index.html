@@ -9,9 +9,10 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/">
     <meta name="google-site-verification" content="googlec7402ac01baf1102">
-    <!-- Preload del estilo crítico y hoja de estilo consolidada y minificada -->
-    <link rel="preload" href="css/app.min.css?v=12" as="style">
-    <link rel="stylesheet" href="css/app.min.css?v=12">
+    <!-- Hojas de estilo modulares oficiales -->
+    <link rel="stylesheet" href="css/base.css?v=15">
+    <link rel="stylesheet" href="css/animaciones.css?v=15">
+    <link rel="stylesheet" href="css/elipse.css?v=15">
 </head>
 <body>
 
@@ -1023,7 +1024,14 @@
         <p style="margin-top: 6px; font-size: 0.88rem;">Desarrollado con HTML5, CSS3 y JavaScript Puro (Vanilla JS). <a href="pruebas/pruebas.html">Ver suite de pruebas matemáticas</a></p>
     </footer>
 
-    <!-- SCRIPT CONSOLIDADO Y MINIFICADO (1 sola petición asíncrona, sin bloqueo de renderizado) -->
-    <script src="js/app.min.js?v=12" defer></script>
+    <!-- SCRIPTS MODULARES (Sin CDN ni librerías externas) -->
+    <script src="js/matematicas/formato.js?v=15" defer></script>
+    <script src="js/matematicas/elipse.js?v=15" defer></script>
+    <script src="js/graficador.js?v=15" defer></script>
+    <script src="js/ui/ui-explora.js?v=15" defer></script>
+    <script src="js/ui/ui-analiza.js?v=15" defer></script>
+    <script src="js/ui/ui-arma.js?v=15" defer></script>
+    <script src="js/ui/ui-retos.js?v=15" defer></script>
+    <script src="js/main.js?v=15" defer></script>
 </body>
 </html>
