@@ -32,7 +32,7 @@
             return { ok: true, valor: entrada };
         }
 
-        var texto = String(entrada).trim();
+        let texto = String(entrada).trim();
         if (texto.length === 0) {
             return { ok: false, error: 'Este campo no puede estar vacío.' };
         }
@@ -42,20 +42,20 @@
 
         // Verificar si es una fracción simple de la forma "a/b" o "-a/b"
         if (texto.indexOf('/') !== -1) {
-            var partes = texto.split('/');
+            const partes = texto.split('/');
             if (partes.length !== 2) {
                 return { ok: false, error: 'La fracción debe tener solo un numerador y un denominador (ej: 3/2).' };
             }
 
-            var numTexto = partes[0].trim();
-            var denTexto = partes[1].trim();
+            const numTexto = partes[0].trim();
+            const denTexto = partes[1].trim();
 
             if (numTexto.length === 0 || denTexto.length === 0) {
                 return { ok: false, error: 'La fracción está incompleta. Escribe por ejemplo 3/2.' };
             }
 
-            var num = Number(numTexto);
-            var den = Number(denTexto);
+            const num = Number(numTexto);
+            const den = Number(denTexto);
 
             if (Number.isNaN(num) || Number.isNaN(den)) {
                 return { ok: false, error: 'Los valores de la fracción deben ser números válidos.' };
@@ -64,7 +64,7 @@
                 return { ok: false, error: '¡Cuidado! No se puede dividir entre cero.' };
             }
 
-            var resultadoFrac = num / den;
+            const resultadoFrac = num / den;
             if (!Number.isFinite(resultadoFrac)) {
                 return { ok: false, error: 'El resultado de la fracción no es un número válido.' };
             }
@@ -73,7 +73,7 @@
         }
 
         // Número decimal o entero normal
-        var valor = Number(texto);
+        const valor = Number(texto);
         if (Number.isNaN(valor)) {
             return { ok: false, error: '¡Ups! "' + entrada + '" no es un número válido. Escribe algo como 4, 2.5 o 3/2 🙂' };
         }
@@ -88,14 +88,14 @@
      * Máximo común divisor entre dos enteros.
      */
     function mcd(a, b) {
-        a = Math.abs(Math.round(a));
-        b = Math.abs(Math.round(b));
-        while (b) {
-            var temp = b;
-            b = a % b;
-            a = temp;
+        let x = Math.abs(Math.round(a));
+        let y = Math.abs(Math.round(b));
+        while (y) {
+            const temp = y;
+            y = x % y;
+            x = temp;
         }
-        return a;
+        return x;
     }
 
     /**
@@ -105,20 +105,20 @@
      * @returns {string}
      */
     function simplificarRaiz(radicando) {
-        var n = Math.round(radicando);
+        const n = Math.round(radicando);
         if (n < 0) return 'indefinido';
         if (n === 0) return '0';
         if (n === 1) return '1';
 
-        var factorFuera = 1;
-        var residuo = n;
+        let factorFuera = 1;
+        let residuo = n;
 
-        var raizExacta = Math.round(Math.sqrt(n));
+        const raizExacta = Math.round(Math.sqrt(n));
         if (raizExacta * raizExacta === n) {
             return String(raizExacta);
         }
 
-        for (var i = 2; i * i <= residuo; i++) {
+        for (let i = 2; i * i <= residuo; i++) {
             while (residuo % (i * i) === 0) {
                 factorFuera *= i;
                 residuo /= (i * i);
@@ -140,18 +140,18 @@
      * @returns {{numerador: number, denominador: number}|null}
      */
     function aFraccion(valor) {
-        var signo = valor < 0 ? -1 : 1;
-        var v = Math.abs(valor);
+        const signo = valor < 0 ? -1 : 1;
+        const v = Math.abs(valor);
 
         // Si ya es casi entero
         if (Math.abs(v - Math.round(v)) < 1e-7) {
             return { numerador: signo * Math.round(v), denominador: 1 };
         }
 
-        for (var q = 2; q <= 120; q++) {
-            var p = Math.round(v * q);
+        for (let q = 2; q <= 120; q++) {
+            const p = Math.round(v * q);
             if (Math.abs(v - p / q) < 1e-6) {
-                var d = mcd(p, q);
+                const d = mcd(p, q);
                 return {
                     numerador: signo * (p / d),
                     denominador: q / d
@@ -171,12 +171,10 @@
      * @param {boolean} [incluirAprox=true]
      * @returns {string}
      */
-    function formatearExacto(valor, incluirAprox) {
-        if (incluirAprox === undefined) incluirAprox = true;
-
+    function formatearExacto(valor, incluirAprox = true) {
         if (typeof valor === 'object' && valor !== null && valor.radicando !== undefined) {
-            var r = simplificarRaiz(valor.radicando);
-            var aprox = Math.sqrt(valor.radicando);
+            const r = simplificarRaiz(valor.radicando);
+            const aprox = Math.sqrt(valor.radicando);
             if (r.indexOf('√') !== -1 && incluirAprox) {
                 return r + ' (≈ ' + aprox.toFixed(4) + ')';
             }
@@ -193,18 +191,18 @@
         }
 
         // Verificar si el cuadrado es un entero exacto (es raíz de un entero)
-        var cuadrado = Math.round(valor * valor);
+        const cuadrado = Math.round(valor * valor);
         if (cuadrado > 0 && Math.abs(valor - Math.sqrt(cuadrado)) < 1e-6) {
-            var textoRaiz = simplificarRaiz(cuadrado);
+            const textoRaiz = simplificarRaiz(cuadrado);
             if (textoRaiz.indexOf('√') !== -1) {
                 return incluirAprox ? (textoRaiz + ' (≈ ' + valor.toFixed(4) + ')') : textoRaiz;
             }
         }
 
         // Verificar si es fracción simple
-        var frac = aFraccion(valor);
+        const frac = aFraccion(valor);
         if (frac && frac.denominador > 1) {
-            var textoFrac = frac.numerador + '/' + frac.denominador;
+            const textoFrac = frac.numerador + '/' + frac.denominador;
             return incluirAprox ? (textoFrac + ' (≈ ' + valor.toFixed(4) + ')') : textoFrac;
         }
 
@@ -219,8 +217,8 @@
      * @returns {string}
      */
     function formatearPunto(x, y) {
-        var strX = formatearExacto(x, false);
-        var strY = formatearExacto(y, false);
+        let strX = formatearExacto(x, false);
+        let strY = formatearExacto(y, false);
         // Usar signo menos tipográfico si es negativo
         strX = strX.replace(/^-/, '−');
         strY = strY.replace(/^-/, '−');
@@ -238,7 +236,7 @@
      * @returns {string}
      */
     function formatearEcuacion(h, k, denX, denY) {
-        var parteX = '';
+        let parteX = '';
         if (Math.abs(h) < 1e-7) {
             parteX = 'x²';
         } else if (h > 0) {
@@ -247,7 +245,7 @@
             parteX = '(x + ' + formatearExacto(Math.abs(h), false) + ')²';
         }
 
-        var parteY = '';
+        let parteY = '';
         if (Math.abs(k) < 1e-7) {
             parteY = 'y²';
         } else if (k > 0) {
@@ -256,19 +254,19 @@
             parteY = '(y + ' + formatearExacto(Math.abs(k), false) + ')²';
         }
 
-        var strDenX = formatearExacto(denX, false);
-        var strDenY = formatearExacto(denY, false);
+        const strDenX = formatearExacto(denX, false);
+        const strDenY = formatearExacto(denY, false);
 
         return parteX + '/' + strDenX + ' + ' + parteY + '/' + strDenY + ' = 1';
     }
 
     return {
-        leerNumero: leerNumero,
-        mcd: mcd,
-        simplificarRaiz: simplificarRaiz,
-        aFraccion: aFraccion,
-        formatearExacto: formatearExacto,
-        formatearPunto: formatearPunto,
-        formatearEcuacion: formatearEcuacion
+        leerNumero,
+        mcd,
+        simplificarRaiz,
+        aFraccion,
+        formatearExacto,
+        formatearPunto,
+        formatearEcuacion
     };
 }));

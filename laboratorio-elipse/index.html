@@ -181,7 +181,10 @@
                     <h2>🔭 Explora la Elipse en Tiempo Real</h2>
                     <p class="instruccion-actividad">Ajusta el centro (h, k), los semiejes (a, b) y la orientación.</p>
                 </div>
-                <button class="btn btn-volver-menu">🏠 Menú</button>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-ayuda-actividad" data-ayuda="explora" type="button" title="¿Cómo funciona esta actividad?">❓ ¿Cómo funciona?</button>
+                    <button class="btn btn-volver-menu">🏠 Menú</button>
+                </div>
             </div>
 
             <!-- Globo de Mati -->
@@ -200,7 +203,10 @@
                         <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                                 <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 800;">⚙️ Parámetros de la Elipse</h3>
-                                <button id="btnEjemploExplora" class="btn btn-ejemplo">💡 Siguiente Ejemplo</button>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <button id="btnResetExplora" class="btn btn-secundario" type="button" title="Restablecer valores iniciales">🔄 Restablecer</button>
+                                    <button id="btnEjemploExplora" class="btn btn-ejemplo">💡 Siguiente Ejemplo</button>
+                                </div>
                             </div>
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <label for="selectEjemplosExplora" style="color: #38bdf8; font-size: 0.82rem; font-weight: 700; white-space: nowrap;">📚 10 Ejemplos Guiados:</label>
@@ -211,7 +217,7 @@
                         <!-- Centro h -->
                         <div class="grupo-control">
                             <div class="fila-control">
-                                <span class="etiqueta-control">Centro X (h):</span>
+                                <label for="sliderH" class="etiqueta-control">Centro X (h):</label>
                                 <span class="valor-badge" id="valH">0</span>
                             </div>
                             <input type="range" id="sliderH" min="-8" max="8" step="0.5" value="0">
@@ -220,7 +226,7 @@
                         <!-- Centro k -->
                         <div class="grupo-control" style="margin-top: 10px;">
                             <div class="fila-control">
-                                <span class="etiqueta-control">Centro Y (k):</span>
+                                <label for="sliderK" class="etiqueta-control">Centro Y (k):</label>
                                 <span class="valor-badge" id="valK">0</span>
                             </div>
                             <input type="range" id="sliderK" min="-8" max="8" step="0.5" value="0">
@@ -229,7 +235,7 @@
                         <!-- Semieje a -->
                         <div class="grupo-control" style="margin-top: 10px;">
                             <div class="fila-control">
-                                <span class="etiqueta-control">Semieje Mayor (a):</span>
+                                <label for="sliderA" class="etiqueta-control">Semieje Mayor (a):</label>
                                 <span class="valor-badge" id="valA">5</span>
                             </div>
                             <input type="range" id="sliderA" min="1" max="10" step="0.1" value="5">
@@ -238,7 +244,7 @@
                         <!-- Semieje b -->
                         <div class="grupo-control" style="margin-top: 10px;">
                             <div class="fila-control">
-                                <span class="etiqueta-control">Semieje Menor (b):</span>
+                                <label for="sliderB" class="etiqueta-control">Semieje Menor (b):</label>
                                 <span class="valor-badge" id="valB">3</span>
                             </div>
                             <input type="range" id="sliderB" min="1" max="10" step="0.1" value="3">
@@ -419,7 +425,10 @@
                     <h2>🧮 Analiza Cualquier Ecuación de la Elipse</h2>
                     <p class="instruccion-actividad">Descubre la orientación, focos, vértices y lado recto a partir de su ecuación.</p>
                 </div>
-                <button class="btn btn-volver-menu">🏠 Menú</button>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-ayuda-actividad" data-ayuda="analiza" type="button" title="¿Cómo funciona esta actividad?">❓ ¿Cómo funciona?</button>
+                    <button class="btn btn-volver-menu">🏠 Menú</button>
+                </div>
             </div>
 
             <!-- Mensaje de Mati -->
@@ -462,19 +471,19 @@
                             </p>
                             <div class="subgrid-2-cols">
                                 <div>
-                                    <label class="etiqueta-control">Centro X (h):</label>
+                                    <label for="inputAnalizaH" class="etiqueta-control">Centro X (h):</label>
                                     <input type="text" id="inputAnalizaH" value="2" placeholder="ej. 2 o 3/2">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Centro Y (k):</label>
+                                    <label for="inputAnalizaK" class="etiqueta-control">Centro Y (k):</label>
                                     <input type="text" id="inputAnalizaK" value="-3" placeholder="ej. -3 o -1/2">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Denominador X (denX):</label>
+                                    <label for="inputAnalizaDenX" class="etiqueta-control">Denominador X (denX):</label>
                                     <input type="text" id="inputAnalizaDenX" value="9" placeholder="ej. 9, 36 o 25">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Denominador Y (denY):</label>
+                                    <label for="inputAnalizaDenY" class="etiqueta-control">Denominador Y (denY):</label>
                                     <input type="text" id="inputAnalizaDenY" value="5" placeholder="ej. 5 o 100">
                                 </div>
                             </div>
@@ -487,15 +496,15 @@
                             </p>
                             <div class="subgrid-3-cols">
                                 <div>
-                                    <label class="etiqueta-control">Coeficiente A:</label>
+                                    <label for="inputGeneralA" class="etiqueta-control">Coeficiente A:</label>
                                     <input type="text" id="inputGeneralA" value="4" placeholder="ej. 4">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Coeficiente B:</label>
+                                    <label for="inputGeneralB" class="etiqueta-control">Coeficiente B:</label>
                                     <input type="text" id="inputGeneralB" value="9" placeholder="ej. 9">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Término C:</label>
+                                    <label for="inputGeneralC" class="etiqueta-control">Término C:</label>
                                     <input type="text" id="inputGeneralC" value="36" placeholder="ej. 36">
                                 </div>
                             </div>
@@ -508,8 +517,8 @@
                             <button id="btnEjemploAnaliza" class="btn btn-ejemplo" style="flex: 1; min-width: 100px;">
                                 💡 Ejemplo
                             </button>
-                            <button id="btnLimpiarAnaliza" class="btn btn-secundario">
-                                🗑️
+                            <button id="btnLimpiarAnaliza" class="btn btn-secundario" type="button" title="Restablecer valores iniciales">
+                                🔄 Restablecer
                             </button>
                         </div>
                     </div>
@@ -608,7 +617,10 @@
                     <h2>🧩 Arma tu Elipse Paso a Paso</h2>
                     <p class="instruccion-actividad">Introduce los datos conocidos y obtén la deducción completa de la ecuación.</p>
                 </div>
-                <button class="btn btn-volver-menu">🏠 Menú</button>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-ayuda-actividad" data-ayuda="arma" type="button" title="¿Cómo funciona esta actividad?">❓ ¿Cómo funciona?</button>
+                    <button class="btn btn-volver-menu">🏠 Menú</button>
+                </div>
             </div>
 
             <!-- Mensaje de Mati -->
@@ -655,24 +667,24 @@
                         <div id="formArmaA">
                             <div class="subgrid-2-cols">
                                 <div>
-                                    <label class="etiqueta-control">Centro X (h):</label>
+                                    <label for="inputArmaH" class="etiqueta-control">Centro X (h):</label>
                                     <input type="text" id="inputArmaH" value="-2">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Centro Y (k):</label>
+                                    <label for="inputArmaK" class="etiqueta-control">Centro Y (k):</label>
                                     <input type="text" id="inputArmaK" value="5">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Longitud Eje Mayor (2a):</label>
+                                    <label for="inputArmaEjeMayor" class="etiqueta-control">Longitud Eje Mayor (2a):</label>
                                     <input type="text" id="inputArmaEjeMayor" value="10">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Longitud Eje Menor (2b):</label>
+                                    <label for="inputArmaEjeMenor" class="etiqueta-control">Longitud Eje Menor (2b):</label>
                                     <input type="text" id="inputArmaEjeMenor" value="8">
                                 </div>
                             </div>
                             <div style="margin-top: 10px;">
-                                <label class="etiqueta-control">Orientación:</label>
+                                <label for="selectArmaOrientacion" class="etiqueta-control">Orientación:</label>
                                 <select id="selectArmaOrientacion">
                                     <option value="vertical" selected>Vertical (eje focal paralelo a Y)</option>
                                     <option value="horizontal">Horizontal (eje focal paralelo a X)</option>
@@ -684,23 +696,23 @@
                         <div id="formArmaB" style="display: none;">
                             <div class="subgrid-2-cols">
                                 <div>
-                                    <label class="etiqueta-control">Vértice 1 X (A'):</label>
+                                    <label for="inputArmaV1x" class="etiqueta-control">Vértice 1 X (A'):</label>
                                     <input type="text" id="inputArmaV1x" value="3">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Vértice 1 Y (A'):</label>
+                                    <label for="inputArmaV1y" class="etiqueta-control">Vértice 1 Y (A'):</label>
                                     <input type="text" id="inputArmaV1y" value="6">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Vértice 2 X (A):</label>
+                                    <label for="inputArmaV2x" class="etiqueta-control">Vértice 2 X (A):</label>
                                     <input type="text" id="inputArmaV2x" value="3">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Vértice 2 Y (A):</label>
+                                    <label for="inputArmaV2y" class="etiqueta-control">Vértice 2 Y (A):</label>
                                     <input type="text" id="inputArmaV2y" value="-2">
                                 </div>
                                 <div style="grid-column: 1 / -1;">
-                                    <label class="etiqueta-control">Longitud del Lado Recto (LR):</label>
+                                    <label for="inputArmaLR" class="etiqueta-control">Longitud del Lado Recto (LR):</label>
                                     <input type="text" id="inputArmaLR" value="6">
                                 </div>
                             </div>
@@ -710,27 +722,27 @@
                         <div id="formArmaC" style="display: none;">
                             <div class="subgrid-2-cols">
                                 <div>
-                                    <label class="etiqueta-control">Vértice 1 X (A'):</label>
+                                    <label for="inputArmaCV1x" class="etiqueta-control">Vértice 1 X (A'):</label>
                                     <input type="text" id="inputArmaCV1x" value="-5">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Vértice 1 Y (A'):</label>
+                                    <label for="inputArmaCV1y" class="etiqueta-control">Vértice 1 Y (A'):</label>
                                     <input type="text" id="inputArmaCV1y" value="2">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Vértice 2 X (A):</label>
+                                    <label for="inputArmaCV2x" class="etiqueta-control">Vértice 2 X (A):</label>
                                     <input type="text" id="inputArmaCV2x" value="3">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Vértice 2 Y (A):</label>
+                                    <label for="inputArmaCV2y" class="etiqueta-control">Vértice 2 Y (A):</label>
                                     <input type="text" id="inputArmaCV2y" value="2">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Extremo Menor X (B):</label>
+                                    <label for="inputArmaBx" class="etiqueta-control">Extremo Menor X (B):</label>
                                     <input type="text" id="inputArmaBx" value="-1">
                                 </div>
                                 <div>
-                                    <label class="etiqueta-control">Extremo Menor Y (B):</label>
+                                    <label for="inputArmaBy" class="etiqueta-control">Extremo Menor Y (B):</label>
                                     <input type="text" id="inputArmaBy" value="4">
                                 </div>
                             </div>
@@ -743,8 +755,8 @@
                             <button id="btnEjemploArma" class="btn btn-ejemplo" style="flex: 1; min-width: 100px;">
                                 💡 Ejemplo
                             </button>
-                            <button id="btnLimpiarArma" class="btn btn-secundario">
-                                🗑️
+                            <button id="btnLimpiarArma" class="btn btn-secundario" type="button" title="Restablecer valores iniciales">
+                                🔄 Restablecer
                             </button>
                         </div>
                     </div>
@@ -814,7 +826,10 @@
                     <h2>🎯 Retos de Mati: ¡Gana tus Estrellas STEAM+!</h2>
                     <p class="instruccion-actividad">Observa la gráfica y la ecuación generada al azar y responde la pregunta.</p>
                 </div>
-                <button class="btn btn-volver-menu">🏠 Menú</button>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-ayuda-actividad" data-ayuda="retos" type="button" title="¿Cómo funciona esta actividad?">❓ ¿Cómo funciona?</button>
+                    <button class="btn btn-volver-menu">🏠 Menú</button>
+                </div>
             </div>
 
             <!-- Globo de Mati -->
@@ -845,7 +860,7 @@
                         <div class="ecuacion-destacada" id="ecuacionReto" style="font-size: 1.2rem; padding: 10px;"></div>
 
                         <div style="margin: 18px 0;">
-                            <label class="etiqueta-control">Tu Respuesta:</label>
+                            <label for="inputRespuestaReto" class="etiqueta-control">Tu Respuesta:</label>
                             <input type="text" id="inputRespuestaReto" placeholder="Escribe tu número, fracción o respuesta...">
                         </div>
 
@@ -964,6 +979,32 @@
             <!-- Contenidos de las pestañas -->
             <div class="cuerpo-documentacion" id="cuerpoDocumentacion">
                 <!-- Se inyecta dinámicamente con JS según la pestaña activa -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MODAL 3: AYUDA RÁPIDA "¿CÓMO FUNCIONA ESTA ACTIVIDAD?"
+    ════════════════════════════════════════════════════════ -->
+    <div id="modalAyuda" class="modal-superpuesto" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tituloModalAyuda">
+        <div class="modal-contenido" style="max-width: 620px; text-align: left;">
+            <button class="btn-cerrar-modal" id="btnCerrarAyuda" aria-label="Cerrar modal">&times;</button>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+                <span style="font-size: 2.2rem;" id="iconoModalAyuda">❓</span>
+                <div>
+                    <h3 id="tituloModalAyuda" style="color: #ffffff; font-size: 1.25rem; font-weight: 800; margin: 0;">
+                        ¿Cómo funciona?
+                    </h3>
+                    <p style="color: #94a3b8; font-size: 0.86rem; margin: 2px 0 0 0;" id="subtituloModalAyuda">
+                        Guía interactiva paso a paso
+                    </p>
+                </div>
+            </div>
+            <div id="cuerpoModalAyuda" style="color: #e2e8f0; font-size: 0.92rem; line-height: 1.6; max-height: 55vh; overflow-y: auto;">
+                <!-- Se inyecta dinámicamente con JS según la actividad -->
+            </div>
+            <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
+                <button class="btn btn-primario" id="btnEntendidoAyuda" type="button" style="padding: 8px 20px;">¡Entendido! 👍</button>
             </div>
         </div>
     </div>

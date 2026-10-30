@@ -64,17 +64,17 @@
      * Evita multiplicaciones sucesivas de escala y previene fallos cuando el canvas está oculto.
      */
     Graficador.prototype.ajustarDPI = function () {
-        var dpr = window.devicePixelRatio || 1;
-        var rect = this.canvas.getBoundingClientRect();
-        var ancho = Math.round(rect.width) || this.canvas.clientWidth || 480;
-        var alto = Math.round(rect.height) || this.canvas.clientHeight || ancho || 480;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = this.canvas.getBoundingClientRect();
+        let ancho = Math.round(rect.width) || this.canvas.clientWidth || 480;
+        let alto = Math.round(rect.height) || this.canvas.clientHeight || ancho || 480;
 
         // Si el elemento está en display: none temporalmente, mantener dimensiones base seguras
         if (ancho <= 0) ancho = 480;
         if (alto <= 0) alto = ancho;
 
-        var targetWidth = Math.round(ancho * dpr);
-        var targetHeight = Math.round(alto * dpr);
+        const targetWidth = Math.round(ancho * dpr);
+        const targetHeight = Math.round(alto * dpr);
 
         if (this.canvas.width !== targetWidth || this.canvas.height !== targetHeight) {
             this.canvas.width = targetWidth;
@@ -93,24 +93,24 @@
      */
     Graficador.prototype.calcularLimites = function (elipse) {
         if (!elipse || !elipse.ok) {
-            var rfDefault = this.config.rangoFijo || 12;
+            const rfDefault = this.config.rangoFijo || 12;
             return { minX: -rfDefault, maxX: rfDefault, minY: -rfDefault, maxY: rfDefault };
         }
 
         if (this.config.fijaEscala) {
             // Escala fija inteligente: mantiene la escala fija (12) a menos que la elipse la sobrepase
-            var maxCoord = Math.max(
+            const maxCoord = Math.max(
                 Math.abs(elipse.centro.x) + elipse.a + 2,
                 Math.abs(elipse.centro.y) + elipse.a + 2,
                 this.config.rangoFijo || 12
             );
-            var rf = Math.ceil(maxCoord);
+            const rf = Math.ceil(maxCoord);
             return { minX: -rf, maxX: rf, minY: -rf, maxY: rf };
         }
 
         // Autoescala que incluye el origen (0,0), el centro, los vértices, extremos y focos con margen
-        var puntosX = [0, elipse.centro.x];
-        var puntosY = [0, elipse.centro.y];
+        const puntosX = [0, elipse.centro.x];
+        const puntosY = [0, elipse.centro.y];
 
         if (elipse.vertices) {
             elipse.vertices.forEach(function (v) { puntosX.push(v.x); puntosY.push(v.y); });
@@ -122,17 +122,17 @@
             elipse.focos.forEach(function (f) { puntosX.push(f.x); puntosY.push(f.y); });
         }
 
-        var minX = Math.min.apply(null, puntosX);
-        var maxX = Math.max.apply(null, puntosX);
-        var minY = Math.min.apply(null, puntosY);
-        var maxY = Math.max.apply(null, puntosY);
+        const minX = Math.min.apply(null, puntosX);
+        const maxX = Math.max.apply(null, puntosX);
+        const minY = Math.min.apply(null, puntosY);
+        const maxY = Math.max.apply(null, puntosY);
 
-        var spanX = Math.max(maxX - minX, 4);
-        var spanY = Math.max(maxY - minY, 4);
-        var margenX = Math.max(spanX * 0.25, 2);
-        var margenY = Math.max(spanY * 0.25, 2);
+        const spanX = Math.max(maxX - minX, 4);
+        const spanY = Math.max(maxY - minY, 4);
+        const margenX = Math.max(spanX * 0.25, 2);
+        const margenY = Math.max(spanY * 0.25, 2);
 
-        var radioMax = Math.max(
+        let radioMax = Math.max(
             Math.abs(minX - margenX),
             Math.abs(maxX + margenX),
             Math.abs(minY - margenY),
@@ -154,8 +154,8 @@
      * Convierte coordenadas cartesianas a píxeles en canvas.
      */
     Graficador.prototype.aPixel = function (x, y, lim) {
-        var px = ((x - lim.minX) / (lim.maxX - lim.minX)) * this.anchoCSS;
-        var py = ((lim.maxY - y) / (lim.maxY - lim.minY)) * this.altoCSS;
+        const px = ((x - lim.minX) / (lim.maxX - lim.minX)) * this.anchoCSS;
+        const py = ((lim.maxY - y) / (lim.maxY - lim.minY)) * this.altoCSS;
         return { x: px, y: py };
     };
 
@@ -163,17 +163,17 @@
      * Dibuja la cuadrícula y los ejes cartesianos graduados.
      */
     Graficador.prototype.dibujarEjesYCuadricula = function (lim) {
-        var ctx = this.ctx;
-        var ancho = this.anchoCSS;
-        var alto = this.altoCSS;
+        const ctx = this.ctx;
+        const ancho = this.anchoCSS;
+        const alto = this.altoCSS;
 
         // Fondo blanco nítido tipo papel milimetrado
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, ancho, alto);
 
         // Calcular paso adecuado de la cuadrícula (1, 2 o 5 según el rango)
-        var rango = lim.maxX - lim.minX;
-        var paso = 1;
+        const rango = lim.maxX - lim.minX;
+        let paso = 1;
         if (rango > 30) paso = 5;
         else if (rango > 16) paso = 2;
 
@@ -181,22 +181,22 @@
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#e2e8f0';
 
-        var inicioX = Math.ceil(lim.minX / paso) * paso;
-        var finX = Math.floor(lim.maxX / paso) * paso;
-        for (var x = inicioX; x <= finX; x += paso) {
-            var p1 = this.aPixel(x, lim.minY, lim);
-            var p2 = this.aPixel(x, lim.maxY, lim);
+        const inicioX = Math.ceil(lim.minX / paso) * paso;
+        const finX = Math.floor(lim.maxX / paso) * paso;
+        for (let x = inicioX; x <= finX; x += paso) {
+            const p1 = this.aPixel(x, lim.minY, lim);
+            const p2 = this.aPixel(x, lim.maxY, lim);
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.stroke();
         }
 
-        var inicioY = Math.ceil(lim.minY / paso) * paso;
-        var finY = Math.floor(lim.maxY / paso) * paso;
-        for (var y = inicioY; y <= finY; y += paso) {
-            var q1 = this.aPixel(lim.minX, y, lim);
-            var q2 = this.aPixel(lim.maxX, y, lim);
+        const inicioY = Math.ceil(lim.minY / paso) * paso;
+        const finY = Math.floor(lim.maxY / paso) * paso;
+        for (let y = inicioY; y <= finY; y += paso) {
+            const q1 = this.aPixel(lim.minX, y, lim);
+            const q2 = this.aPixel(lim.maxX, y, lim);
             ctx.beginPath();
             ctx.moveTo(q1.x, q1.y);
             ctx.lineTo(q2.x, q2.y);
@@ -204,7 +204,7 @@
         }
 
         // Ejes X e Y principales
-        var origen = this.aPixel(0, 0, lim);
+        const origen = this.aPixel(0, 0, lim);
 
         ctx.lineWidth = 2;
         ctx.strokeStyle = '#334155';
@@ -242,9 +242,9 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
 
-        for (var nx = inicioX; nx <= finX; nx += paso) {
+        for (let nx = inicioX; nx <= finX; nx += paso) {
             if (nx === 0) continue;
-            var posMarcaX = this.aPixel(nx, 0, lim);
+            const posMarcaX = this.aPixel(nx, 0, lim);
             ctx.beginPath();
             ctx.moveTo(posMarcaX.x, origen.y - 3);
             ctx.lineTo(posMarcaX.x, origen.y + 3);
@@ -254,9 +254,9 @@
 
         ctx.textAlign = 'right';
         ctx.textBaseline = 'middle';
-        for (var ny = inicioY; ny <= finY; ny += paso) {
+        for (let ny = inicioY; ny <= finY; ny += paso) {
             if (ny === 0) continue;
-            var posMarcaY = this.aPixel(0, ny, lim);
+            const posMarcaY = this.aPixel(0, ny, lim);
             ctx.beginPath();
             ctx.moveTo(origen.x - 3, posMarcaY.y);
             ctx.lineTo(origen.x + 3, posMarcaY.y);
@@ -276,8 +276,8 @@
      * Dibuja un punto con borde, color de relleno y etiqueta rotulada.
      */
     Graficador.prototype.dibujarPunto = function (x, y, etiqueta, color, lim, desplazamiento) {
-        var ctx = this.ctx;
-        var p = this.aPixel(x, y, lim);
+        const ctx = this.ctx;
+        const p = this.aPixel(x, y, lim);
         desplazamiento = desplazamiento || { dx: 10, dy: -10 };
 
         // Punto exterior con anillo blanco
@@ -290,12 +290,12 @@
         ctx.stroke();
 
         // Etiqueta con fondo semitransparente para máxima legibilidad
-        var texto = etiqueta;
+        const texto = etiqueta;
         ctx.font = 'bold 12px sans-serif';
-        var anchoTexto = ctx.measureText(texto).width;
+        const anchoTexto = ctx.measureText(texto).width;
 
-        var tx = p.x + desplazamiento.dx;
-        var ty = p.y + desplazamiento.dy;
+        const tx = p.x + desplazamiento.dx;
+        const ty = p.y + desplazamiento.dy;
 
         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.fillRect(tx - 3, ty - 10, anchoTexto + 6, 16);
@@ -316,16 +316,16 @@
      */
     Graficador.prototype.dibujar = function (elipse, toggles) {
         this.ajustarDPI();
-        var ctx = this.ctx;
-        var config = Object.assign({}, this.config, toggles || {});
+        const ctx = this.ctx;
+        const config = Object.assign({}, this.config, toggles || {});
 
         if (!elipse || !elipse.ok) {
-            var limVacio = { minX: -10, maxX: 10, minY: -10, maxY: 10 };
+            const limVacio = { minX: -10, maxX: 10, minY: -10, maxY: 10 };
             this.dibujarEjesYCuadricula(limVacio);
             return;
         }
 
-        var lim = this.calcularLimites(elipse);
+        const lim = this.calcularLimites(elipse);
         this.dibujarEjesYCuadricula(lim);
 
         // 1. Eje focal (línea punteada)
@@ -336,13 +336,13 @@
             ctx.strokeStyle = config.colorEjeFocal;
             ctx.beginPath();
             if (elipse.ejeFocal.tipo === 'horizontal') {
-                var efP1 = this.aPixel(lim.minX, elipse.ejeFocal.valor, lim);
-                var efP2 = this.aPixel(lim.maxX, elipse.ejeFocal.valor, lim);
+                const efP1 = this.aPixel(lim.minX, elipse.ejeFocal.valor, lim);
+                const efP2 = this.aPixel(lim.maxX, elipse.ejeFocal.valor, lim);
                 ctx.moveTo(efP1.x, efP1.y);
                 ctx.lineTo(efP2.x, efP2.y);
             } else {
-                var efQ1 = this.aPixel(elipse.ejeFocal.valor, lim.minY, lim);
-                var efQ2 = this.aPixel(elipse.ejeFocal.valor, lim.maxY, lim);
+                const efQ1 = this.aPixel(elipse.ejeFocal.valor, lim.minY, lim);
+                const efQ2 = this.aPixel(elipse.ejeFocal.valor, lim.maxY, lim);
                 ctx.moveTo(efQ1.x, efQ1.y);
                 ctx.lineTo(efQ2.x, efQ2.y);
             }
@@ -356,8 +356,8 @@
             ctx.lineWidth = 2.5;
             ctx.strokeStyle = config.colorLadoRecto;
             elipse.ladosRectosSegmentos.forEach(function (seg) {
-                var s1 = this.aPixel(seg[0].x, seg[0].y, lim);
-                var s2 = this.aPixel(seg[1].x, seg[1].y, lim);
+                const s1 = this.aPixel(seg[0].x, seg[0].y, lim);
+                const s2 = this.aPixel(seg[1].x, seg[1].y, lim);
                 ctx.beginPath();
                 ctx.moveTo(s1.x, s1.y);
                 ctx.lineTo(s2.x, s2.y);
@@ -367,23 +367,23 @@
         }
 
         // 3. Trazo de la curva de la elipse
-        var h = elipse.centro.x;
-        var k = elipse.centro.y;
-        var a = elipse.a;
-        var b = elipse.b;
-        var esHorizontal = elipse.orientacion === 'horizontal';
+        const h = elipse.centro.x;
+        const k = elipse.centro.y;
+        const a = elipse.a;
+        const b = elipse.b;
+        const esHorizontal = elipse.orientacion === 'horizontal';
 
         ctx.save();
         ctx.lineWidth = 3.5;
         ctx.strokeStyle = config.colorElipse;
         ctx.beginPath();
 
-        var nPuntos = 240;
-        for (var i = 0; i <= nPuntos; i++) {
-            var t = (i * 2 * Math.PI) / nPuntos;
-            var ex = esHorizontal ? (h + a * Math.cos(t)) : (h + b * Math.cos(t));
-            var ey = esHorizontal ? (k + b * Math.sin(t)) : (k + a * Math.sin(t));
-            var pix = this.aPixel(ex, ey, lim);
+        const nPuntos = 240;
+        for (let i = 0; i <= nPuntos; i++) {
+            const t = (i * 2 * Math.PI) / nPuntos;
+            const ex = esHorizontal ? (h + a * Math.cos(t)) : (h + b * Math.cos(t));
+            const ey = esHorizontal ? (k + b * Math.sin(t)) : (k + a * Math.sin(t));
+            const pix = this.aPixel(ex, ey, lim);
             if (i === 0) ctx.moveTo(pix.x, pix.y);
             else ctx.lineTo(pix.x, pix.y);
         }
@@ -431,14 +431,14 @@
      * rotulando sus longitudes d1 y d2.
      */
     Graficador.prototype.dibujarHiloJardinero = function (elipse, P, lim) {
-        var ctx = this.ctx;
-        var pp = this.aPixel(P.x, P.y, lim);
-        var focos = elipse.focos;
-        var colores = ['#db2777', '#7c3aed'];
-        var etiquetas = ['d₁', 'd₂'];
+        const ctx = this.ctx;
+        const pp = this.aPixel(P.x, P.y, lim);
+        const focos = elipse.focos;
+        const colores = ['#db2777', '#7c3aed'];
+        const etiquetas = ['d₁', 'd₂'];
 
-        for (var i = 0; i < 2; i++) {
-            var pf = this.aPixel(focos[i].x, focos[i].y, lim);
+        for (let i = 0; i < 2; i++) {
+            const pf = this.aPixel(focos[i].x, focos[i].y, lim);
             ctx.save();
             ctx.lineWidth = 3;
             ctx.strokeStyle = colores[i];
@@ -448,10 +448,10 @@
             ctx.stroke();
 
             // Rótulo en el punto medio del segmento
-            var mx = (pf.x + pp.x) / 2;
-            var my = (pf.y + pp.y) / 2;
+            const mx = (pf.x + pp.x) / 2;
+            const my = (pf.y + pp.y) / 2;
             ctx.font = 'bold 13px sans-serif';
-            var w = ctx.measureText(etiquetas[i]).width;
+            const w = ctx.measureText(etiquetas[i]).width;
             ctx.fillStyle = colores[i];
             ctx.fillRect(mx - w / 2 - 4, my - 10, w + 8, 18);
             ctx.fillStyle = '#ffffff';
@@ -470,11 +470,11 @@
      */
     Graficador.prototype.pixelACartesiano = function (evento) {
         if (!this.ultimoLim) return null;
-        var rect = this.canvas.getBoundingClientRect();
+        const rect = this.canvas.getBoundingClientRect();
         if (!rect.width || !rect.height) return null;
-        var lim = this.ultimoLim;
-        var px = (evento.clientX - rect.left) / rect.width;
-        var py = (evento.clientY - rect.top) / rect.height;
+        const lim = this.ultimoLim;
+        const px = (evento.clientX - rect.left) / rect.width;
+        const py = (evento.clientY - rect.top) / rect.height;
         return {
             x: lim.minX + px * (lim.maxX - lim.minX),
             y: lim.maxY - py * (lim.maxY - lim.minY)
@@ -486,27 +486,27 @@
      */
     Graficador.prototype.dibujarComparacion = function (listaElipses, colores, toggles) {
         this.ajustarDPI();
-        var lim = { minX: -6, maxX: 6, minY: -6, maxY: 6 };
+        const lim = { minX: -6, maxX: 6, minY: -6, maxY: 6 };
         this.dibujarEjesYCuadricula(lim);
 
-        var ctx = this.ctx;
+        const ctx = this.ctx;
         colores = colores || ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
-        var config = Object.assign({}, this.config, toggles || {});
+        const config = Object.assign({}, this.config, toggles || {});
 
         listaElipses.forEach(function (elipse, idx) {
             if (!elipse || !elipse.ok) return;
-            var col = colores[idx % colores.length];
+            const col = colores[idx % colores.length];
 
             ctx.save();
             ctx.lineWidth = 3;
             ctx.strokeStyle = col;
             ctx.beginPath();
-            var nPuntos = 240;
-            for (var i = 0; i <= nPuntos; i++) {
-                var t = (i * 2 * Math.PI) / nPuntos;
-                var ex = elipse.a * Math.cos(t);
-                var ey = elipse.b * Math.sin(t);
-                var pix = this.aPixel(ex, ey, lim);
+            const nPuntos = 240;
+            for (let i = 0; i <= nPuntos; i++) {
+                const t = (i * 2 * Math.PI) / nPuntos;
+                const ex = elipse.a * Math.cos(t);
+                const ey = elipse.b * Math.sin(t);
+                const pix = this.aPixel(ex, ey, lim);
                 if (i === 0) ctx.moveTo(pix.x, pix.y);
                 else ctx.lineTo(pix.x, pix.y);
             }
@@ -515,8 +515,8 @@
 
             // Dibujar focos de cada elipse en su color
             if (config.mostrarFocos && !elipse.esCircunferencia && elipse.focos) {
-                var f1 = this.aPixel(elipse.focos[0].x, elipse.focos[0].y, lim);
-                var f2 = this.aPixel(elipse.focos[1].x, elipse.focos[1].y, lim);
+                const f1 = this.aPixel(elipse.focos[0].x, elipse.focos[0].y, lim);
+                const f2 = this.aPixel(elipse.focos[1].x, elipse.focos[1].y, lim);
                 ctx.fillStyle = col;
                 ctx.beginPath(); ctx.arc(f1.x, f1.y, 4, 0, 2 * Math.PI); ctx.fill();
                 ctx.beginPath(); ctx.arc(f2.x, f2.y, 4, 0, 2 * Math.PI); ctx.fill();
@@ -537,10 +537,10 @@
 
         // Cartela de Leyenda interactiva en la esquina superior del canvas
         ctx.save();
-        var legW = 185;
-        var legH = 104;
-        var legX = this.ancho - legW - 14;
-        var legY = 14;
+        const legW = 185;
+        const legH = 104;
+        const legX = this.anchoCSS - legW - 14;
+        const legY = 14;
 
         ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
         ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
@@ -559,7 +559,7 @@
         ctx.font = 'bold 11px system-ui, sans-serif';
         ctx.fillText('Experimento: a² = 16 fijo', legX + 10, legY + 18);
 
-        var textosLeyenda = [
+        const textosLeyenda = [
             { txt: 'b²=12 → e=0.50 (Ovalada)', col: colores[0] },
             { txt: 'b²=9  → e=0.66 (Achatada)', col: colores[1] },
             { txt: 'b²=6  → e=0.79 (Alargada)', col: colores[2] },

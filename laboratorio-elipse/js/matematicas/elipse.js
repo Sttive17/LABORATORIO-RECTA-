@@ -7,7 +7,7 @@
 
 (function (raiz, fabrica) {
     if (typeof exports === 'object' && typeof module !== 'undefined') {
-        var Formato = require('./formato');
+        const Formato = require('./formato');
         module.exports = fabrica(Formato);
     } else {
         raiz.Elipse = fabrica(raiz.Formato);
@@ -15,7 +15,7 @@
 }(typeof self !== 'undefined' ? self : this, function (Formato) {
     'use strict';
 
-    var EPSILON = 1e-6;
+    const EPSILON = 1e-6;
 
     /**
      * Valida que un número sea finito y real.
@@ -39,11 +39,11 @@
             return { ok: false, error: '¡Hola! Faltan los datos para construir la elipse.' };
         }
 
-        var h = params.h;
-        var k = params.k;
-        var a = params.a;
-        var b = params.b;
-        var orientacion = params.orientacion;
+        const h = params.h;
+        const k = params.k;
+        const a = params.a;
+        const b = params.b;
+        const orientacion = params.orientacion;
 
         if (!esNumeroValido(h) || !esNumeroValido(k)) {
             return { ok: false, error: 'Las coordenadas del centro (h, k) deben ser números válidos.' };
@@ -69,21 +69,21 @@
             };
         }
 
-        var esCircunferencia = Math.abs(a - b) < EPSILON;
-        var a2 = Math.abs(a * a - Math.round(a * a)) < 1e-9 ? Math.round(a * a) : (a * a);
-        var b2 = Math.abs(b * b - Math.round(b * b)) < 1e-9 ? Math.round(b * b) : (b * b);
-        var c2 = Math.max(0, a2 - b2);
+        const esCircunferencia = Math.abs(a - b) < EPSILON;
+        const a2 = Math.abs(a * a - Math.round(a * a)) < 1e-9 ? Math.round(a * a) : (a * a);
+        const b2 = Math.abs(b * b - Math.round(b * b)) < 1e-9 ? Math.round(b * b) : (b * b);
+        let c2 = Math.max(0, a2 - b2);
         c2 = Math.abs(c2 - Math.round(c2)) < 1e-9 ? Math.round(c2) : c2;
-        var c = Math.sqrt(c2);
+        const c = Math.sqrt(c2);
 
-        var ejeMayor = 2 * a;
-        var ejeMenor = 2 * b;
-        var ladoRecto = (2 * b2) / a;
-        var excentricidad = esCircunferencia ? 0 : (c / a);
+        const ejeMayor = 2 * a;
+        const ejeMenor = 2 * b;
+        const ladoRecto = (2 * b2) / a;
+        const excentricidad = esCircunferencia ? 0 : (c / a);
 
-        var denX, denY;
-        var F1, F2, A1, A2, B1, B2;
-        var ejeFocal;
+        let denX, denY;
+        let F1, F2, A1, A2, B1, B2;
+        let ejeFocal;
 
         if (orientacion === 'horizontal') {
             denX = a2;
@@ -115,12 +115,12 @@
             B2 = { x: h + b, y: k, etiqueta: 'B' };
         }
 
-        var ecuacionTexto = Formato ? Formato.formatearEcuacion(h, k, denX, denY) :
+        const ecuacionTexto = Formato ? Formato.formatearEcuacion(h, k, denX, denY) :
             '((x - ' + h + ')^2)/' + denX + ' + ((y - ' + k + ')^2)/' + denY + ' = 1';
 
         // Lados rectos: segmentos que pasan perpendicularmente por cada foco con longitud ladoRecto
-        var mitadLR = ladoRecto / 2;
-        var lrFoco1, lrFoco2;
+        const mitadLR = ladoRecto / 2;
+        let lrFoco1, lrFoco2;
         if (orientacion === 'horizontal') {
             lrFoco1 = [{ x: F1.x, y: F1.y - mitadLR }, { x: F1.x, y: F1.y + mitadLR }];
             lrFoco2 = [{ x: F2.x, y: F2.y - mitadLR }, { x: F2.x, y: F2.y + mitadLR }];
@@ -166,10 +166,10 @@
             return { ok: false, error: 'Por favor proporciona los datos de la ecuación.' };
         }
 
-        var h = params.h;
-        var k = params.k;
-        var denX = params.denX;
-        var denY = params.denY;
+        const h = params.h;
+        const k = params.k;
+        const denX = params.denX;
+        const denY = params.denY;
 
         if (!esNumeroValido(h) || !esNumeroValido(k)) {
             return { ok: false, error: 'Las coordenadas del centro (h, k) deben ser números válidos.' };
@@ -181,7 +181,7 @@
             return { ok: false, error: 'El denominador debajo de (y−k)² debe ser mayor que cero 🙂' };
         }
 
-        var a, b, orientacion;
+        let a, b, orientacion;
         if (Math.abs(denX - denY) < EPSILON) {
             a = Math.sqrt(denX);
             b = a;
@@ -196,7 +196,7 @@
             orientacion = 'vertical';
         }
 
-        var resultado = crearElipse({
+        const resultado = crearElipse({
             h: h,
             k: k,
             a: a,
@@ -219,9 +219,9 @@
         if (!params || typeof params !== 'object') {
             return { ok: false, error: 'Por favor ingresa los coeficientes A, B y C.' };
         }
-        var A = params.A;
-        var B = params.B;
-        var C = params.C;
+        const A = params.A;
+        const B = params.B;
+        const C = params.C;
 
         if (!esNumeroValido(A) || A <= 0) {
             return { ok: false, error: 'El coeficiente A de x² debe ser un número positivo.' };
@@ -233,8 +233,8 @@
             return { ok: false, error: 'El término independiente C debe ser un número positivo.' };
         }
 
-        var denX = C / A;
-        var denY = C / B;
+        const denX = C / A;
+        const denY = C / B;
 
         return analizarEcuacion({
             h: 0,
@@ -251,11 +251,11 @@
         if (!params || typeof params !== 'object') {
             return { ok: false, error: 'Faltan los datos de la elipse.' };
         }
-        var h = params.h;
-        var k = params.k;
-        var ejeMayor = params.ejeMayor !== undefined ? params.ejeMayor : params.longitudEjeMayor;
-        var ejeMenor = params.ejeMenor !== undefined ? params.ejeMenor : params.longitudEjeMenor;
-        var orientacion = params.orientacion;
+        const h = params.h;
+        const k = params.k;
+        const ejeMayor = params.ejeMayor !== undefined ? params.ejeMayor : params.longitudEjeMayor;
+        const ejeMenor = params.ejeMenor !== undefined ? params.ejeMenor : params.longitudEjeMenor;
+        const orientacion = params.orientacion;
 
         if (!esNumeroValido(ejeMayor) || ejeMayor <= 0) {
             return { ok: false, error: 'La longitud del eje mayor (2a) debe ser un número positivo.' };
@@ -267,10 +267,10 @@
             return { ok: false, error: 'La longitud del eje menor no puede ser mayor que la del eje mayor.' };
         }
 
-        var a = ejeMayor / 2;
-        var b = ejeMenor / 2;
+        const a = ejeMayor / 2;
+        const b = ejeMenor / 2;
 
-        var elipse = crearElipse({
+        const elipse = crearElipse({
             h: h,
             k: k,
             a: a,
@@ -296,9 +296,9 @@
         if (!params || typeof params !== 'object') {
             return { ok: false, error: 'Faltan los datos de vértices y lado recto.' };
         }
-        var v1 = params.v1;
-        var v2 = params.v2;
-        var ladoRecto = params.ladoRecto;
+        const v1 = params.v1;
+        const v2 = params.v2;
+        const ladoRecto = params.ladoRecto;
 
         if (!v1 || !v2 || !esNumeroValido(v1.x) || !esNumeroValido(v1.y) || !esNumeroValido(v2.x) || !esNumeroValido(v2.y)) {
             return { ok: false, error: 'Las coordenadas de los dos vértices deben ser números válidos.' };
@@ -307,12 +307,12 @@
             return { ok: false, error: 'La longitud del lado recto debe ser mayor que cero.' };
         }
 
-        var distPuntos = Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
+        const distPuntos = Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
         if (distPuntos < EPSILON) {
             return { ok: false, error: 'Los dos vértices no pueden ser el mismo punto.' };
         }
 
-        var orientacion;
+        let orientacion;
         if (Math.abs(v1.y - v2.y) < EPSILON) {
             orientacion = 'horizontal';
         } else if (Math.abs(v1.x - v2.x) < EPSILON) {
@@ -324,12 +324,12 @@
             };
         }
 
-        var centro = {
+        const centro = {
             x: (v1.x + v2.x) / 2,
             y: (v1.y + v2.y) / 2
         };
 
-        var a = distPuntos / 2;
+        const a = distPuntos / 2;
         if (ladoRecto > 2 * a + EPSILON) {
             return {
                 ok: false,
@@ -338,10 +338,10 @@
         }
 
         // LR = 2b^2 / a  =>  b^2 = (LR * a) / 2
-        var b2 = (ladoRecto * a) / 2;
-        var b = Math.sqrt(b2);
+        const b2 = (ladoRecto * a) / 2;
+        const b = Math.sqrt(b2);
 
-        var elipse = crearElipse({
+        const elipse = crearElipse({
             h: centro.x,
             k: centro.y,
             a: a,
@@ -368,9 +368,9 @@
         if (!params || typeof params !== 'object') {
             return { ok: false, error: 'Faltan los datos de los vértices y el extremo menor.' };
         }
-        var v1 = params.v1;
-        var v2 = params.v2;
-        var B = params.extremoMenor;
+        const v1 = params.v1;
+        const v2 = params.v2;
+        const B = params.extremoMenor;
 
         if (!v1 || !v2 || !B ||
             !esNumeroValido(v1.x) || !esNumeroValido(v1.y) ||
@@ -379,18 +379,18 @@
             return { ok: false, error: 'Todas las coordenadas deben ser números válidos.' };
         }
 
-        var distVertices = Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
+        const distVertices = Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
         if (distVertices < EPSILON) {
             return { ok: false, error: 'Los dos vértices del eje mayor no pueden coincidir.' };
         }
 
-        var orientacion;
-        var centro = {
+        let orientacion;
+        const centro = {
             x: (v1.x + v2.x) / 2,
             y: (v1.y + v2.y) / 2
         };
-        var a = distVertices / 2;
-        var b;
+        const a = distVertices / 2;
+        let b;
 
         if (Math.abs(v1.y - v2.y) < EPSILON) {
             // Eje mayor horizontal: la perpendicular por el centro es x = centro.x
@@ -429,7 +429,7 @@
             };
         }
 
-        var elipse = crearElipse({
+        const elipse = crearElipse({
             h: centro.x,
             k: centro.y,
             a: a,
@@ -458,17 +458,17 @@
     function puntosParaDibujar(elipse, n) {
         if (!elipse || !elipse.ok) return [];
         n = n || 200;
-        var puntos = [];
-        var h = elipse.centro.x;
-        var k = elipse.centro.y;
-        var a = elipse.a;
-        var b = elipse.b;
-        var esHorizontal = elipse.orientacion === 'horizontal';
+        const puntos = [];
+        const h = elipse.centro.x;
+        const k = elipse.centro.y;
+        const a = elipse.a;
+        const b = elipse.b;
+        const esHorizontal = elipse.orientacion === 'horizontal';
 
-        var paso = (2 * Math.PI) / n;
-        for (var i = 0; i <= n; i++) {
-            var t = i * paso;
-            var x, y;
+        const paso = (2 * Math.PI) / n;
+        for (let i = 0; i <= n; i++) {
+            const t = i * paso;
+            let x, y;
             if (esHorizontal) {
                 x = h + a * Math.cos(t);
                 y = k + b * Math.sin(t);
@@ -490,8 +490,8 @@
      */
     function puntoEnElipse(elipse, grados) {
         if (!elipse || !elipse.ok || !esNumeroValido(grados)) return null;
-        var t = (grados * Math.PI) / 180;
-        var esHorizontal = elipse.orientacion === 'horizontal';
+        const t = (grados * Math.PI) / 180;
+        const esHorizontal = elipse.orientacion === 'horizontal';
         return {
             x: elipse.centro.x + (esHorizontal ? elipse.a : elipse.b) * Math.cos(t),
             y: elipse.centro.y + (esHorizontal ? elipse.b : elipse.a) * Math.sin(t)
@@ -510,10 +510,10 @@
         if (!punto || !esNumeroValido(punto.x) || !esNumeroValido(punto.y)) {
             return { ok: false, error: 'El punto P debe tener coordenadas numéricas.' };
         }
-        var F1 = elipse.focos[0];
-        var F2 = elipse.focos[1];
-        var d1 = Math.sqrt(Math.pow(punto.x - F1.x, 2) + Math.pow(punto.y - F1.y, 2));
-        var d2 = Math.sqrt(Math.pow(punto.x - F2.x, 2) + Math.pow(punto.y - F2.y, 2));
+        const F1 = elipse.focos[0];
+        const F2 = elipse.focos[1];
+        const d1 = Math.sqrt(Math.pow(punto.x - F1.x, 2) + Math.pow(punto.y - F1.y, 2));
+        const d2 = Math.sqrt(Math.pow(punto.x - F2.x, 2) + Math.pow(punto.y - F2.y, 2));
         return { ok: true, d1: d1, d2: d2, suma: d1 + d2, dosA: 2 * elipse.a };
     }
 
@@ -526,16 +526,16 @@
         if (!esNumeroValido(a2) || a2 <= 0 || !Array.isArray(listaB2)) {
             return { ok: false, error: 'Datos de comparación no válidos.' };
         }
-        var a = Math.sqrt(a2);
-        var resultados = [];
+        const a = Math.sqrt(a2);
+        const resultados = [];
 
-        for (var i = 0; i < listaB2.length; i++) {
-            var b2 = listaB2[i];
+        for (let i = 0; i < listaB2.length; i++) {
+            const b2 = listaB2[i];
             if (!esNumeroValido(b2) || b2 <= 0 || b2 > a2) continue;
-            var b = Math.sqrt(b2);
-            var c = Math.sqrt(a2 - b2);
-            var e = c / a;
-            var interpretacion = '';
+            const b = Math.sqrt(b2);
+            const c = Math.sqrt(a2 - b2);
+            const e = c / a;
+            let interpretacion = '';
             if (e < 0.3) {
                 interpretacion = 'Casi redonda';
             } else if (e <= 0.7) {

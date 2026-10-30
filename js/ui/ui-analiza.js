@@ -6,14 +6,14 @@
  * muestra elementos exactos y aproximados con un banco de 11 ejemplos completos.
  */
 
-var UIAnaliza = (function () {
+const UIAnaliza = (function () {
     'use strict';
 
-    var graficador = null;
-    var modoForma = 'canonica'; // 'canonica' o 'general'
+    let graficador = null;
+    let modoForma = 'canonica'; // 'canonica' o 'general'
 
     // Banco completo de 11 ejemplos representativos del libro de matemáticas
-    var ejemplosAnaliza = [
+    const ejemplosAnaliza = [
         {
             nombre: 'Ejemplo 1 del libro (Horizontal)',
             modo: 'canonica',
@@ -81,31 +81,56 @@ var UIAnaliza = (function () {
             desc: '25x² + 169y² = 4225  →  x²/169 + y²/25 = 1 (a=13, b=5, horizontal)'
         }
     ];
-    var indiceEjemplo = 0;
+    let indiceEjemplo = 0;
+
+    function limpiarErroresInputs() {
+        const inputs = document.querySelectorAll('#pantallaAnaliza input[type="text"]');
+        inputs.forEach(inp => inp.classList.remove('campo-error'));
+    }
+
+    function marcarErrorInput(idInput, mensaje) {
+        const el = document.getElementById(idInput);
+        if (el) {
+            el.classList.add('campo-error');
+            el.focus();
+        }
+        mostrarError(mensaje);
+    }
 
     function inicializar() {
-        var canvas = document.getElementById('canvasAnaliza');
+        const canvas = document.getElementById('canvasAnaliza');
         if (!canvas) return;
 
         graficador = new Graficador(canvas, { fijaEscala: false });
 
-        var btnCalcular = document.getElementById('btnCalcularAnaliza');
+        const btnCalcular = document.getElementById('btnCalcularAnaliza');
         if (btnCalcular) btnCalcular.addEventListener('click', procesarAnalisis);
 
-        var btnEjemplo = document.getElementById('btnEjemploAnaliza');
+        const btnEjemplo = document.getElementById('btnEjemploAnaliza');
         if (btnEjemplo) btnEjemplo.addEventListener('click', cargarSiguienteEjemplo);
 
-        var btnLimpiar = document.getElementById('btnLimpiarAnaliza');
-        if (btnLimpiar) btnLimpiar.addEventListener('click', limpiarCampos);
+        const btnLimpiar = document.getElementById('btnLimpiarAnaliza');
+        if (btnLimpiar) btnLimpiar.addEventListener('click', restablecer);
+
+        // Feedback inmediato: remover clase de error al escribir en cualquier campo
+        const inputsAnaliza = document.querySelectorAll('#pantallaAnaliza input[type="text"]');
+        inputsAnaliza.forEach(inp => {
+            inp.addEventListener('input', () => {
+                inp.classList.remove('campo-error');
+                ocultarAlerta();
+            });
+        });
 
         // Selector de modo canónica vs general
-        var tabCanonica = document.getElementById('tabFormaCanonica');
-        var tabGeneral = document.getElementById('tabFormaGeneral');
-        var secCanonica = document.getElementById('seccionCanonica');
-        var secGeneral = document.getElementById('seccionGeneral');
+        const tabCanonica = document.getElementById('tabFormaCanonica');
+        const tabGeneral = document.getElementById('tabFormaGeneral');
+        const secCanonica = document.getElementById('seccionCanonica');
+        const secGeneral = document.getElementById('seccionGeneral');
 
         if (tabCanonica && tabGeneral) {
-            tabCanonica.addEventListener('click', function () {
+            tabCanonica.addEventListener('click', () => {
+                limpiarErroresInputs();
+                ocultarAlerta();
                 modoForma = 'canonica';
                 tabCanonica.classList.add('seleccionado');
                 tabGeneral.classList.remove('seleccionado');
@@ -113,7 +138,9 @@ var UIAnaliza = (function () {
                 if (secGeneral) secGeneral.style.display = 'none';
             });
 
-            tabGeneral.addEventListener('click', function () {
+            tabGeneral.addEventListener('click', () => {
+                limpiarErroresInputs();
+                ocultarAlerta();
                 modoForma = 'general';
                 tabGeneral.classList.add('seleccionado');
                 tabCanonica.classList.remove('seleccionado');
@@ -123,27 +150,25 @@ var UIAnaliza = (function () {
         }
 
         // Toggles de elementos gráficos
-        var toggles = ['chkCentroAnaliza', 'chkFocosAnaliza', 'chkVerticesAnaliza', 'chkExtremosAnaliza', 'chkEjeFocalAnaliza', 'chkLadoRectoAnaliza'];
-        toggles.forEach(function (id) {
-            var el = document.getElementById(id);
+        const toggles = ['chkCentroAnaliza', 'chkFocosAnaliza', 'chkVerticesAnaliza', 'chkExtremosAnaliza', 'chkEjeFocalAnaliza', 'chkLadoRectoAnaliza'];
+        toggles.forEach(id => {
+            const el = document.getElementById(id);
             if (el) {
-                el.addEventListener('change', function () {
-                    redibujar();
-                });
+                el.addEventListener('change', () => redibujar());
             }
         });
 
         // Selector desplegable de ejemplos
-        var selEjemplos = document.getElementById('selectEjemplosAnaliza');
+        const selEjemplos = document.getElementById('selectEjemplosAnaliza');
         if (selEjemplos) {
             selEjemplos.innerHTML = '';
-            ejemplosAnaliza.forEach(function (ej, idx) {
-                var opt = document.createElement('option');
+            ejemplosAnaliza.forEach((ej, idx) => {
+                const opt = document.createElement('option');
                 opt.value = idx;
                 opt.textContent = (idx + 1) + '. ' + ej.nombre;
                 selEjemplos.appendChild(opt);
             });
-            selEjemplos.addEventListener('change', function () {
+            selEjemplos.addEventListener('change', () => {
                 cargarEjemploPorIndice(parseInt(selEjemplos.value, 10));
             });
         }
@@ -153,52 +178,57 @@ var UIAnaliza = (function () {
     }
 
     function procesarAnalisis() {
+        limpiarErroresInputs();
         ocultarAlerta();
-        var resultado;
+        let resultado;
 
-        if (modoForma === 'canonica') {
-            var hStr = document.getElementById('inputAnalizaH').value;
-            var kStr = document.getElementById('inputAnalizaK').value;
-            var denXStr = document.getElementById('inputAnalizaDenX').value;
-            var denYStr = document.getElementById('inputAnalizaDenY').value;
+        try {
+            if (modoForma === 'canonica') {
+                const hInput = document.getElementById('inputAnalizaH');
+                const kInput = document.getElementById('inputAnalizaK');
+                const denXInput = document.getElementById('inputAnalizaDenX');
+                const denYInput = document.getElementById('inputAnalizaDenY');
 
-            var rH = Formato.leerNumero(hStr);
-            if (!rH.ok) return mostrarError('Centro h: ' + rH.error);
+                const rH = Formato.leerNumero(hInput.value);
+                if (!rH.ok) return marcarErrorInput('inputAnalizaH', 'Centro X (h): ' + rH.error);
 
-            var rK = Formato.leerNumero(kStr);
-            if (!rK.ok) return mostrarError('Centro k: ' + rK.error);
+                const rK = Formato.leerNumero(kInput.value);
+                if (!rK.ok) return marcarErrorInput('inputAnalizaK', 'Centro Y (k): ' + rK.error);
 
-            var rDenX = Formato.leerNumero(denXStr);
-            if (!rDenX.ok) return mostrarError('Denominador de X: ' + rDenX.error);
+                const rDenX = Formato.leerNumero(denXInput.value);
+                if (!rDenX.ok) return marcarErrorInput('inputAnalizaDenX', 'Denominador de X: ' + rDenX.error);
 
-            var rDenY = Formato.leerNumero(denYStr);
-            if (!rDenY.ok) return mostrarError('Denominador de Y: ' + rDenY.error);
+                const rDenY = Formato.leerNumero(denYInput.value);
+                if (!rDenY.ok) return marcarErrorInput('inputAnalizaDenY', 'Denominador de Y: ' + rDenY.error);
 
-            resultado = Elipse.analizarEcuacion({
-                h: rH.valor,
-                k: rK.valor,
-                denX: rDenX.valor,
-                denY: rDenY.valor
-            });
-        } else {
-            var aStr = document.getElementById('inputGeneralA').value;
-            var bStr = document.getElementById('inputGeneralB').value;
-            var cStr = document.getElementById('inputGeneralC').value;
+                resultado = Elipse.analizarEcuacion({
+                    h: rH.valor,
+                    k: rK.valor,
+                    denX: rDenX.valor,
+                    denY: rDenY.valor
+                });
+            } else {
+                const aInput = document.getElementById('inputGeneralA');
+                const bInput = document.getElementById('inputGeneralB');
+                const cInput = document.getElementById('inputGeneralC');
 
-            var rA = Formato.leerNumero(aStr);
-            if (!rA.ok) return mostrarError('Coeficiente A: ' + rA.error);
+                const rA = Formato.leerNumero(aInput.value);
+                if (!rA.ok) return marcarErrorInput('inputGeneralA', 'Coeficiente A: ' + rA.error);
 
-            var rB = Formato.leerNumero(bStr);
-            if (!rB.ok) return mostrarError('Coeficiente B: ' + rB.error);
+                const rB = Formato.leerNumero(bInput.value);
+                if (!rB.ok) return marcarErrorInput('inputGeneralB', 'Coeficiente B: ' + rB.error);
 
-            var rC = Formato.leerNumero(cStr);
-            if (!rC.ok) return mostrarError('Término C: ' + rC.error);
+                const rC = Formato.leerNumero(cInput.value);
+                if (!rC.ok) return marcarErrorInput('inputGeneralC', 'Término C: ' + rC.error);
 
-            resultado = Elipse.desdeFormaGeneral({
-                A: rA.valor,
-                B: rB.valor,
-                C: rC.valor
-            });
+                resultado = Elipse.desdeFormaGeneral({
+                    A: rA.valor,
+                    B: rB.valor,
+                    C: rC.valor
+                });
+            }
+        } catch (err) {
+            return mostrarError('Error en el cálculo algebraico: ' + err.message);
         }
 
         if (!resultado.ok) {
@@ -210,10 +240,10 @@ var UIAnaliza = (function () {
     }
 
     function mostrarResultados(res) {
-        var elEcuacion = document.getElementById('ecuacionAnaliza');
+        const elEcuacion = document.getElementById('ecuacionAnaliza');
         if (elEcuacion) elEcuacion.textContent = res.ecuacion;
 
-        var elOrientacion = document.getElementById('orientacionAnaliza');
+        const elOrientacion = document.getElementById('orientacionAnaliza');
         if (elOrientacion) {
             if (res.esCircunferencia) {
                 elOrientacion.textContent = 'Circunferencia (a = b)';
@@ -246,111 +276,110 @@ var UIAnaliza = (function () {
             llenar('resVertices', Formato.formatearPunto(res.vertices[0].x, res.vertices[0].y) + ' y ' + Formato.formatearPunto(res.vertices[1].x, res.vertices[1].y));
             llenar('resExtremos', Formato.formatearPunto(res.extremosMenor[0].x, res.extremosMenor[0].y) + ' y ' + Formato.formatearPunto(res.extremosMenor[1].x, res.extremosMenor[1].y));
             
-            var mensajeMati = res.orientacion === 'horizontal'
+            const mensajeMati = res.orientacion === 'horizontal'
                 ? 'Como el número más grande (' + Formato.formatearExacto(res.denX) + ') está debajo de X, ¡la elipse se estira horizontalmente! ↔'
                 : 'Como el número más grande (' + Formato.formatearExacto(res.denY) + ') está debajo de Y, ¡la elipse se estira verticalmente! ↕';
             mostrarMensajeMati(mensajeMati);
         }
 
-        var panel = document.getElementById('panelResultadosAnaliza');
-        if (panel) panel.style.display = 'block';
-
-        // Renderizar desarrollo paso a paso
-        var cajaPasos = document.getElementById('cajaPasosAnaliza');
+        // Mostrar procedimiento paso a paso si existe (en forma general)
+        const cajaPasos = document.getElementById('cajaPasosAnaliza');
         if (cajaPasos) {
             if (res.pasos && res.pasos.length > 0) {
-                cajaPasos.innerHTML = '<strong>📐 Procedimiento Matemático Detallado:</strong><br><br>' + res.pasos.join('<br>');
+                cajaPasos.innerHTML = '<strong>📝 Procedimiento de Transformación a Forma Canónica:</strong><br><br>' + res.pasos.join('<br>');
                 cajaPasos.style.display = 'block';
             } else {
+                cajaPasos.innerHTML = '';
                 cajaPasos.style.display = 'none';
             }
         }
 
-        graficador.dibujar(res, obtenerToggles());
+        const panel = document.getElementById('panelResultadosAnaliza');
+        if (panel) panel.style.display = 'block';
+
+        if (graficador) {
+            graficador.dibujar(res, obtenerToggles());
+        }
     }
 
     function llenar(id, texto) {
-        var el = document.getElementById(id);
+        const el = document.getElementById(id);
         if (el) el.textContent = texto;
     }
 
     function obtenerToggles() {
         return {
-            mostrarCentro: document.getElementById('chkCentroAnaliza') ? document.getElementById('chkCentroAnaliza').checked : true,
-            mostrarFocos: document.getElementById('chkFocosAnaliza') ? document.getElementById('chkFocosAnaliza').checked : true,
-            mostrarVertices: document.getElementById('chkVerticesAnaliza') ? document.getElementById('chkVerticesAnaliza').checked : true,
-            mostrarExtremosMenor: document.getElementById('chkExtremosAnaliza') ? document.getElementById('chkExtremosAnaliza').checked : true,
-            mostrarEjeFocal: document.getElementById('chkEjeFocalAnaliza') ? document.getElementById('chkEjeFocalAnaliza').checked : true,
-            mostrarLadoRecto: document.getElementById('chkLadoRectoAnaliza') ? document.getElementById('chkLadoRectoAnaliza').checked : true
+            mostrarCentro: document.getElementById('chkCentroAnaliza')?.checked ?? true,
+            mostrarFocos: document.getElementById('chkFocosAnaliza')?.checked ?? true,
+            mostrarVertices: document.getElementById('chkVerticesAnaliza')?.checked ?? true,
+            mostrarExtremosMenor: document.getElementById('chkExtremosAnaliza')?.checked ?? true,
+            mostrarEjeFocal: document.getElementById('chkEjeFocalAnaliza')?.checked ?? true,
+            mostrarLadoRecto: document.getElementById('chkLadoRectoAnaliza')?.checked ?? true
         };
     }
 
     function cargarEjemploPorIndice(idx) {
         if (idx < 0 || idx >= ejemplosAnaliza.length) return;
         indiceEjemplo = idx;
-        var ej = ejemplosAnaliza[idx];
+        const ej = ejemplosAnaliza[idx];
 
-        if (ej.modo === 'general') {
-            var tabGeneral = document.getElementById('tabFormaGeneral');
-            if (tabGeneral) tabGeneral.click();
+        limpiarErroresInputs();
+        ocultarAlerta();
 
-            document.getElementById('inputGeneralA').value = ej.A;
-            document.getElementById('inputGeneralB').value = ej.B;
-            document.getElementById('inputGeneralC').value = ej.C;
-        } else {
-            var tabCanonica = document.getElementById('tabFormaCanonica');
-            if (tabCanonica) tabCanonica.click();
+        if (ej.modo === 'canonica') {
+            modoForma = 'canonica';
+            document.getElementById('tabFormaCanonica')?.classList.add('seleccionado');
+            document.getElementById('tabFormaGeneral')?.classList.remove('seleccionado');
+            document.getElementById('seccionCanonica').style.display = 'block';
+            document.getElementById('seccionGeneral').style.display = 'none';
 
             document.getElementById('inputAnalizaH').value = ej.h;
             document.getElementById('inputAnalizaK').value = ej.k;
             document.getElementById('inputAnalizaDenX').value = ej.denX;
             document.getElementById('inputAnalizaDenY').value = ej.denY;
+        } else {
+            modoForma = 'general';
+            document.getElementById('tabFormaGeneral')?.classList.add('seleccionado');
+            document.getElementById('tabFormaCanonica')?.classList.remove('seleccionado');
+            document.getElementById('seccionCanonica').style.display = 'none';
+            document.getElementById('seccionGeneral').style.display = 'block';
+
+            document.getElementById('inputGeneralA').value = ej.A;
+            document.getElementById('inputGeneralB').value = ej.B;
+            document.getElementById('inputGeneralC').value = ej.C;
         }
 
-        var sel = document.getElementById('selectEjemplosAnaliza');
+        const sel = document.getElementById('selectEjemplosAnaliza');
         if (sel) sel.value = idx;
 
         procesarAnalisis();
-        mostrarMensajeMati('Cargado el ' + ej.nombre + ': ' + ej.desc);
+        mostrarMensajeMati('Cargado el ' + ej.nombre + ': ' + ej.desc + ' 💡');
     }
 
     function cargarSiguienteEjemplo() {
-        var prox = (indiceEjemplo + 1) % ejemplosAnaliza.length;
+        const prox = (indiceEjemplo + 1) % ejemplosAnaliza.length;
         cargarEjemploPorIndice(prox);
     }
 
-    function limpiarCampos() {
-        document.getElementById('inputAnalizaH').value = '0';
-        document.getElementById('inputAnalizaK').value = '0';
-        document.getElementById('inputAnalizaDenX').value = '';
-        document.getElementById('inputAnalizaDenY').value = '';
-
-        var panel = document.getElementById('panelResultadosAnaliza');
-        if (panel) panel.style.display = 'none';
-
-        var cajaPasos = document.getElementById('cajaPasosAnaliza');
-        if (cajaPasos) {
-            cajaPasos.innerHTML = '';
-            cajaPasos.style.display = 'none';
-        }
-
+    function restablecer() {
+        limpiarErroresInputs();
         ocultarAlerta();
-        if (graficador) graficador.dibujar(null);
-        mostrarMensajeMati('Ingresa los valores de la ecuación o elige un ejemplo del libro para analizar 🔬');
+        cargarEjemploPorIndice(0);
+        mostrarMensajeMati('Se restableció la actividad al Ejemplo 1. ¡Ingresa tus propios datos o prueba otro ejemplo! 🔄');
     }
 
     function mostrarError(msg) {
-        var alerta = document.getElementById('alertaAnaliza');
+        const alerta = document.getElementById('alertaAnaliza');
         if (alerta) {
             alerta.className = 'caja-alerta error';
-            alerta.innerHTML = '⚠️ <strong>¡Ups!</strong> ' + msg;
+            alerta.innerHTML = '⚠️ <strong>Dato no válido:</strong> ' + msg;
             alerta.style.display = 'flex';
         }
-        mostrarMensajeMati('¡Revisa los números que ingresaste! ' + msg);
+        mostrarMensajeMati('¡Revisa el campo señalado en rojo! ' + msg);
     }
 
     function mostrarAlertaEspecial(msg) {
-        var alerta = document.getElementById('alertaAnaliza');
+        const alerta = document.getElementById('alertaAnaliza');
         if (alerta) {
             alerta.className = 'caja-alerta info';
             alerta.innerHTML = '💡 <strong>Nota Especial:</strong> ' + msg;
@@ -359,12 +388,12 @@ var UIAnaliza = (function () {
     }
 
     function ocultarAlerta() {
-        var alerta = document.getElementById('alertaAnaliza');
+        const alerta = document.getElementById('alertaAnaliza');
         if (alerta) alerta.style.display = 'none';
     }
 
     function mostrarMensajeMati(msg) {
-        var globo = document.getElementById('globoMatiAnaliza');
+        const globo = document.getElementById('globoMatiAnaliza');
         if (globo) globo.textContent = msg;
     }
 
@@ -378,6 +407,9 @@ var UIAnaliza = (function () {
         inicializar: inicializar,
         procesarAnalisis: procesarAnalisis,
         redibujar: redibujar,
-        cargarEjemploPorIndice: cargarEjemploPorIndice
+        cargarEjemploPorIndice: cargarEjemploPorIndice,
+        restablecer: restablecer
     };
 })();
+
+if (typeof self !== 'undefined') self.UIAnaliza = UIAnaliza;

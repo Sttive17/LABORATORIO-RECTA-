@@ -2,13 +2,13 @@
  * Laboratorio de la Elipse - Feria STEAM+ 2026
  * Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz
  * Controlador Principal: Navegación fluida entre pantallas, inicialización bajo demanda,
- * redibujado reactivo ante cambios de tamaño y mascota Mati.
+ * redibujado reactivo ante cambios de tamaño, modales oficiales y centro de ayuda.
  */
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    var pantallas = {
+    const pantallas = {
         bienvenida: document.getElementById('pantallaBienvenida'),
         menu: document.getElementById('pantallaMenu'),
         explora: document.getElementById('pantallaExplora'),
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         retos: document.getElementById('pantallaRetos')
     };
 
-    var inicializados = {
+    const inicializados = {
         explora: false,
         analiza: false,
         arma: false,
@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param {'bienvenida'|'menu'|'explora'|'analiza'|'arma'|'retos'} idDestino
      */
     function navegarA(idDestino) {
-        Object.keys(pantallas).forEach(function (clave) {
-            var el = pantallas[clave];
+        Object.keys(pantallas).forEach(clave => {
+            const el = pantallas[clave];
             if (el) {
                 if (clave === idDestino) {
                     el.classList.add('activa');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         // Esperar al siguiente cuadro de renderizado para garantizar que el canvas tenga dimensiones CSS reales
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
             if (idDestino === 'explora') {
                 if (!inicializados.explora) {
                     UIExplora.inicializar();
@@ -77,70 +77,48 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 1. Botón "¡Empezar!" en Bienvenida
-    var btnEmpezar = document.getElementById('btnEmpezar');
+    const btnEmpezar = document.getElementById('btnEmpezar');
     if (btnEmpezar) {
-        btnEmpezar.addEventListener('click', function () {
-            navegarA('menu');
-        });
+        btnEmpezar.addEventListener('click', () => navegarA('menu'));
     }
 
     // 2. Botón volver a Bienvenida desde el Menú
-    var btnVolverBienvenida = document.getElementById('btnVolverBienvenida');
+    const btnVolverBienvenida = document.getElementById('btnVolverBienvenida');
     if (btnVolverBienvenida) {
-        btnVolverBienvenida.addEventListener('click', function () {
-            navegarA('bienvenida');
-        });
+        btnVolverBienvenida.addEventListener('click', () => navegarA('bienvenida'));
     }
 
     // 3. Tarjetas del Menú Principal
-    var tarjetaExplora = document.getElementById('tarjetaExplora');
-    if (tarjetaExplora) {
-        tarjetaExplora.addEventListener('click', function () {
-            navegarA('explora');
-        });
-    }
+    const tarjetaExplora = document.getElementById('tarjetaExplora');
+    if (tarjetaExplora) tarjetaExplora.addEventListener('click', () => navegarA('explora'));
 
-    var tarjetaAnaliza = document.getElementById('tarjetaAnaliza');
-    if (tarjetaAnaliza) {
-        tarjetaAnaliza.addEventListener('click', function () {
-            navegarA('analiza');
-        });
-    }
+    const tarjetaAnaliza = document.getElementById('tarjetaAnaliza');
+    if (tarjetaAnaliza) tarjetaAnaliza.addEventListener('click', () => navegarA('analiza'));
 
-    var tarjetaArma = document.getElementById('tarjetaArma');
-    if (tarjetaArma) {
-        tarjetaArma.addEventListener('click', function () {
-            navegarA('arma');
-        });
-    }
+    const tarjetaArma = document.getElementById('tarjetaArma');
+    if (tarjetaArma) tarjetaArma.addEventListener('click', () => navegarA('arma'));
 
-    var tarjetaRetos = document.getElementById('tarjetaRetos');
-    if (tarjetaRetos) {
-        tarjetaRetos.addEventListener('click', function () {
-            navegarA('retos');
-        });
-    }
+    const tarjetaRetos = document.getElementById('tarjetaRetos');
+    if (tarjetaRetos) tarjetaRetos.addEventListener('click', () => navegarA('retos'));
 
     // 4. Botones volver al menú en todas las actividades
-    var botonesVolverMenu = document.querySelectorAll('.btn-volver-menu');
-    botonesVolverMenu.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            navegarA('menu');
-        });
+    const botonesVolverMenu = document.querySelectorAll('.btn-volver-menu');
+    botonesVolverMenu.forEach(btn => {
+        btn.addEventListener('click', () => navegarA('menu'));
     });
 
     // 5. Redibujado responsivo continuo ante redimensionado o cambio de zoom
-    var resizeTimer = null;
-    window.addEventListener('resize', function () {
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-            if (pantallas.explora && pantallas.explora.classList.contains('activa')) {
+        resizeTimer = setTimeout(() => {
+            if (pantallas.explora?.classList.contains('activa')) {
                 UIExplora.actualizar();
-            } else if (pantallas.analiza && pantallas.analiza.classList.contains('activa') && UIAnaliza.redibujar) {
+            } else if (pantallas.analiza?.classList.contains('activa') && UIAnaliza.redibujar) {
                 UIAnaliza.redibujar();
-            } else if (pantallas.arma && pantallas.arma.classList.contains('activa') && UIArma.redibujar) {
+            } else if (pantallas.arma?.classList.contains('activa') && UIArma.redibujar) {
                 UIArma.redibujar();
-            } else if (pantallas.retos && pantallas.retos.classList.contains('activa') && UIRetos.redibujar) {
+            } else if (pantallas.retos?.classList.contains('activa') && UIRetos.redibujar) {
                 UIRetos.redibujar();
             }
         }, 120);
@@ -150,18 +128,18 @@ document.addEventListener('DOMContentLoaded', function () {
     generarEstrellasFondo();
 
     function generarEstrellasFondo() {
-        var contenedor = document.getElementById('capaEstrellas');
+        const contenedor = document.getElementById('capaEstrellas');
         if (!contenedor) return;
 
-        var numEstrellas = 60;
-        for (var i = 0; i < numEstrellas; i++) {
-            var estrella = document.createElement('div');
+        const numEstrellas = 60;
+        for (let i = 0; i < numEstrellas; i++) {
+            const estrella = document.createElement('div');
             estrella.className = 'estrella';
-            var x = Math.random() * 100;
-            var y = Math.random() * 100;
-            var tam = Math.random() * 3 + 1.5;
-            var retardo = Math.random() * 4;
-            var duracion = Math.random() * 2 + 2;
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const tam = Math.random() * 3 + 1.5;
+            const retardo = Math.random() * 4;
+            const duracion = Math.random() * 2 + 2;
 
             estrella.style.left = x + '%';
             estrella.style.top = y + '%';
@@ -177,11 +155,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ════════════════════════════════════════════════════════════════════════
     // 7. MODAL DE CÓDIGO QR PARA EL JURADO Y VISITANTES EN LA FERIA
     // ════════════════════════════════════════════════════════════════════════
-    var btnAbrirQR = document.getElementById('btnAbrirQR');
-    var modalQR = document.getElementById('modalQR');
-    var btnCerrarQR = document.getElementById('btnCerrarQR');
-    var btnCopiarEnlaceQR = document.getElementById('btnCopiarEnlaceQR');
-    var inputEnlaceQR = document.getElementById('inputEnlaceQR');
+    const btnAbrirQR = document.getElementById('btnAbrirQR');
+    const modalQR = document.getElementById('modalQR');
+    const btnCerrarQR = document.getElementById('btnCerrarQR');
+    const btnCopiarEnlaceQR = document.getElementById('btnCopiarEnlaceQR');
+    const inputEnlaceQR = document.getElementById('inputEnlaceQR');
 
     function abrirModalQR() {
         if (modalQR) {
@@ -201,24 +179,24 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnCerrarQR) btnCerrarQR.addEventListener('click', cerrarModalQR);
 
     if (modalQR) {
-        modalQR.addEventListener('click', function (e) {
+        modalQR.addEventListener('click', e => {
             if (e.target === modalQR) cerrarModalQR();
         });
     }
 
     if (btnCopiarEnlaceQR && inputEnlaceQR) {
-        btnCopiarEnlaceQR.addEventListener('click', function () {
-            var url = inputEnlaceQR.value || 'https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/';
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url).then(function () {
-                    var txtOriginal = btnCopiarEnlaceQR.textContent;
+        btnCopiarEnlaceQR.addEventListener('click', () => {
+            const url = inputEnlaceQR.value || 'https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/';
+            if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    const txtOriginal = btnCopiarEnlaceQR.textContent;
                     btnCopiarEnlaceQR.textContent = '¡Copiado! 👍';
                     btnCopiarEnlaceQR.style.background = '#10b981';
-                    setTimeout(function () {
+                    setTimeout(() => {
                         btnCopiarEnlaceQR.textContent = txtOriginal;
                         btnCopiarEnlaceQR.style.background = '';
                     }, 2000);
-                }).catch(function () {
+                }).catch(() => {
                     inputEnlaceQR.select();
                     document.execCommand('copy');
                 });
@@ -232,11 +210,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ════════════════════════════════════════════════════════════════════════
     // 8. MODO PANTALLA COMPLETA (FULL SCREEN)
     // ════════════════════════════════════════════════════════════════════════
-    var btnPantallaCompleta = document.getElementById('btnPantallaCompleta');
+    const btnPantallaCompleta = document.getElementById('btnPantallaCompleta');
 
     function alternarPantallaCompleta() {
         if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-            var el = document.documentElement;
+            const el = document.documentElement;
             if (el.requestFullscreen) {
                 el.requestFullscreen();
             } else if (el.webkitRequestFullscreen) {
@@ -253,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function actualizarBotonFullscreen() {
         if (!btnPantallaCompleta) return;
-        var esFull = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        const esFull = !!(document.fullscreenElement || document.webkitFullscreenElement);
         if (esFull) {
             btnPantallaCompleta.innerHTML = '🗗 <span class="ocultar-movil">Salir de Pantalla Completa</span>';
             btnPantallaCompleta.title = 'Salir de Pantalla Completa';
@@ -272,13 +250,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // ════════════════════════════════════════════════════════════════════════
     // 9. CENTRO DE DOCUMENTACIÓN OFICIAL (MODAL CON 5 PESTAÑAS)
     // ════════════════════════════════════════════════════════════════════════
-    var btnAbrirDocs = document.getElementById('btnAbrirDocs');
-    var modalDocs = document.getElementById('modalDocs');
-    var btnCerrarDocs = document.getElementById('btnCerrarDocs');
-    var cuerpoDocumentacion = document.getElementById('cuerpoDocumentacion');
-    var tabsDoc = document.querySelectorAll('.tab-doc');
+    const btnAbrirDocs = document.getElementById('btnAbrirDocs');
+    const modalDocs = document.getElementById('modalDocs');
+    const btnCerrarDocs = document.getElementById('btnCerrarDocs');
+    const cuerpoDocumentacion = document.getElementById('cuerpoDocumentacion');
+    const tabsDoc = document.querySelectorAll('.tab-doc');
 
-    var contenidosDocs = {
+    const contenidosDocs = {
         docFicha: 
             '<div style="display: flex; flex-direction: column; gap: 14px;">' +
                 '<div style="background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; border-radius: 10px; padding: 12px 16px;">' +
@@ -327,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-borde); border-radius: 10px; padding: 12px;">' +
                     '<strong style="color: #38bdf8;">4. Retos de Mati & Diploma STEAM+:</strong>' +
                     '<ul style="margin: 6px 0 0 20px; color: #e2e8f0; font-size: 0.88rem;">' +
-                        '<li>Ronda evaluativa de 5 preguntas aleatorias con tolerancia numérica adaptativa (±0.05).</li>' +
+                        '<li>Ronda evaluativa de 8 preguntas aleatorias con tolerancia numérica adaptativa (±0.05).</li>' +
                         '<li>Al culminar, ingresa tu nombre y descarga tu <strong>Diploma de Honor STEAM+ en alta resolución (PNG 1200x800)</strong>.</li>' +
                     '</ul>' +
                 '</div>' +
@@ -419,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function mostrarTabDocs(nombreTab) {
-        tabsDoc.forEach(function (tab) {
+        tabsDoc.forEach(tab => {
             if (tab.getAttribute('data-tab') === nombreTab) {
                 tab.classList.add('activa');
             } else {
@@ -451,60 +429,52 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnCerrarDocs) btnCerrarDocs.addEventListener('click', cerrarModalDocs);
 
     if (modalDocs) {
-        modalDocs.addEventListener('click', function (e) {
+        modalDocs.addEventListener('click', e => {
             if (e.target === modalDocs) cerrarModalDocs();
         });
     }
 
-    tabsDoc.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            var tabId = tab.getAttribute('data-tab');
+    tabsDoc.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
             mostrarTabDocs(tabId);
         });
-    });
-
-    // Cerrar modales con tecla Escape
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' || e.keyCode === 27) {
-            cerrarModalQR();
-            cerrarModalDocs();
-        }
     });
 
     // ════════════════════════════════════════════════════════════════════════
     // 10. DESCARGA DE GRÁFICAS EN ALTA DEFINICIÓN (PNG)
     // ════════════════════════════════════════════════════════════════════════
-    var botonesDescargaPNG = document.querySelectorAll('.btn-descargar-png');
-    botonesDescargaPNG.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var canvasId = btn.getAttribute('data-canvas');
-            var canvas = canvasId ? document.getElementById(canvasId) : null;
+    const botonesDescargaPNG = document.querySelectorAll('.btn-descargar-png');
+    botonesDescargaPNG.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const canvasId = btn.getAttribute('data-canvas');
+            let canvas = canvasId ? document.getElementById(canvasId) : null;
             if (!canvas) {
-                var contenedorCol = btn.closest('.columna-grafica');
+                const contenedorCol = btn.closest('.columna-grafica');
                 if (contenedorCol) canvas = contenedorCol.querySelector('canvas');
             }
             if (!canvas) return;
 
-            var ecuacionId = btn.getAttribute('data-ecuacion');
-            var elEcuacion = ecuacionId ? document.getElementById(ecuacionId) : null;
-            var txtEcuacion = elEcuacion ? (elEcuacion.innerText || elEcuacion.textContent || '').trim() : '';
+            const ecuacionId = btn.getAttribute('data-ecuacion');
+            const elEcuacion = ecuacionId ? document.getElementById(ecuacionId) : null;
+            const txtEcuacion = elEcuacion ? (elEcuacion.innerText || elEcuacion.textContent || '').trim() : '';
 
-            var nombreBase = btn.getAttribute('data-nombre') || 'grafica-elipse';
+            const nombreBase = btn.getAttribute('data-nombre') || 'grafica-elipse';
             descargarCanvasConMembrete(canvas, txtEcuacion, nombreBase);
         });
     });
 
     function descargarCanvasConMembrete(canvasFuente, ecuacionTexto, prefijoNombre) {
-        var w = canvasFuente.width || 800;
-        var hFuente = canvasFuente.height || 800;
-        var headerH = 70;
-        var footerH = 40;
-        var totalH = hFuente + headerH + footerH;
+        const w = canvasFuente.width || 800;
+        const hFuente = canvasFuente.height || 800;
+        const headerH = 70;
+        const footerH = 40;
+        const totalH = hFuente + headerH + footerH;
 
-        var expCanvas = document.createElement('canvas');
+        const expCanvas = document.createElement('canvas');
         expCanvas.width = w;
         expCanvas.height = totalH;
-        var expCtx = expCanvas.getContext('2d');
+        const expCtx = expCanvas.getContext('2d');
 
         // Fondo elegante
         expCtx.fillStyle = '#0f172a';
@@ -525,20 +495,160 @@ document.addEventListener('DOMContentLoaded', function () {
         // Pie con link oficial y ecuación si existe
         expCtx.fillStyle = '#64748b';
         expCtx.font = Math.max(11, Math.round(w * 0.02)) + 'px system-ui, sans-serif';
-        var pieTexto = 'https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/';
+        let pieTexto = 'https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/';
         if (ecuacionTexto && ecuacionTexto.length < 50) {
             pieTexto += '  |  ' + ecuacionTexto;
         }
         expCtx.fillText(pieTexto, 24, totalH - 16);
 
         // Descargar PNG
-        var a = document.createElement('a');
+        const a = document.createElement('a');
         a.download = prefijoNombre + '-steam-2026.png';
         a.href = expCanvas.toDataURL('image/png');
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
     }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 11. MODAL DE AYUDA RÁPIDA: "¿CÓMO FUNCIONA ESTA ACTIVIDAD?"
+    // ════════════════════════════════════════════════════════════════════════
+    const modalAyuda = document.getElementById('modalAyuda');
+    const btnCerrarAyuda = document.getElementById('btnCerrarAyuda');
+    const btnEntendidoAyuda = document.getElementById('btnEntendidoAyuda');
+    const iconoModalAyuda = document.getElementById('iconoModalAyuda');
+    const tituloModalAyuda = document.getElementById('tituloModalAyuda');
+    const subtituloModalAyuda = document.getElementById('subtituloModalAyuda');
+    const cuerpoModalAyuda = document.getElementById('cuerpoModalAyuda');
+    const botonesAyuda = document.querySelectorAll('.btn-ayuda-actividad');
+
+    const guiasAyuda = {
+        explora: {
+            icono: '🔭',
+            titulo: '¿Cómo funciona "Explora la Elipse"?',
+            subtitulo: 'Experimenta la deformación y parámetros en tiempo real',
+            html: 
+                '<div style="display: flex; flex-direction: column; gap: 12px;">' +
+                    '<div style="background: rgba(56, 189, 248, 0.1); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #38bdf8;">1. Mueve los Deslizadores:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Varía el centro (h, k), el semieje mayor (a) y el semieje menor (b). Recuerda que por definición matemática siempre <strong>a ≥ b</strong>.</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #10b981;">2. Hilo del Jardinero (d₁ + d₂ = 2a):</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Activa la casilla para ver los dos segmentos elásticos. Puedes <strong>arrastrar el punto P</strong> sobre la elipse con el ratón o pantalla táctil, o activar el recorrido animado automático.</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #f59e0b;">3. Experimento de Excentricidades:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Pulsa el botón de comparar para visualizar las 4 elipses con a²=16 fijo. Observa cómo al achicarse b², los focos migran hacia los vértices.</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-borde); padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; color: #94a3b8;">' +
+                        '💡 <strong>Consejo para la Feria:</strong> Si deseas empezar de nuevo con un nuevo jurado o visitante, pulsa <strong>🔄 Restablecer</strong>.' +
+                    '</div>' +
+                '</div>'
+        },
+        analiza: {
+            icono: '🧮',
+            titulo: '¿Cómo funciona "Analiza la Ecuación"?',
+            subtitulo: 'Deducción automática de elementos a partir de cualquier ecuación',
+            html: 
+                '<div style="display: flex; flex-direction: column; gap: 12px;">' +
+                    '<div style="background: rgba(56, 189, 248, 0.1); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #38bdf8;">1. Elige la Forma:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Canónica <code>(x−h)²/denX + (y−k)²/denY = 1</code> o General <code>A·x² + B·y² = C</code>.</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #10b981;">2. Admite Fracciones y Decimales:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Puedes escribir números enteros (ej. <code>9</code>), decimales (ej. <code>2.5</code>) o fracciones exactas como <code>3/2</code> o <code>-1/4</code>.</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #f59e0b;">3. Resultados en Detalle:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">El laboratorio calcula centro, semiejes a y b, distancia focal c, lado recto, excentricidad e y dibuja el paso a paso algebraico.</p>' +
+                    '</div>' +
+                '</div>'
+        },
+        arma: {
+            icono: '🧩',
+            titulo: '¿Cómo funciona "Arma tu Elipse"?',
+            subtitulo: 'Construcción paso a paso a partir de datos conocidos',
+            html: 
+                '<div style="display: flex; flex-direction: column; gap: 12px;">' +
+                    '<div style="background: rgba(56, 189, 248, 0.1); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #38bdf8;">1. Selecciona tu Caso:</strong>' +
+                        '<ul style="margin: 4px 0 0 16px; color: #cbd5e1; font-size: 0.86rem;">' +
+                            '<li><strong>a)</strong> Centro, longitud del eje mayor, eje menor y orientación.</li>' +
+                            '<li><strong>b)</strong> Dos vértices del eje mayor y longitud del lado recto (LR).</li>' +
+                            '<li><strong>c)</strong> Dos vértices del eje mayor y un extremo del eje menor.</li>' +
+                        '</ul>' +
+                    '</div>' +
+                    '<div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #10b981;">2. Deducción Paso a Paso:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Al pulsar "Armar Ecuación", el laboratorio despliega las fórmulas analíticas, la sustitución exacta y la ecuación canónica resultante.</p>' +
+                    '</div>' +
+                '</div>'
+        },
+        retos: {
+            icono: '🎯',
+            titulo: '¿Cómo funcionan los "Retos de Mati"?',
+            subtitulo: 'Demuestra tus habilidades matemáticas y gana tu Diploma STEAM+',
+            html: 
+                '<div style="display: flex; flex-direction: column; gap: 12px;">' +
+                    '<div style="background: rgba(56, 189, 248, 0.1); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #38bdf8;">1. Ronda de 8 Preguntas:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Observa la elipse en el canvas y la ecuación generada al azar. Responde en el campo de texto (acepta enteros, decimales y fracciones).</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #10b981;">2. ¿Tienes dudas? ¡Usa la Pista!</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">El botón "💡 Pista" te orientará sobre la fórmula necesaria sin quitarte la oportunidad de responder.</p>' +
+                    '</div>' +
+                    '<div style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 6px;">' +
+                        '<strong style="color: #f59e0b;">3. Diploma de Honor Descargable:</strong>' +
+                        '<p style="margin: 4px 0 0 0; color: #cbd5e1; font-size: 0.88rem;">Al terminar la ronda, escribe el nombre del visitante o jurado y descarga el diploma de honor en alta definición (PNG 1200x800).</p>' +
+                    '</div>' +
+                '</div>'
+        }
+    };
+
+    function abrirModalAyuda(seccion) {
+        if (!modalAyuda) return;
+        const info = guiasAyuda[seccion] || guiasAyuda.explora;
+        if (iconoModalAyuda) iconoModalAyuda.textContent = info.icono;
+        if (tituloModalAyuda) tituloModalAyuda.textContent = info.titulo;
+        if (subtituloModalAyuda) subtituloModalAyuda.textContent = info.subtitulo;
+        if (cuerpoModalAyuda) cuerpoModalAyuda.innerHTML = info.html;
+        modalAyuda.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarModalAyuda() {
+        if (!modalAyuda) return;
+        modalAyuda.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    botonesAyuda.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const seccion = btn.getAttribute('data-ayuda') || 'explora';
+            abrirModalAyuda(seccion);
+        });
+    });
+
+    if (btnCerrarAyuda) btnCerrarAyuda.addEventListener('click', cerrarModalAyuda);
+    if (btnEntendidoAyuda) btnEntendidoAyuda.addEventListener('click', cerrarModalAyuda);
+
+    if (modalAyuda) {
+        modalAyuda.addEventListener('click', e => {
+            if (e.target === modalAyuda) cerrarModalAyuda();
+        });
+    }
+
+    // Cerrar cualquier modal con tecla Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            cerrarModalQR();
+            cerrarModalDocs();
+            cerrarModalAyuda();
+        }
+    });
 
     // Exponer función de navegación global
     window.navegarA = navegarA;

@@ -5,15 +5,15 @@
  * explicando el procedimiento paso a paso, con un banco de 15 ejemplos del libro.
  */
 
-var UIArma = (function () {
+const UIArma = (function () {
     'use strict';
 
-    var graficador = null;
-    var casoActual = 'a'; // 'a', 'b', o 'c'
-    var indicesCasos = { a: 0, b: 0, c: 0 };
+    let graficador = null;
+    let casoActual = 'a'; // 'a', 'b', o 'c'
+    const indicesCasos = { a: 0, b: 0, c: 0 };
 
     // Banco completo de 15 ejemplos (5 para cada uno de los 3 casos)
-    var ejemplosPorCaso = {
+    const ejemplosPorCaso = {
         a: [
             {
                 nombre: 'Ejemplo 2 del libro (Vertical)',
@@ -85,54 +85,75 @@ var UIArma = (function () {
                 desc: 'Vértices (0, 5) y (0, -5), Extremo B(3, 0) → a=5, b=3'
             },
             {
-                nombre: 'Vertical desplazada',
-                v1x: '1', v1y: '7', v2x: '1', v2y: '-1', bx: '4', by: '3',
-                desc: 'Vértices (1, 7) y (1, -1), Extremo B(4, 3) → a=4, b=3'
+                nombre: 'Horizontal desplazada en (-2, 3)',
+                v1x: '-8', v1y: '3', v2x: '4', v2y: '3', bx: '-2', by: '7',
+                desc: 'Vértices (-8, 3) y (4, 3), Extremo B(-2, 7) → a=6, b=4'
             },
             {
-                nombre: 'Horizontal con decimales',
-                v1x: '-3', v1y: '1', v2x: '5', v2y: '1', bx: '1', by: '3.5',
-                desc: 'Vértices (-3, 1) y (5, 1), Extremo B(1, 3.5) → a=4, b=2.5'
+                nombre: 'Vertical desplazada en (1, -1)',
+                v1x: '1', v1y: '4', v2x: '1', v2y: '-6', bx: '4', by: '-1',
+                desc: 'Vértices (1, 4) y (1, -6), Extremo B(4, -1) → a=5, b=3'
             }
         ]
     };
 
+    function limpiarErroresInputs() {
+        const inputs = document.querySelectorAll('#pantallaArma input[type="text"]');
+        inputs.forEach(inp => inp.classList.remove('campo-error'));
+    }
+
+    function marcarErrorInput(idInput, mensaje) {
+        const el = document.getElementById(idInput);
+        if (el) {
+            el.classList.add('campo-error');
+            el.focus();
+        }
+        mostrarError(mensaje);
+    }
+
     function inicializar() {
-        var canvas = document.getElementById('canvasArma');
+        const canvas = document.getElementById('canvasArma');
         if (!canvas) return;
 
         graficador = new Graficador(canvas, { fijaEscala: false });
 
-        // Selector de casos
-        var radios = document.getElementsByName('tipoDatosArma');
-        for (var i = 0; i < radios.length; i++) {
-            radios[i].addEventListener('change', cambiarCaso);
-        }
-
-        var btnCalcular = document.getElementById('btnCalcularArma');
+        const btnCalcular = document.getElementById('btnCalcularArma');
         if (btnCalcular) btnCalcular.addEventListener('click', procesarArmado);
 
-        var btnEjemplo = document.getElementById('btnEjemploArma');
+        const btnEjemplo = document.getElementById('btnEjemploArma');
         if (btnEjemplo) btnEjemplo.addEventListener('click', cargarSiguienteEjemplo);
 
-        var btnLimpiar = document.getElementById('btnLimpiarArma');
-        if (btnLimpiar) btnLimpiar.addEventListener('click', limpiarCampos);
+        const btnLimpiar = document.getElementById('btnLimpiarArma');
+        if (btnLimpiar) btnLimpiar.addEventListener('click', restablecer);
 
-        // Toggles gráficos
-        var toggles = ['chkCentroArma', 'chkFocosArma', 'chkVerticesArma', 'chkExtremosArma', 'chkEjeFocalArma', 'chkLadoRectoArma'];
-        toggles.forEach(function (id) {
-            var el = document.getElementById(id);
+        // Feedback inmediato: remover clase de error al escribir en cualquier campo
+        const inputsArma = document.querySelectorAll('#pantallaArma input[type="text"]');
+        inputsArma.forEach(inp => {
+            inp.addEventListener('input', () => {
+                inp.classList.remove('campo-error');
+                ocultarAlerta();
+            });
+        });
+
+        // Radios de selección de caso
+        const radios = document.getElementsByName('tipoDatosArma');
+        radios.forEach(r => {
+            r.addEventListener('change', cambiarCaso);
+        });
+
+        // Toggles de visualización
+        const toggles = ['chkCentroArma', 'chkFocosArma', 'chkVerticesArma', 'chkExtremosArma', 'chkEjeFocalArma', 'chkLadoRectoArma'];
+        toggles.forEach(id => {
+            const el = document.getElementById(id);
             if (el) {
-                el.addEventListener('change', function () {
-                    redibujar();
-                });
+                el.addEventListener('change', () => redibujar());
             }
         });
 
         // Selector desplegable de ejemplos
-        var selEjemplos = document.getElementById('selectEjemplosArma');
+        const selEjemplos = document.getElementById('selectEjemplosArma');
         if (selEjemplos) {
-            selEjemplos.addEventListener('change', function () {
+            selEjemplos.addEventListener('change', () => {
                 cargarEjemploPorIndice(parseInt(selEjemplos.value, 10));
             });
         }
@@ -141,8 +162,11 @@ var UIArma = (function () {
     }
 
     function cambiarCaso() {
-        var radios = document.getElementsByName('tipoDatosArma');
-        for (var i = 0; i < radios.length; i++) {
+        limpiarErroresInputs();
+        ocultarAlerta();
+
+        const radios = document.getElementsByName('tipoDatosArma');
+        for (let i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
                 casoActual = radios[i].value;
                 break;
@@ -153,20 +177,17 @@ var UIArma = (function () {
         document.getElementById('formArmaB').style.display = casoActual === 'b' ? 'block' : 'none';
         document.getElementById('formArmaC').style.display = casoActual === 'c' ? 'block' : 'none';
 
-        // Actualizar opciones del selector desplegable de ejemplos según el caso activo
         actualizarSelectEjemplos();
-
-        ocultarAlerta();
         cargarEjemploPorIndice(0);
     }
 
     function actualizarSelectEjemplos() {
-        var sel = document.getElementById('selectEjemplosArma');
+        const sel = document.getElementById('selectEjemplosArma');
         if (!sel) return;
         sel.innerHTML = '';
-        var lista = ejemplosPorCaso[casoActual] || [];
-        lista.forEach(function (ej, idx) {
-            var opt = document.createElement('option');
+        const lista = ejemplosPorCaso[casoActual] || [];
+        lista.forEach((ej, idx) => {
+            const opt = document.createElement('option');
             opt.value = idx;
             opt.textContent = (idx + 1) + '. ' + ej.nombre;
             sel.appendChild(opt);
@@ -175,131 +196,168 @@ var UIArma = (function () {
     }
 
     function procesarArmado() {
+        limpiarErroresInputs();
         ocultarAlerta();
-        var resultado;
+        let resultado;
 
-        if (casoActual === 'a') {
-            var rH = Formato.leerNumero(document.getElementById('inputArmaH').value);
-            var rK = Formato.leerNumero(document.getElementById('inputArmaK').value);
-            var rMayor = Formato.leerNumero(document.getElementById('inputArmaEjeMayor').value);
-            var rMenor = Formato.leerNumero(document.getElementById('inputArmaEjeMenor').value);
-            var orientacion = document.getElementById('selectArmaOrientacion').value;
+        try {
+            if (casoActual === 'a') {
+                const hInput = document.getElementById('inputArmaH');
+                const kInput = document.getElementById('inputArmaK');
+                const mayorInput = document.getElementById('inputArmaEjeMayor');
+                const menorInput = document.getElementById('inputArmaEjeMenor');
+                const orientacion = document.getElementById('selectArmaOrientacion').value;
 
-            if (!rH.ok) return mostrarError('Centro h: ' + rH.error);
-            if (!rK.ok) return mostrarError('Centro k: ' + rK.error);
-            if (!rMayor.ok) return mostrarError('Longitud del Eje Mayor: ' + rMayor.error);
-            if (!rMenor.ok) return mostrarError('Longitud del Eje Menor: ' + rMenor.error);
+                const rH = Formato.leerNumero(hInput.value);
+                if (!rH.ok) return marcarErrorInput('inputArmaH', 'Centro X (h): ' + rH.error);
 
-            resultado = (Elipse.desdeEjes || Elipse.construirDesdeEjes)({
-                h: rH.valor,
-                k: rK.valor,
-                ejeMayor: rMayor.valor,
-                ejeMenor: rMenor.valor,
-                longitudEjeMayor: rMayor.valor,
-                longitudEjeMenor: rMenor.valor,
-                orientacion: orientacion
-            });
-        } else if (casoActual === 'b') {
-            var rV1x = Formato.leerNumero(document.getElementById('inputArmaV1x').value);
-            var rV1y = Formato.leerNumero(document.getElementById('inputArmaV1y').value);
-            var rV2x = Formato.leerNumero(document.getElementById('inputArmaV2x').value);
-            var rV2y = Formato.leerNumero(document.getElementById('inputArmaV2y').value);
-            var rLR = Formato.leerNumero(document.getElementById('inputArmaLR').value);
+                const rK = Formato.leerNumero(kInput.value);
+                if (!rK.ok) return marcarErrorInput('inputArmaK', 'Centro Y (k): ' + rK.error);
 
-            if (!rV1x.ok || !rV1y.ok) return mostrarError('Vértice A1: ingresa números válidos');
-            if (!rV2x.ok || !rV2y.ok) return mostrarError('Vértice A2: ingresa números válidos');
-            if (!rLR.ok) return mostrarError('Lado Recto: ' + rLR.error);
+                const rMayor = Formato.leerNumero(mayorInput.value);
+                if (!rMayor.ok) return marcarErrorInput('inputArmaEjeMayor', 'Longitud del Eje Mayor (2a): ' + rMayor.error);
 
-            resultado = (Elipse.desdeVerticesYLadoRecto || Elipse.construirDesdeVerticesYLadoRecto)({
-                v1: { x: rV1x.valor, y: rV1y.valor },
-                v2: { x: rV2x.valor, y: rV2y.valor },
-                ladoRecto: rLR.valor
-            });
-        } else if (casoActual === 'c') {
-            var rV1x = Formato.leerNumero(document.getElementById('inputArmaCV1x').value);
-            var rV1y = Formato.leerNumero(document.getElementById('inputArmaCV1y').value);
-            var rV2x = Formato.leerNumero(document.getElementById('inputArmaCV2x').value);
-            var rV2y = Formato.leerNumero(document.getElementById('inputArmaCV2y').value);
-            var rBx = Formato.leerNumero(document.getElementById('inputArmaBx').value);
-            var rBy = Formato.leerNumero(document.getElementById('inputArmaBy').value);
+                const rMenor = Formato.leerNumero(menorInput.value);
+                if (!rMenor.ok) return marcarErrorInput('inputArmaEjeMenor', 'Longitud del Eje Menor (2b): ' + rMenor.error);
 
-            if (!rV1x.ok || !rV1y.ok) return mostrarError('Vértice A1: números inválidos');
-            if (!rV2x.ok || !rV2y.ok) return mostrarError('Vértice A2: números inválidos');
-            if (!rBx.ok || !rBy.ok) return mostrarError('Extremo B: números inválidos');
+                resultado = (Elipse.desdeEjes || Elipse.construirDesdeEjes)({
+                    h: rH.valor,
+                    k: rK.valor,
+                    ejeMayor: rMayor.valor,
+                    ejeMenor: rMenor.valor,
+                    longitudEjeMayor: rMayor.valor,
+                    longitudEjeMenor: rMenor.valor,
+                    orientacion: orientacion
+                });
+            } else if (casoActual === 'b') {
+                const v1xInput = document.getElementById('inputArmaV1x');
+                const v1yInput = document.getElementById('inputArmaV1y');
+                const v2xInput = document.getElementById('inputArmaV2x');
+                const v2yInput = document.getElementById('inputArmaV2y');
+                const lrInput = document.getElementById('inputArmaLR');
 
-            resultado = (Elipse.desdeVerticesYExtremoMenor || Elipse.construirDesdeVerticesYExtremoMenor)({
-                v1: { x: rV1x.valor, y: rV1y.valor },
-                v2: { x: rV2x.valor, y: rV2y.valor },
-                extremoMenor: { x: rBx.valor, y: rBy.valor }
-            });
+                const rV1x = Formato.leerNumero(v1xInput.value);
+                if (!rV1x.ok) return marcarErrorInput('inputArmaV1x', 'Vértice 1 X (A\'): ' + rV1x.error);
+
+                const rV1y = Formato.leerNumero(v1yInput.value);
+                if (!rV1y.ok) return marcarErrorInput('inputArmaV1y', 'Vértice 1 Y (A\'): ' + rV1y.error);
+
+                const rV2x = Formato.leerNumero(v2xInput.value);
+                if (!rV2x.ok) return marcarErrorInput('inputArmaV2x', 'Vértice 2 X (A): ' + rV2x.error);
+
+                const rV2y = Formato.leerNumero(v2yInput.value);
+                if (!rV2y.ok) return marcarErrorInput('inputArmaV2y', 'Vértice 2 Y (A): ' + rV2y.error);
+
+                const rLR = Formato.leerNumero(lrInput.value);
+                if (!rLR.ok) return marcarErrorInput('inputArmaLR', 'Longitud del Lado Recto (LR): ' + rLR.error);
+
+                resultado = (Elipse.desdeVerticesYLadoRecto || Elipse.construirDesdeVerticesYLadoRecto)({
+                    v1: { x: rV1x.valor, y: rV1y.valor },
+                    v2: { x: rV2x.valor, y: rV2y.valor },
+                    ladoRecto: rLR.valor
+                });
+            } else if (casoActual === 'c') {
+                const cv1xInput = document.getElementById('inputArmaCV1x');
+                const cv1yInput = document.getElementById('inputArmaCV1y');
+                const cv2xInput = document.getElementById('inputArmaCV2x');
+                const cv2yInput = document.getElementById('inputArmaCV2y');
+                const bxInput = document.getElementById('inputArmaBx');
+                const byInput = document.getElementById('inputArmaBy');
+
+                const rV1x = Formato.leerNumero(cv1xInput.value);
+                if (!rV1x.ok) return marcarErrorInput('inputArmaCV1x', 'Vértice 1 X (A\'): ' + rV1x.error);
+
+                const rV1y = Formato.leerNumero(cv1yInput.value);
+                if (!rV1y.ok) return marcarErrorInput('inputArmaCV1y', 'Vértice 1 Y (A\'): ' + rV1y.error);
+
+                const rV2x = Formato.leerNumero(cv2xInput.value);
+                if (!rV2x.ok) return marcarErrorInput('inputArmaCV2x', 'Vértice 2 X (A): ' + rV2x.error);
+
+                const rV2y = Formato.leerNumero(cv2yInput.value);
+                if (!rV2y.ok) return marcarErrorInput('inputArmaCV2y', 'Vértice 2 Y (A): ' + rV2y.error);
+
+                const rBx = Formato.leerNumero(bxInput.value);
+                if (!rBx.ok) return marcarErrorInput('inputArmaBx', 'Extremo Menor X (B): ' + rBx.error);
+
+                const rBy = Formato.leerNumero(byInput.value);
+                if (!rBy.ok) return marcarErrorInput('inputArmaBy', 'Extremo Menor Y (B): ' + rBy.error);
+
+                resultado = (Elipse.desdeVerticesYExtremoMenor || Elipse.construirDesdeVerticesYExtremoMenor)({
+                    v1: { x: rV1x.valor, y: rV1y.valor },
+                    v2: { x: rV2x.valor, y: rV2y.valor },
+                    extremoMenor: { x: rBx.valor, y: rBy.valor }
+                });
+            }
+        } catch (err) {
+            return mostrarError('Error en la construcción geométrica: ' + err.message);
         }
 
         if (!resultado || !resultado.ok) {
-            return mostrarError(resultado ? resultado.error : 'Ocurrió un error al procesar los datos de la elipse.');
+            return mostrarError(resultado ? resultado.error : 'Ocurrió un error al procesar los datos.');
         }
 
         window.elipseArmadaActual = resultado;
-        mostrarResultados(resultado);
-    }
 
-    function mostrarResultados(res) {
-        var elEcuacion = document.getElementById('ecuacionArma');
-        if (elEcuacion) elEcuacion.textContent = res.ecuacion;
+        const elEcuacion = document.getElementById('ecuacionArma');
+        if (elEcuacion) elEcuacion.textContent = resultado.ecuacion;
 
-        var elPasos = document.getElementById('cajaPasosArma');
-        if (elPasos && res.pasos) {
-            elPasos.innerHTML = '<strong>📐 Procedimiento de Construcción Paso a Paso:</strong><br><br>' + res.pasos.join('<br>');
+        const elPasos = document.getElementById('cajaPasosArma');
+        if (elPasos && resultado.pasos) {
+            elPasos.innerHTML = '<strong>📝 Procedimiento de Construcción Paso a Paso:</strong><br><br>' + resultado.pasos.join('<br>');
         }
 
-        llenar('resArmaCentro', Formato.formatearPunto(res.centro.x, res.centro.y));
-        llenar('resArmaA', Formato.formatearExacto(res.a));
-        llenar('resArmaB', Formato.formatearExacto(res.b));
-        llenar('resArmaC', Formato.formatearExacto(res.c));
-        llenar('resArmaLR', Formato.formatearExacto(res.ladoRecto));
-        llenar('resArmaE', res.excentricidad.toFixed(4));
+        llenar('resArmaCentro', Formato.formatearPunto(resultado.centro.x, resultado.centro.y));
+        llenar('resArmaA', Formato.formatearExacto(resultado.a));
+        llenar('resArmaB', Formato.formatearExacto(resultado.b));
+        llenar('resArmaC', Formato.formatearExacto(resultado.c));
+        llenar('resArmaLR', Formato.formatearExacto(resultado.ladoRecto));
+        llenar('resArmaE', 'e = ' + resultado.excentricidad.toFixed(4));
 
-        var panel = document.getElementById('panelResultadosArma');
+        const panel = document.getElementById('panelResultadosArma');
         if (panel) panel.style.display = 'block';
 
-        mostrarMensajeMati('¡Elipse armada exitosamente! Revisa el procedimiento paso a paso y la gráfica 🧩');
-        graficador.dibujar(res, obtenerToggles());
+        mostrarMensajeMati('¡Elipse armada exitosamente! Revisa el procedimiento analítico y la gráfica 🧩');
+        graficador.dibujar(resultado, obtenerToggles());
     }
 
     function llenar(id, texto) {
-        var el = document.getElementById(id);
+        const el = document.getElementById(id);
         if (el) el.textContent = texto;
     }
 
     function obtenerToggles() {
         return {
-            mostrarCentro: document.getElementById('chkCentroArma') ? document.getElementById('chkCentroArma').checked : true,
-            mostrarFocos: document.getElementById('chkFocosArma') ? document.getElementById('chkFocosArma').checked : true,
-            mostrarVertices: document.getElementById('chkVerticesArma') ? document.getElementById('chkVerticesArma').checked : true,
-            mostrarExtremosMenor: document.getElementById('chkExtremosArma') ? document.getElementById('chkExtremosArma').checked : true,
-            mostrarEjeFocal: document.getElementById('chkEjeFocalArma') ? document.getElementById('chkEjeFocalArma').checked : true,
-            mostrarLadoRecto: document.getElementById('chkLadoRectoArma') ? document.getElementById('chkLadoRectoArma').checked : true
+            mostrarCentro: document.getElementById('chkCentroArma')?.checked ?? true,
+            mostrarFocos: document.getElementById('chkFocosArma')?.checked ?? true,
+            mostrarVertices: document.getElementById('chkVerticesArma')?.checked ?? true,
+            mostrarExtremosMenor: document.getElementById('chkExtremosArma')?.checked ?? true,
+            mostrarEjeFocal: document.getElementById('chkEjeFocalArma')?.checked ?? true,
+            mostrarLadoRecto: document.getElementById('chkLadoRectoArma')?.checked ?? true
         };
     }
 
-    function cargarEjemploPorIndice(idx) {
-        var lista = ejemplosPorCaso[casoActual] || [];
-        if (idx < 0 || idx >= lista.length) return;
-        indicesCasos[casoActual] = idx;
-        var ej = lista[idx];
+    function cargarEjemploPorCaso(caso, idx) {
+        const lista = ejemplosPorCaso[caso];
+        if (!lista || idx < 0 || idx >= lista.length) return;
+        indicesCasos[caso] = idx;
+        const ej = lista[idx];
 
-        if (casoActual === 'a') {
+        limpiarErroresInputs();
+        ocultarAlerta();
+
+        if (caso === 'a') {
             document.getElementById('inputArmaH').value = ej.h;
             document.getElementById('inputArmaK').value = ej.k;
             document.getElementById('inputArmaEjeMayor').value = ej.ejeMayor;
             document.getElementById('inputArmaEjeMenor').value = ej.ejeMenor;
             document.getElementById('selectArmaOrientacion').value = ej.orientacion;
-        } else if (casoActual === 'b') {
+        } else if (caso === 'b') {
             document.getElementById('inputArmaV1x').value = ej.v1x;
             document.getElementById('inputArmaV1y').value = ej.v1y;
             document.getElementById('inputArmaV2x').value = ej.v2x;
             document.getElementById('inputArmaV2y').value = ej.v2y;
             document.getElementById('inputArmaLR').value = ej.lr;
-        } else if (casoActual === 'c') {
+        } else if (caso === 'c') {
             document.getElementById('inputArmaCV1x').value = ej.v1x;
             document.getElementById('inputArmaCV1y').value = ej.v1y;
             document.getElementById('inputArmaCV2x').value = ej.v2x;
@@ -308,65 +366,47 @@ var UIArma = (function () {
             document.getElementById('inputArmaBy').value = ej.by;
         }
 
-        var sel = document.getElementById('selectEjemplosArma');
+        const sel = document.getElementById('selectEjemplosArma');
         if (sel) sel.value = idx;
 
         procesarArmado();
-        mostrarMensajeMati('Cargado el ' + ej.nombre + ': ' + ej.desc);
+        mostrarMensajeMati('Cargado el ' + ej.nombre + ' 💡');
+    }
+
+    function cargarEjemploPorIndice(idx) {
+        cargarEjemploPorCaso(casoActual, idx);
     }
 
     function cargarSiguienteEjemplo() {
-        var lista = ejemplosPorCaso[casoActual] || [];
-        var prox = ((indicesCasos[casoActual] || 0) + 1) % lista.length;
+        const lista = ejemplosPorCaso[casoActual] || [];
+        const prox = ((indicesCasos[casoActual] || 0) + 1) % lista.length;
         cargarEjemploPorIndice(prox);
     }
 
-    function limpiarCampos() {
-        if (casoActual === 'a') {
-            document.getElementById('inputArmaH').value = '0';
-            document.getElementById('inputArmaK').value = '0';
-            document.getElementById('inputArmaEjeMayor').value = '';
-            document.getElementById('inputArmaEjeMenor').value = '';
-        } else if (casoActual === 'b') {
-            document.getElementById('inputArmaV1x').value = '';
-            document.getElementById('inputArmaV1y').value = '';
-            document.getElementById('inputArmaV2x').value = '';
-            document.getElementById('inputArmaV2y').value = '';
-            document.getElementById('inputArmaLR').value = '';
-        } else if (casoActual === 'c') {
-            document.getElementById('inputArmaCV1x').value = '';
-            document.getElementById('inputArmaCV1y').value = '';
-            document.getElementById('inputArmaCV2x').value = '';
-            document.getElementById('inputArmaCV2y').value = '';
-            document.getElementById('inputArmaBx').value = '';
-            document.getElementById('inputArmaBy').value = '';
-        }
-
-        var panel = document.getElementById('panelResultadosArma');
-        if (panel) panel.style.display = 'none';
-
+    function restablecer() {
+        limpiarErroresInputs();
         ocultarAlerta();
-        if (graficador) graficador.dibujar(null);
-        mostrarMensajeMati('Ingresa los datos para construir tu elipse geométrica 🔨');
+        cargarEjemploPorIndice(0);
+        mostrarMensajeMati('Se restableció el caso ' + casoActual.toUpperCase() + ' a los datos del Ejemplo 1. ¡Comienza de nuevo! 🔄');
     }
 
     function mostrarError(msg) {
-        var alerta = document.getElementById('alertaArma');
+        const alerta = document.getElementById('alertaArma');
         if (alerta) {
             alerta.className = 'caja-alerta error';
-            alerta.innerHTML = '⚠️ <strong>¡Ups!</strong> ' + msg;
+            alerta.innerHTML = '⚠️ <strong>Dato no válido:</strong> ' + msg;
             alerta.style.display = 'flex';
         }
-        mostrarMensajeMati('Revisa los datos ingresados: ' + msg);
+        mostrarMensajeMati('¡Revisa el campo señalado en rojo! ' + msg);
     }
 
     function ocultarAlerta() {
-        var alerta = document.getElementById('alertaArma');
+        const alerta = document.getElementById('alertaArma');
         if (alerta) alerta.style.display = 'none';
     }
 
     function mostrarMensajeMati(msg) {
-        var globo = document.getElementById('globoMatiArma');
+        const globo = document.getElementById('globoMatiArma');
         if (globo) globo.textContent = msg;
     }
 
@@ -380,6 +420,9 @@ var UIArma = (function () {
         inicializar: inicializar,
         procesarArmado: procesarArmado,
         redibujar: redibujar,
-        cargarEjemploPorIndice: cargarEjemploPorIndice
+        cargarEjemploPorCaso: cargarEjemploPorCaso,
+        restablecer: restablecer
     };
 })();
+
+if (typeof self !== 'undefined') self.UIArma = UIArma;

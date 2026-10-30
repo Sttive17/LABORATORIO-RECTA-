@@ -528,6 +528,55 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
+/* Feedback visual de validación (borde rojo y animación de sacudida) */
+input[type="text"].campo-error, 
+input[type="number"].campo-error, 
+select.campo-error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important;
+    background-color: rgba(239, 68, 68, 0.08) !important;
+    animation: sacudidaError 0.3s ease-in-out;
+}
+
+@keyframes sacudidaError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+.mensaje-campo-error {
+    color: #f87171;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Botón "¿Cómo funciona?" de ayuda rápida */
+.btn-ayuda-actividad {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e2e8f0;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-ayuda-actividad:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: #38bdf8;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
 /* ══════════ MENÚ DE ACTIVIDADES ══════════ */
 .cuadricula-menu {
     display: grid;
@@ -590,6 +639,14 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 .opcion-radio-card:hover {
     background: rgba(56, 189, 248, 0.12);
     border-color: #38bdf8;
+    color: #ffffff;
+}
+
+.opcion-radio-card:has(input:checked),
+.opcion-radio-card.activa {
+    background: rgba(2, 132, 199, 0.22);
+    border-color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
     color: #ffffff;
 }
 

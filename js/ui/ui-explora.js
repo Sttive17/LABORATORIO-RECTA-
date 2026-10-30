@@ -5,19 +5,19 @@
  * sliders de alta precisión, medidor de achatamiento y modo comparativo limpio.
  */
 
-var UIExplora = (function () {
+const UIExplora = (function () {
     'use strict';
 
-    var graficador = null;
-    var enModoComparacion = false;
-    var datosComparacionElipses = null;
-    var coloresComparacion = ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
-    var mostrarJardinero = false;
-    var anguloP = 45;
-    var idAnimacionP = null;
-    var arrastrandoP = false;
+    let graficador = null;
+    let enModoComparacion = false;
+    let datosComparacionElipses = null;
+    const coloresComparacion = ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
+    let mostrarJardinero = false;
+    let anguloP = 45;
+    let idAnimacionP = null;
+    let arrastrandoP = false;
 
-    var estado = {
+    const estado = {
         h: 0,
         k: 0,
         a: 5,
@@ -26,7 +26,7 @@ var UIExplora = (function () {
     };
 
     // Banco completo de 10 ejemplos pedagógicos y astronómicos
-    var ejemplosLibro = [
+    const ejemplosLibro = [
         {
             nombre: 'Ejemplo 1 del libro (Horizontal)',
             h: 2, k: -3, a: 3, b: 2.24, orientacion: 'horizontal',
@@ -78,10 +78,10 @@ var UIExplora = (function () {
             desc: 'Muy alargada (e≈0.967). Vértices lejanos y focos en los extremos.'
         }
     ];
-    var indiceEjemplo = 0;
+    let indiceEjemplo = 0;
 
     function inicializar() {
-        var canvas = document.getElementById('canvasExplora');
+        const canvas = document.getElementById('canvasExplora');
         if (!canvas) return;
 
         graficador = new Graficador(canvas, { fijaEscala: true, rangoFijo: 12 });
@@ -93,8 +93,8 @@ var UIExplora = (function () {
         enlazarControl('sliderB', 'b');
 
         // Botones de orientación
-        var btnHoriz = document.getElementById('btnOrientacionH');
-        var btnVert = document.getElementById('btnOrientacionV');
+        const btnHoriz = document.getElementById('btnOrientacionH');
+        const btnVert = document.getElementById('btnOrientacionV');
 
         if (btnHoriz && btnVert) {
             btnHoriz.addEventListener('click', function () {
@@ -115,9 +115,9 @@ var UIExplora = (function () {
         }
 
         // Toggles de elementos gráficos
-        var toggles = ['chkCentro', 'chkFocos', 'chkVertices', 'chkExtremos', 'chkEjeFocal', 'chkLadoRecto'];
+        const toggles = ['chkCentro', 'chkFocos', 'chkVertices', 'chkExtremos', 'chkEjeFocal', 'chkLadoRecto'];
         toggles.forEach(function (id) {
-            var el = document.getElementById(id);
+            const el = document.getElementById(id);
             if (el) {
                 el.addEventListener('change', function () {
                     if (enModoComparacion && datosComparacionElipses) {
@@ -130,13 +130,13 @@ var UIExplora = (function () {
         });
 
         // Botón Comparar
-        var btnComp = document.getElementById('btnCompararExplora');
+        const btnComp = document.getElementById('btnCompararExplora');
         if (btnComp) {
             btnComp.addEventListener('click', ejecutarComparacion);
         }
 
         // Botón Salir de Comparación
-        var btnSalirComp = document.getElementById('btnSalirComparacion');
+        const btnSalirComp = document.getElementById('btnSalirComparacion');
         if (btnSalirComp) {
             btnSalirComp.addEventListener('click', function () {
                 salirModoComparacion(true);
@@ -144,17 +144,23 @@ var UIExplora = (function () {
         }
 
         // Botón Probar Ejemplo
-        var btnEjemplo = document.getElementById('btnEjemploExplora');
+        const btnEjemplo = document.getElementById('btnEjemploExplora');
         if (btnEjemplo) {
             btnEjemplo.addEventListener('click', cargarSiguienteEjemplo);
         }
 
+        // Botón Restablecer Valores Iniciales
+        const btnReset = document.getElementById('btnResetExplora');
+        if (btnReset) {
+            btnReset.addEventListener('click', restablecer);
+        }
+
         // Selector desplegable de ejemplos guiados
-        var selEjemplos = document.getElementById('selectEjemplosExplora');
+        const selEjemplos = document.getElementById('selectEjemplosExplora');
         if (selEjemplos) {
             selEjemplos.innerHTML = '';
             ejemplosLibro.forEach(function (ej, idx) {
-                var opt = document.createElement('option');
+                const opt = document.createElement('option');
                 opt.value = idx;
                 opt.textContent = (idx + 1) + '. ' + ej.nombre;
                 selEjemplos.appendChild(opt);
@@ -165,11 +171,11 @@ var UIExplora = (function () {
         }
 
         // Hilo del jardinero (d1 + d2 = 2a)
-        var chkJardinero = document.getElementById('chkJardinero');
-        var controlesJardinero = document.getElementById('controlesJardinero');
-        var sliderAnguloP = document.getElementById('sliderAnguloP');
-        var valAnguloP = document.getElementById('valAnguloP');
-        var btnAnimarP = document.getElementById('btnAnimarP');
+        const chkJardinero = document.getElementById('chkJardinero');
+        const controlesJardinero = document.getElementById('controlesJardinero');
+        const sliderAnguloP = document.getElementById('sliderAnguloP');
+        const valAnguloP = document.getElementById('valAnguloP');
+        const btnAnimarP = document.getElementById('btnAnimarP');
 
         if (chkJardinero) {
             chkJardinero.addEventListener('change', function () {
@@ -236,8 +242,8 @@ var UIExplora = (function () {
     }
 
     function enlazarControl(idSlider, propiedad) {
-        var slider = document.getElementById(idSlider);
-        var badge = document.getElementById('val' + propiedad.toUpperCase());
+        const slider = document.getElementById(idSlider);
+        const badge = document.getElementById('val' + propiedad.toUpperCase());
         if (!slider) return;
 
         slider.addEventListener('input', function () {
@@ -245,7 +251,7 @@ var UIExplora = (function () {
                 salirModoComparacion(false);
             }
 
-            var val = parseFloat(slider.value);
+            const val = parseFloat(slider.value);
             estado[propiedad] = val;
 
             // Regla pedagógica: b nunca puede superar a a
@@ -255,9 +261,9 @@ var UIExplora = (function () {
                 mostrarMensajeMati('¡Ojo! "b" no puede ser mayor que "a". Cuando a = b la elipse se convierte en una circunferencia 😊');
             } else if (propiedad === 'a' && estado.a < estado.b) {
                 estado.b = estado.a;
-                var sliderB = document.getElementById('sliderB');
+                const sliderB = document.getElementById('sliderB');
                 if (sliderB) sliderB.value = estado.a;
-                var badgeB = document.getElementById('valB');
+                const badgeB = document.getElementById('valB');
                 if (badgeB) badgeB.textContent = estado.a;
             }
 
@@ -273,13 +279,13 @@ var UIExplora = (function () {
 
         // Actualizar badges y sliders físicamente en pantalla
         ['h', 'k', 'a', 'b'].forEach(function (prop) {
-            var badge = document.getElementById('val' + prop.toUpperCase());
-            var slider = document.getElementById('slider' + prop.toUpperCase());
+            const badge = document.getElementById('val' + prop.toUpperCase());
+            const slider = document.getElementById('slider' + prop.toUpperCase());
             if (badge) badge.textContent = Number(estado[prop].toFixed(2));
             if (slider && document.activeElement !== slider) slider.value = estado[prop];
         });
 
-        var res = Elipse.crearElipse({
+        const res = Elipse.crearElipse({
             h: estado.h,
             k: estado.k,
             a: estado.a,
@@ -293,7 +299,7 @@ var UIExplora = (function () {
         }
 
         // Renderizar ecuación canónica
-        var elEcuacion = document.getElementById('ecuacionExplora');
+        const elEcuacion = document.getElementById('ecuacionExplora');
         if (elEcuacion) elEcuacion.textContent = res.ecuacion;
 
         // Renderizar propiedades
@@ -320,33 +326,33 @@ var UIExplora = (function () {
         actualizarMedidor(res);
 
         // Ocultar banner y tabla de comparación si estaban visibles
-        var bannerComp = document.getElementById('bannerModoComparacion');
+        const bannerComp = document.getElementById('bannerModoComparacion');
         if (bannerComp) bannerComp.style.display = 'none';
 
-        var contComp = document.getElementById('contenedorComparacion');
+        const contComp = document.getElementById('contenedorComparacion');
         if (contComp) contComp.style.display = 'none';
 
         actualizarGrafica(res);
     }
 
     function llenarPropiedad(id, texto) {
-        var el = document.getElementById(id);
+        const el = document.getElementById(id);
         if (el) el.textContent = texto;
     }
 
     function actualizarMedidor(res) {
-        var barra = document.getElementById('barraAchatamiento');
-        var textoVal = document.getElementById('valorExcentricidad');
-        var textoDiag = document.getElementById('diagnosticoAchatamiento');
+        const barra = document.getElementById('barraAchatamiento');
+        const textoVal = document.getElementById('valorExcentricidad');
+        const textoDiag = document.getElementById('diagnosticoAchatamiento');
 
-        var e = res.excentricidad;
-        var porcentaje = Math.min(Math.max(e * 100, 0), 100);
+        const e = res.excentricidad;
+        const porcentaje = Math.min(Math.max(e * 100, 0), 100);
 
         if (barra) barra.style.width = porcentaje + '%';
         if (textoVal) textoVal.textContent = 'e = ' + e.toFixed(4);
 
-        var diagnostico = '';
-        var colorFondo = '';
+        let diagnostico = '';
+        let colorFondo = '';
 
         if (res.esCircunferencia || e < 0.05) {
             diagnostico = '¡Es una circunferencia perfecta! (e = 0, c = 0)';
@@ -373,7 +379,7 @@ var UIExplora = (function () {
     }
 
     function obtenerToggles() {
-        var toggles = {
+        const toggles = {
             mostrarCentro: document.getElementById('chkCentro') ? document.getElementById('chkCentro').checked : true,
             mostrarFocos: document.getElementById('chkFocos') ? document.getElementById('chkFocos').checked : true,
             mostrarVertices: document.getElementById('chkVertices') ? document.getElementById('chkVertices').checked : true,
@@ -383,14 +389,14 @@ var UIExplora = (function () {
         };
 
         if (mostrarJardinero && !enModoComparacion) {
-            var elipseActual = Elipse.crearElipse({
+            const elipseActual = Elipse.crearElipse({
                 h: estado.h,
                 k: estado.k,
                 a: estado.a,
                 b: estado.b,
                 orientacion: estado.orientacion
             });
-            var P = Elipse.puntoEnElipse(elipseActual, anguloP);
+            const P = Elipse.puntoEnElipse(elipseActual, anguloP);
             toggles.puntoP = P;
             actualizarLecturaJardinero(elipseActual, P);
         }
@@ -399,9 +405,9 @@ var UIExplora = (function () {
     }
 
     function actualizarLecturaJardinero(elipse, P) {
-        var elLectura = document.getElementById('lecturaJardinero');
+        const elLectura = document.getElementById('lecturaJardinero');
         if (!elLectura || !elipse || !P) return;
-        var dist = Elipse.distanciasFocales(elipse, P);
+        const dist = Elipse.distanciasFocales(elipse, P);
         if (!dist.ok) return;
 
         elLectura.innerHTML = 
@@ -415,21 +421,21 @@ var UIExplora = (function () {
 
     function moverPAHacia(e) {
         if (!graficador) return;
-        var cart = graficador.pixelACartesiano(e);
+        const cart = graficador.pixelACartesiano(e);
         if (!cart) return;
-        var dx = cart.x - estado.h;
-        var dy = cart.y - estado.k;
-        var tRad;
+        const dx = cart.x - estado.h;
+        const dy = cart.y - estado.k;
+        let tRad;
         if (estado.orientacion === 'horizontal') {
             tRad = Math.atan2(dy / estado.b, dx / estado.a);
         } else {
             tRad = Math.atan2(dy / estado.a, dx / estado.b);
         }
-        var g = (tRad * 180 / Math.PI);
+        let g = (tRad * 180 / Math.PI);
         if (g < 0) g += 360;
         anguloP = Math.round(g);
-        var sliderAnguloP = document.getElementById('sliderAnguloP');
-        var valAnguloP = document.getElementById('valAnguloP');
+        const sliderAnguloP = document.getElementById('sliderAnguloP');
+        const valAnguloP = document.getElementById('valAnguloP');
         if (sliderAnguloP) sliderAnguloP.value = anguloP;
         if (valAnguloP) valAnguloP.textContent = anguloP + '°';
         actualizarGrafica();
@@ -438,8 +444,8 @@ var UIExplora = (function () {
     function animarRecorrido() {
         if (!mostrarJardinero) return;
         anguloP = (anguloP + 1) % 360;
-        var sliderAnguloP = document.getElementById('sliderAnguloP');
-        var valAnguloP = document.getElementById('valAnguloP');
+        const sliderAnguloP = document.getElementById('sliderAnguloP');
+        const valAnguloP = document.getElementById('valAnguloP');
         if (sliderAnguloP) sliderAnguloP.value = anguloP;
         if (valAnguloP) valAnguloP.textContent = anguloP + '°';
         actualizarGrafica();
@@ -461,14 +467,14 @@ var UIExplora = (function () {
     }
 
     function sincronizarControlesConEstado() {
-        var sH = document.getElementById('sliderH');
-        var sK = document.getElementById('sliderK');
-        var sA = document.getElementById('sliderA');
-        var sB = document.getElementById('sliderB');
-        var vH = document.getElementById('valH');
-        var vK = document.getElementById('valK');
-        var vA = document.getElementById('valA');
-        var vB = document.getElementById('valB');
+        const sH = document.getElementById('sliderH');
+        const sK = document.getElementById('sliderK');
+        const sA = document.getElementById('sliderA');
+        const sB = document.getElementById('sliderB');
+        const vH = document.getElementById('valH');
+        const vK = document.getElementById('valK');
+        const vA = document.getElementById('valA');
+        const vB = document.getElementById('valB');
 
         if (sH) sH.value = estado.h;
         if (sK) sK.value = estado.k;
@@ -480,8 +486,8 @@ var UIExplora = (function () {
         if (vA) vA.textContent = Number(estado.a.toFixed(2));
         if (vB) vB.textContent = Number(estado.b.toFixed(2));
 
-        var btnHoriz = document.getElementById('btnOrientacionH');
-        var btnVert = document.getElementById('btnOrientacionV');
+        const btnHoriz = document.getElementById('btnOrientacionH');
+        const btnVert = document.getElementById('btnOrientacionV');
         if (btnHoriz && btnVert) {
             if (estado.orientacion === 'horizontal') {
                 btnHoriz.classList.add('seleccionado');
@@ -502,14 +508,14 @@ var UIExplora = (function () {
         estado.orientacion = 'horizontal';
         sincronizarControlesConEstado();
 
-        var vA = document.getElementById('valA');
-        var vB = document.getElementById('valB');
+        const vA = document.getElementById('valA');
+        const vB = document.getElementById('valB');
         if (vA) vA.textContent = '4 (fijo)';
         if (vB) vB.textContent = 'Varía';
 
-        var valorE = document.getElementById('valorExcentricidadExplora');
-        var formaE = document.getElementById('formaExcentricidadExplora');
-        var barraE = document.getElementById('barraExcentricidadExplora');
+        const valorE = document.getElementById('valorExcentricidadExplora');
+        const formaE = document.getElementById('formaExcentricidadExplora');
+        const barraE = document.getElementById('barraExcentricidadExplora');
         if (valorE) valorE.textContent = 'e: 0.50 → 0.94';
         if (formaE) formaE.textContent = '4 elipses superpuestas';
         if (barraE) {
@@ -517,12 +523,12 @@ var UIExplora = (function () {
             barraE.style.background = 'linear-gradient(90deg, #2563eb, #10b981, #f59e0b, #ef4444)';
         }
 
-        var a2 = 16;
-        var listaB2 = [12, 9, 6, 2];
-        var listaElipses = [];
+        const a2 = 16;
+        const listaB2 = [12, 9, 6, 2];
+        const listaElipses = [];
 
         listaB2.forEach(function (b2) {
-            var el = Elipse.crearElipse({
+            const el = Elipse.crearElipse({
                 h: 0,
                 k: 0,
                 a: 4,
@@ -535,11 +541,11 @@ var UIExplora = (function () {
         datosComparacionElipses = listaElipses;
 
         // Mostrar banner de modo comparación
-        var bannerComp = document.getElementById('bannerModoComparacion');
+        const bannerComp = document.getElementById('bannerModoComparacion');
         if (bannerComp) bannerComp.style.display = 'flex';
 
         // Actualizar caja de ecuación con leyenda de colores y botón de salida
-        var elEcuacion = document.getElementById('ecuacionExplora');
+        const elEcuacion = document.getElementById('ecuacionExplora');
         if (elEcuacion) {
             elEcuacion.innerHTML = 
                 '<div style="display: flex; flex-direction: column; gap: 8px; text-align: left;">' +
@@ -555,7 +561,7 @@ var UIExplora = (function () {
                     '</div>' +
                 '</div>';
 
-            var btnSalirCaja = document.getElementById('btnSalirComparacionEnCaja');
+            const btnSalirCaja = document.getElementById('btnSalirComparacionEnCaja');
             if (btnSalirCaja) {
                 btnSalirCaja.addEventListener('click', function () {
                     salirModoComparacion(true);
@@ -567,13 +573,13 @@ var UIExplora = (function () {
             graficador.dibujarComparacion(listaElipses, coloresComparacion, obtenerToggles());
         }
 
-        var contComp = document.getElementById('contenedorComparacion');
-        var cuerpoTabla = document.getElementById('cuerpoTablaComparacion');
+        const contComp = document.getElementById('contenedorComparacion');
+        const cuerpoTabla = document.getElementById('cuerpoTablaComparacion');
         if (contComp && cuerpoTabla) {
             cuerpoTabla.innerHTML = '';
-            var compData = Elipse.compararExcentricidad(a2, listaB2);
+            const compData = Elipse.compararExcentricidad(a2, listaB2);
             compData.comparaciones.forEach(function (c, idx) {
-                var fila = document.createElement('tr');
+                const fila = document.createElement('tr');
                 fila.innerHTML = '<td><span class="punto-color" style="background:' + coloresComparacion[idx] + '"></span>' + (idx + 1) + '</td>' +
                                  '<td>16</td>' +
                                  '<td>' + c.b2 + '</td>' +
@@ -592,10 +598,10 @@ var UIExplora = (function () {
         if (!enModoComparacion) return;
         enModoComparacion = false;
 
-        var bannerComp = document.getElementById('bannerModoComparacion');
+        const bannerComp = document.getElementById('bannerModoComparacion');
         if (bannerComp) bannerComp.style.display = 'none';
 
-        var contComp = document.getElementById('contenedorComparacion');
+        const contComp = document.getElementById('contenedorComparacion');
         if (contComp) contComp.style.display = 'none';
 
         sincronizarControlesConEstado();
@@ -612,7 +618,7 @@ var UIExplora = (function () {
         if (idx < 0 || idx >= ejemplosLibro.length) return;
         indiceEjemplo = idx;
 
-        var ej = ejemplosLibro[idx];
+        const ej = ejemplosLibro[idx];
         estado.h = ej.h;
         estado.k = ej.k;
         estado.a = ej.a;
@@ -621,7 +627,7 @@ var UIExplora = (function () {
 
         sincronizarControlesConEstado();
 
-        var sel = document.getElementById('selectEjemplosExplora');
+        const sel = document.getElementById('selectEjemplosExplora');
         if (sel) sel.value = idx;
 
         actualizar();
@@ -629,12 +635,26 @@ var UIExplora = (function () {
     }
 
     function cargarSiguienteEjemplo() {
-        var prox = (indiceEjemplo + 1) % ejemplosLibro.length;
+        const prox = (indiceEjemplo + 1) % ejemplosLibro.length;
         cargarEjemploPorIndice(prox);
     }
 
+    function restablecer() {
+        if (enModoComparacion) {
+            salirModoComparacion(false);
+        }
+        estado.h = 0;
+        estado.k = 0;
+        estado.a = 5;
+        estado.b = 3;
+        estado.orientacion = 'horizontal';
+        sincronizarControlesConEstado();
+        actualizar();
+        mostrarMensajeMati('Se restableció la elipse a sus parámetros iniciales (Centro en (0,0), a=5, b=3). ¡Explora libremente! 🔄');
+    }
+
     function mostrarMensajeMati(msg) {
-        var globo = document.getElementById('globoMatiExplora');
+        const globo = document.getElementById('globoMatiExplora');
         if (globo) globo.textContent = msg;
     }
 
@@ -642,6 +662,9 @@ var UIExplora = (function () {
         inicializar: inicializar,
         actualizar: actualizar,
         redibujar: actualizar,
-        cargarEjemploPorIndice: cargarEjemploPorIndice
+        cargarEjemploPorIndice: cargarEjemploPorIndice,
+        restablecer: restablecer
     };
 })();
+
+if (typeof self !== 'undefined') self.UIExplora = UIExplora;
