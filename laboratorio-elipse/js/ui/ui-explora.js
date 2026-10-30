@@ -268,6 +268,10 @@ const UIExplora = (function () {
             }
 
             if (badge) badge.textContent = Number(estado[propiedad].toFixed(2));
+            if (slider.setAttribute) {
+                slider.setAttribute('aria-valuenow', estado[propiedad]);
+                slider.setAttribute('aria-valuetext', String(Number(estado[propiedad].toFixed(2))));
+            }
             actualizar();
         });
     }
@@ -476,10 +480,34 @@ const UIExplora = (function () {
         const vA = document.getElementById('valA');
         const vB = document.getElementById('valB');
 
-        if (sH) sH.value = estado.h;
-        if (sK) sK.value = estado.k;
-        if (sA) sA.value = estado.a;
-        if (sB) sB.value = estado.b;
+        if (sH) {
+            sH.value = estado.h;
+            if (sH.setAttribute) {
+                sH.setAttribute('aria-valuenow', estado.h);
+                sH.setAttribute('aria-valuetext', String(Number(estado.h.toFixed(2))));
+            }
+        }
+        if (sK) {
+            sK.value = estado.k;
+            if (sK.setAttribute) {
+                sK.setAttribute('aria-valuenow', estado.k);
+                sK.setAttribute('aria-valuetext', String(Number(estado.k.toFixed(2))));
+            }
+        }
+        if (sA) {
+            sA.value = estado.a;
+            if (sA.setAttribute) {
+                sA.setAttribute('aria-valuenow', estado.a);
+                sA.setAttribute('aria-valuetext', String(Number(estado.a.toFixed(2))));
+            }
+        }
+        if (sB) {
+            sB.value = estado.b;
+            if (sB.setAttribute) {
+                sB.setAttribute('aria-valuenow', estado.b);
+                sB.setAttribute('aria-valuetext', String(Number(estado.b.toFixed(2))));
+            }
+        }
 
         if (vH) vH.textContent = Number(estado.h.toFixed(2));
         if (vK) vK.textContent = Number(estado.k.toFixed(2));

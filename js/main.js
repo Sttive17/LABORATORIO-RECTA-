@@ -131,7 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const contenedor = document.getElementById('capaEstrellas');
         if (!contenedor) return;
 
-        const numEstrellas = 60;
+        // Optimización DOM: uso de DocumentFragment para 1 solo reflow y reducción de nodos
+        const fragmento = document.createDocumentFragment();
+        const numEstrellas = 28;
         for (let i = 0; i < numEstrellas; i++) {
             const estrella = document.createElement('div');
             estrella.className = 'estrella';
@@ -148,8 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
             estrella.style.animationDelay = retardo + 's';
             estrella.style.animationDuration = duracion + 's';
 
-            contenedor.appendChild(estrella);
+            fragmento.appendChild(estrella);
         }
+        contenedor.appendChild(fragmento);
     }
 
     // ════════════════════════════════════════════════════════════════════════
