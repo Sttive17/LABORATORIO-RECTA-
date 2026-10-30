@@ -9,10 +9,9 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/">
     <meta name="google-site-verification" content="googlec7402ac01baf1102">
-    <!-- Hojas de estilo modulares con version para evitar cache -->
-    <link rel="stylesheet" href="css/base.css?v=10">
-    <link rel="stylesheet" href="css/animaciones.css?v=10">
-    <link rel="stylesheet" href="css/elipse.css?v=10">
+    <!-- Preload del estilo crítico y hoja de estilo consolidada y minificada -->
+    <link rel="preload" href="css/app.min.css?v=12" as="style">
+    <link rel="stylesheet" href="css/app.min.css?v=12">
 </head>
 <body>
 
@@ -940,7 +939,7 @@
             </p>
             
             <div class="contenedor-codigo-qr">
-                <img src="img/qr-code.svg" alt="Código QR para abrir el Laboratorio de la Elipse" width="220" height="220" style="display: block; margin: 0 auto; border-radius: 8px;">
+                <img src="img/qr-code.svg" alt="Código QR para abrir el Laboratorio de la Elipse" width="220" height="220" loading="lazy" decoding="async" style="display: block; margin: 0 auto; border-radius: 8px;">
             </div>
 
             <div class="caja-enlace-qr">
@@ -1024,14 +1023,7 @@
         <p style="margin-top: 6px; font-size: 0.88rem;">Desarrollado con HTML5, CSS3 y JavaScript Puro (Vanilla JS). <a href="pruebas/pruebas.html">Ver suite de pruebas matemáticas</a></p>
     </footer>
 
-    <!-- SCRIPTS MODULARES (Sin CDN ni librerías externas) -->
-    <script src="js/matematicas/formato.js?v=11" defer></script>
-    <script src="js/matematicas/elipse.js?v=11" defer></script>
-    <script src="js/graficador.js?v=11" defer></script>
-    <script src="js/ui/ui-explora.js?v=11" defer></script>
-    <script src="js/ui/ui-analiza.js?v=11" defer></script>
-    <script src="js/ui/ui-arma.js?v=11" defer></script>
-    <script src="js/ui/ui-retos.js?v=11" defer></script>
-    <script src="js/main.js?v=11" defer></script>
+    <!-- SCRIPT CONSOLIDADO Y MINIFICADO (1 sola petición asíncrona, sin bloqueo de renderizado) -->
+    <script src="js/app.min.js?v=12" defer></script>
 </body>
 </html>
