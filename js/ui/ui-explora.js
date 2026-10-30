@@ -12,6 +12,10 @@ var UIExplora = (function () {
     var enModoComparacion = false;
     var datosComparacionElipses = null;
     var coloresComparacion = ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
+    var mostrarJardinero = false;
+    var anguloP = 45;
+    var idAnimacionP = null;
+    var arrastrandoP = false;
 
     var estado = {
         h: 0,
@@ -160,6 +164,74 @@ var UIExplora = (function () {
             });
         }
 
+        // Hilo del jardinero (d1 + d2 = 2a)
+        var chkJardinero = document.getElementById('chkJardinero');
+        var controlesJardinero = document.getElementById('controlesJardinero');
+        var sliderAnguloP = document.getElementById('sliderAnguloP');
+        var valAnguloP = document.getElementById('valAnguloP');
+        var btnAnimarP = document.getElementById('btnAnimarP');
+
+        if (chkJardinero) {
+            chkJardinero.addEventListener('change', function () {
+                mostrarJardinero = chkJardinero.checked;
+                if (controlesJardinero) controlesJardinero.style.display = mostrarJardinero ? 'block' : 'none';
+                if (!mostrarJardinero && idAnimacionP) {
+                    cancelAnimationFrame(idAnimacionP);
+                    idAnimacionP = null;
+                    if (btnAnimarP) btnAnimarP.textContent = '▶ Recorrer la elipse';
+                }
+                actualizar();
+            });
+        }
+
+        if (sliderAnguloP) {
+            sliderAnguloP.addEventListener('input', function () {
+                anguloP = parseFloat(sliderAnguloP.value);
+                if (valAnguloP) valAnguloP.textContent = Math.round(anguloP) + '°';
+                actualizarGrafica();
+            });
+        }
+
+        if (btnAnimarP) {
+            btnAnimarP.addEventListener('click', function () {
+                if (idAnimacionP) {
+                    cancelAnimationFrame(idAnimacionP);
+                    idAnimacionP = null;
+                    btnAnimarP.textContent = '▶ Recorrer la elipse';
+                } else {
+                    btnAnimarP.textContent = '⏸ Pausar recorrido';
+                    animarRecorrido();
+                }
+            });
+        }
+
+        // Arrastre interactivo de P sobre el canvas
+        canvas.addEventListener('mousedown', function (e) {
+            if (!mostrarJardinero) return;
+            arrastrandoP = true;
+            moverPAHacia(e);
+        });
+        window.addEventListener('mousemove', function (e) {
+            if (!arrastrandoP || !mostrarJardinero) return;
+            moverPAHacia(e);
+        });
+        window.addEventListener('mouseup', function () {
+            arrastrandoP = false;
+        });
+
+        canvas.addEventListener('touchstart', function (e) {
+            if (!mostrarJardinero || !e.touches || !e.touches[0]) return;
+            arrastrandoP = true;
+            moverPAHacia(e.touches[0]);
+        }, { passive: true });
+        canvas.addEventListener('touchmove', function (e) {
+            if (!arrastrandoP || !mostrarJardinero || !e.touches || !e.touches[0]) return;
+            moverPAHacia(e.touches[0]);
+        }, { passive: true });
+        canvas.addEventListener('touchend', function () {
+            arrastrandoP = false;
+        });
+
         actualizar();
     }
 
@@ -301,7 +373,7 @@ var UIExplora = (function () {
     }
 
     function obtenerToggles() {
-        return {
+        var toggles = {
             mostrarCentro: document.getElementById('chkCentro') ? document.getElementById('chkCentro').checked : true,
             mostrarFocos: document.getElementById('chkFocos') ? document.getElementById('chkFocos').checked : true,
             mostrarVertices: document.getElementById('chkVertices') ? document.getElementById('chkVertices').checked : true,
@@ -309,6 +381,69 @@ var UIExplora = (function () {
             mostrarEjeFocal: document.getElementById('chkEjeFocal') ? document.getElementById('chkEjeFocal').checked : true,
             mostrarLadoRecto: document.getElementById('chkLadoRecto') ? document.getElementById('chkLadoRecto').checked : true
         };
+
+        if (mostrarJardinero && !enModoComparacion) {
+            var elipseActual = Elipse.crearElipse({
+                h: estado.h,
+                k: estado.k,
+                a: estado.a,
+                b: estado.b,
+                orientacion: estado.orientacion
+            });
+            var P = Elipse.puntoEnElipse(elipseActual, anguloP);
+            toggles.puntoP = P;
+            actualizarLecturaJardinero(elipseActual, P);
+        }
+
+        return toggles;
+    }
+
+    function actualizarLecturaJardinero(elipse, P) {
+        var elLectura = document.getElementById('lecturaJardinero');
+        if (!elLectura || !elipse || !P) return;
+        var dist = Elipse.distanciasFocales(elipse, P);
+        if (!dist.ok) return;
+
+        elLectura.innerHTML = 
+            '<span class="badge-d1">d₁ = ' + dist.d1.toFixed(2) + '</span> ' +
+            '<span style="color: #cbd5e1; font-weight: 800;">+</span> ' +
+            '<span class="badge-d2">d₂ = ' + dist.d2.toFixed(2) + '</span> ' +
+            '<span style="color: #cbd5e1; font-weight: 800;">=</span> ' +
+            '<span class="badge-suma">d₁ + d₂ = ' + dist.suma.toFixed(2) + '</span> ' +
+            '<span style="color: #38bdf8; font-weight: 800;">(2a = ' + dist.dosA.toFixed(2) + ')</span>';
+    }
+
+    function moverPAHacia(e) {
+        if (!graficador) return;
+        var cart = graficador.pixelACartesiano(e);
+        if (!cart) return;
+        var dx = cart.x - estado.h;
+        var dy = cart.y - estado.k;
+        var tRad;
+        if (estado.orientacion === 'horizontal') {
+            tRad = Math.atan2(dy / estado.b, dx / estado.a);
+        } else {
+            tRad = Math.atan2(dy / estado.a, dx / estado.b);
+        }
+        var g = (tRad * 180 / Math.PI);
+        if (g < 0) g += 360;
+        anguloP = Math.round(g);
+        var sliderAnguloP = document.getElementById('sliderAnguloP');
+        var valAnguloP = document.getElementById('valAnguloP');
+        if (sliderAnguloP) sliderAnguloP.value = anguloP;
+        if (valAnguloP) valAnguloP.textContent = anguloP + '°';
+        actualizarGrafica();
+    }
+
+    function animarRecorrido() {
+        if (!mostrarJardinero) return;
+        anguloP = (anguloP + 1) % 360;
+        var sliderAnguloP = document.getElementById('sliderAnguloP');
+        var valAnguloP = document.getElementById('valAnguloP');
+        if (sliderAnguloP) sliderAnguloP.value = anguloP;
+        if (valAnguloP) valAnguloP.textContent = anguloP + '°';
+        actualizarGrafica();
+        idAnimacionP = requestAnimationFrame(animarRecorrido);
     }
 
     function actualizarGrafica(res) {
@@ -325,8 +460,63 @@ var UIExplora = (function () {
         graficador.dibujar(res, obtenerToggles());
     }
 
+    function sincronizarControlesConEstado() {
+        var sH = document.getElementById('sliderH');
+        var sK = document.getElementById('sliderK');
+        var sA = document.getElementById('sliderA');
+        var sB = document.getElementById('sliderB');
+        var vH = document.getElementById('valH');
+        var vK = document.getElementById('valK');
+        var vA = document.getElementById('valA');
+        var vB = document.getElementById('valB');
+
+        if (sH) sH.value = estado.h;
+        if (sK) sK.value = estado.k;
+        if (sA) sA.value = estado.a;
+        if (sB) sB.value = estado.b;
+
+        if (vH) vH.textContent = Number(estado.h.toFixed(2));
+        if (vK) vK.textContent = Number(estado.k.toFixed(2));
+        if (vA) vA.textContent = Number(estado.a.toFixed(2));
+        if (vB) vB.textContent = Number(estado.b.toFixed(2));
+
+        var btnHoriz = document.getElementById('btnOrientacionH');
+        var btnVert = document.getElementById('btnOrientacionV');
+        if (btnHoriz && btnVert) {
+            if (estado.orientacion === 'horizontal') {
+                btnHoriz.classList.add('seleccionado');
+                btnVert.classList.remove('seleccionado');
+            } else {
+                btnVert.classList.add('seleccionado');
+                btnHoriz.classList.remove('seleccionado');
+            }
+        }
+    }
+
     function ejecutarComparacion() {
         enModoComparacion = true;
+        estado.h = 0;
+        estado.k = 0;
+        estado.a = 4;
+        estado.b = 3.46;
+        estado.orientacion = 'horizontal';
+        sincronizarControlesConEstado();
+
+        var vA = document.getElementById('valA');
+        var vB = document.getElementById('valB');
+        if (vA) vA.textContent = '4 (fijo)';
+        if (vB) vB.textContent = 'Varía';
+
+        var valorE = document.getElementById('valorExcentricidadExplora');
+        var formaE = document.getElementById('formaExcentricidadExplora');
+        var barraE = document.getElementById('barraExcentricidadExplora');
+        if (valorE) valorE.textContent = 'e: 0.50 → 0.94';
+        if (formaE) formaE.textContent = '4 elipses superpuestas';
+        if (barraE) {
+            barraE.style.width = '75%';
+            barraE.style.background = 'linear-gradient(90deg, #2563eb, #10b981, #f59e0b, #ef4444)';
+        }
+
         var a2 = 16;
         var listaB2 = [12, 9, 6, 2];
         var listaElipses = [];
@@ -358,10 +548,10 @@ var UIExplora = (function () {
                         '<button id="btnSalirComparacionEnCaja" class="btn" style="padding: 4px 12px; font-size: 0.82rem; background: #0284c7; color: white; border: none; border-radius: 6px; cursor: pointer;">✕ Volver a mi elipse</button>' +
                     '</div>' +
                     '<div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; font-size: 0.84rem; font-family: system-ui, sans-serif;">' +
-                        '<span style="background: rgba(37,99,235,0.2); border: 1px solid #2563eb; color: #93c5fd; padding: 4px 10px; border-radius: 6px;">🔵 b²=12 → e=0.50 (Ovalada)</span>' +
-                        '<span style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 4px 10px; border-radius: 6px;">🟢 b²=9 → e=0.66 (Achatada)</span>' +
-                        '<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fcd34d; padding: 4px 10px; border-radius: 6px;">🟠 b²=6 → e=0.79 (Bien achatada)</span>' +
-                        '<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 4px 10px; border-radius: 6px;">🔴 b²=2 → e=0.94 (Casi plana)</span>' +
+                        '<span style="background: rgba(37,99,235,0.25); border: 1.5px solid #2563eb; color: #93c5fd; padding: 4px 10px; border-radius: 6px; font-weight: 600;">🔵 b²=12 → e=0.50 (Ovalada)</span>' +
+                        '<span style="background: rgba(16,185,129,0.25); border: 1.5px solid #10b981; color: #6ee7b7; padding: 4px 10px; border-radius: 6px; font-weight: 600;">🟢 b²=9 → e=0.66 (Achatada)</span>' +
+                        '<span style="background: rgba(245,158,11,0.25); border: 1.5px solid #f59e0b; color: #fcd34d; padding: 4px 10px; border-radius: 6px; font-weight: 600;">🟠 b²=6 → e=0.79 (Alargada)</span>' +
+                        '<span style="background: rgba(239,68,68,0.25); border: 1.5px solid #ef4444; color: #fca5a5; padding: 4px 10px; border-radius: 6px; font-weight: 600;">🔴 b²=2 → e=0.94 (Casi plana)</span>' +
                     '</div>' +
                 '</div>';
 
@@ -395,7 +585,7 @@ var UIExplora = (function () {
             contComp.style.display = 'block';
         }
 
-        mostrarMensajeMati('¡Compara cómo al disminuir b² (el semieje menor), los focos se alejan del centro y la elipse se aplasta más y más! 🔬');
+        mostrarMensajeMati('¡Compara cómo al disminuir b² (el semieje menor), los focos se alejan del centro hacia los vértices y la elipse se aplasta más y más! 🔬');
     }
 
     function salirModoComparacion(notificar) {
@@ -408,6 +598,7 @@ var UIExplora = (function () {
         var contComp = document.getElementById('contenedorComparacion');
         if (contComp) contComp.style.display = 'none';
 
+        sincronizarControlesConEstado();
         actualizar();
         if (notificar !== false) {
             mostrarMensajeMati('Regresaste a tu elipse interactiva individual. ¡Mueve los controles para seguir explorando! 🔭');
@@ -428,22 +619,7 @@ var UIExplora = (function () {
         estado.b = ej.b;
         estado.orientacion = ej.orientacion;
 
-        var btnHoriz = document.getElementById('btnOrientacionH');
-        var btnVert = document.getElementById('btnOrientacionV');
-        if (btnHoriz && btnVert) {
-            if (ej.orientacion === 'horizontal') {
-                btnHoriz.classList.add('seleccionado');
-                btnVert.classList.remove('seleccionado');
-            } else {
-                btnVert.classList.add('seleccionado');
-                btnHoriz.classList.remove('seleccionado');
-            }
-        }
-
-        var sH = document.getElementById('sliderH'); if (sH) sH.value = ej.h;
-        var sK = document.getElementById('sliderK'); if (sK) sK.value = ej.k;
-        var sA = document.getElementById('sliderA'); if (sA) sA.value = ej.a;
-        var sB = document.getElementById('sliderB'); if (sB) sB.value = ej.b;
+        sincronizarControlesConEstado();
 
         var sel = document.getElementById('selectEjemplosExplora');
         if (sel) sel.value = idx;

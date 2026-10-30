@@ -417,6 +417,68 @@
         if (config.mostrarCentro && elipse.centro) {
             this.dibujarPunto(elipse.centro.x, elipse.centro.y, 'C', config.colorCentro, lim, { dx: 10, dy: 10 });
         }
+
+        // 8. Hilo del jardinero: segmentos F'P y FP (definición d1 + d2 = 2a)
+        if (config.puntoP && elipse.focos) {
+            this.dibujarHiloJardinero(elipse, config.puntoP, lim);
+        }
+
+        this.ultimoLim = lim;
+    };
+
+    /**
+     * Dibuja los segmentos elásticos desde cada foco hasta el punto P de la curva,
+     * rotulando sus longitudes d1 y d2.
+     */
+    Graficador.prototype.dibujarHiloJardinero = function (elipse, P, lim) {
+        var ctx = this.ctx;
+        var pp = this.aPixel(P.x, P.y, lim);
+        var focos = elipse.focos;
+        var colores = ['#db2777', '#7c3aed'];
+        var etiquetas = ['d₁', 'd₂'];
+
+        for (var i = 0; i < 2; i++) {
+            var pf = this.aPixel(focos[i].x, focos[i].y, lim);
+            ctx.save();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = colores[i];
+            ctx.beginPath();
+            ctx.moveTo(pf.x, pf.y);
+            ctx.lineTo(pp.x, pp.y);
+            ctx.stroke();
+
+            // Rótulo en el punto medio del segmento
+            var mx = (pf.x + pp.x) / 2;
+            var my = (pf.y + pp.y) / 2;
+            ctx.font = 'bold 13px sans-serif';
+            var w = ctx.measureText(etiquetas[i]).width;
+            ctx.fillStyle = colores[i];
+            ctx.fillRect(mx - w / 2 - 4, my - 10, w + 8, 18);
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(etiquetas[i], mx, my - 1);
+            ctx.restore();
+        }
+
+        this.dibujarPunto(P.x, P.y, 'P', '#111827', lim, { dx: 10, dy: -12 });
+    };
+
+    /**
+     * Convierte un evento de puntero a coordenadas cartesianas usando la última escala dibujada.
+     * @returns {{x: number, y: number}|null}
+     */
+    Graficador.prototype.pixelACartesiano = function (evento) {
+        if (!this.ultimoLim) return null;
+        var rect = this.canvas.getBoundingClientRect();
+        if (!rect.width || !rect.height) return null;
+        var lim = this.ultimoLim;
+        var px = (evento.clientX - rect.left) / rect.width;
+        var py = (evento.clientY - rect.top) / rect.height;
+        return {
+            x: lim.minX + px * (lim.maxX - lim.minX),
+            y: lim.maxY - py * (lim.maxY - lim.minY)
+        };
     };
 
     /**
@@ -462,10 +524,59 @@
             ctx.restore();
         }.bind(this));
 
+        // Dibujar Vértices comunes fijos en (+-4, 0)
+        if (config.mostrarVertices) {
+            this.dibujarPunto(4, 0, 'A(4,0)', '#a855f7', lim, { dx: 8, dy: -8 });
+            this.dibujarPunto(-4, 0, "A'(-4,0)", '#a855f7', lim, { dx: -48, dy: -8 });
+        }
+
         // Dibujar Centro común en (0, 0)
         if (config.mostrarCentro) {
-            this.dibujarPunto(0, 0, 'C(0,0)', '#f59e0b', lim, { dx: 10, dy: 10 });
+            this.dibujarPunto(0, 0, 'C(0,0)', '#f59e0b', lim, { dx: 8, dy: 14 });
         }
+
+        // Cartela de Leyenda interactiva en la esquina superior del canvas
+        ctx.save();
+        var legW = 185;
+        var legH = 104;
+        var legX = this.ancho - legW - 14;
+        var legY = 14;
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+        ctx.lineWidth = 1.2;
+
+        ctx.beginPath();
+        if (typeof ctx.roundRect === 'function') {
+            ctx.roundRect(legX, legY, legW, legH, 8);
+        } else {
+            ctx.rect(legX, legY, legW, legH);
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 11px system-ui, sans-serif';
+        ctx.fillText('Experimento: a² = 16 fijo', legX + 10, legY + 18);
+
+        var textosLeyenda = [
+            { txt: 'b²=12 → e=0.50 (Ovalada)', col: colores[0] },
+            { txt: 'b²=9  → e=0.66 (Achatada)', col: colores[1] },
+            { txt: 'b²=6  → e=0.79 (Alargada)', col: colores[2] },
+            { txt: 'b²=2  → e=0.94 (Casi plana)', col: colores[3] }
+        ];
+
+        ctx.font = '10.5px system-ui, sans-serif';
+        textosLeyenda.forEach(function (item, i) {
+            ctx.fillStyle = item.col;
+            ctx.beginPath();
+            ctx.arc(legX + 16, legY + 36 + i * 16, 4.5, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillText(item.txt, legX + 26, legY + 40 + i * 16);
+        });
+        ctx.restore();
+
+        this.ultimoLim = lim;
     };
 
     return Graficador;

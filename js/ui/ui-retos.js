@@ -32,6 +32,9 @@ var UIRetos = (function () {
         var btnReiniciar = document.getElementById('btnReiniciarRetos');
         if (btnReiniciar) btnReiniciar.addEventListener('click', iniciarJuego);
 
+        var btnDiploma = document.getElementById('btnDescargarDiploma');
+        if (btnDiploma) btnDiploma.addEventListener('click', descargarDiploma);
+
         var inputResp = document.getElementById('inputRespuestaReto');
         if (inputResp) {
             inputResp.addEventListener('keyup', function (e) {
@@ -314,6 +317,95 @@ var UIRetos = (function () {
     function mostrarMensajeMati(msg) {
         var globo = document.getElementById('globoMatiRetos');
         if (globo) globo.textContent = msg;
+    }
+
+    function descargarDiploma() {
+        var inputNombre = document.getElementById('inputNombreDiploma');
+        var nombre = (inputNombre && inputNombre.value.trim()) ? inputNombre.value.trim() : 'Visitante Distinguido de la Feria STEAM+';
+        
+        var canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 800;
+        var ctx = canvas.getContext('2d');
+
+        // Fondo degradado elegante
+        var grad = ctx.createRadialGradient(600, 400, 100, 600, 400, 700);
+        grad.addColorStop(0, '#1e293b');
+        grad.addColorStop(1, '#0a0f1d');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 1200, 800);
+
+        // Marco dorado de honor
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(40, 40, 1120, 720);
+
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(52, 52, 1096, 696);
+
+        // Esquinas decorativas
+        var esquinas = [[60, 60], [1140, 60], [60, 740], [1140, 740]];
+        esquinas.forEach(function (eq) {
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath(); ctx.arc(eq[0], eq[1], 8, 0, Math.PI * 2); ctx.fill();
+        });
+
+        // Encabezados
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText('FERIA STEAM+ 2026 · GRADO DÉCIMO', 600, 110);
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = '800 42px sans-serif';
+        ctx.fillText('🏆 DIPLOMA DE EXCELENCIA MATEMÁTICA 🏆', 600, 175);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '22px sans-serif';
+        ctx.fillText('El Laboratorio Matemático Interactivo de la Elipse certifica que:', 600, 240);
+
+        // Nombre del evaluador / estudiante
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 46px sans-serif';
+        ctx.fillText(nombre, 600, 320);
+
+        // Línea dorada bajo el nombre
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(350, 345);
+        ctx.lineTo(850, 345);
+        ctx.stroke();
+
+        // Texto de mérito
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '22px sans-serif';
+        ctx.fillText('Ha completado la ronda de retos demostrando un dominio superior en Secciones Cónicas,', 600, 410);
+        ctx.fillText('Geometría Analítica, deducción de ecuaciones canónicas y análisis gráfico.', 600, 445);
+
+        // Puntaje de estrellas
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 36px sans-serif';
+        ctx.fillText('Puntaje Obtenido: ' + estrellas + ' de ' + totalRonda + ' Estrellas ⭐', 600, 520);
+
+        // Firmas de las autoras
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillText('Valeria Hinestroza · Salomé Jiménez · Gabriela Muñoz', 600, 630);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '16px sans-serif';
+        ctx.fillText('Comité Estudiantil de Desarrollo STEAM+ 2026 · Tecnología e Informática y Matemáticas', 600, 665);
+
+        // Descarga automática en PNG
+        var a = document.createElement('a');
+        var nombreLimpio = nombre.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+        a.download = 'Diploma-STEAM-Elipse-' + (nombreLimpio || 'participante') + '.png';
+        a.href = canvas.toDataURL('image/png');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
 
     function redibujar() {

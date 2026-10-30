@@ -482,6 +482,42 @@
     }
 
     /**
+     * Punto P(x, y) sobre la elipse para un ángulo paramétrico t (en grados).
+     * Horizontal: x = h + a·cos t, y = k + b·sen t. Vertical: x = h + b·cos t, y = k + a·sen t.
+     * @param {Object} elipse
+     * @param {number} grados
+     * @returns {{x: number, y: number}|null}
+     */
+    function puntoEnElipse(elipse, grados) {
+        if (!elipse || !elipse.ok || !esNumeroValido(grados)) return null;
+        var t = (grados * Math.PI) / 180;
+        var esHorizontal = elipse.orientacion === 'horizontal';
+        return {
+            x: elipse.centro.x + (esHorizontal ? elipse.a : elipse.b) * Math.cos(t),
+            y: elipse.centro.y + (esHorizontal ? elipse.b : elipse.a) * Math.sin(t)
+        };
+    }
+
+    /**
+     * Definición geométrica de la elipse: d(P, F') + d(P, F) = 2a.
+     * Calcula las dos distancias focales de un punto P y su suma.
+     * @param {Object} elipse
+     * @param {{x: number, y: number}} punto
+     * @returns {{ok: boolean, d1?: number, d2?: number, suma?: number, dosA?: number, error?: string}}
+     */
+    function distanciasFocales(elipse, punto) {
+        if (!elipse || !elipse.ok) return { ok: false, error: 'Elipse no válida.' };
+        if (!punto || !esNumeroValido(punto.x) || !esNumeroValido(punto.y)) {
+            return { ok: false, error: 'El punto P debe tener coordenadas numéricas.' };
+        }
+        var F1 = elipse.focos[0];
+        var F2 = elipse.focos[1];
+        var d1 = Math.sqrt(Math.pow(punto.x - F1.x, 2) + Math.pow(punto.y - F1.y, 2));
+        var d2 = Math.sqrt(Math.pow(punto.x - F2.x, 2) + Math.pow(punto.y - F2.y, 2));
+        return { ok: true, d1: d1, d2: d2, suma: d1 + d2, dosA: 2 * elipse.a };
+    }
+
+    /**
      * Compara excentricidades fijando a² y variando b².
      * @param {number} a2
      * @param {number[]} listaB2
@@ -532,6 +568,8 @@
         desdeVerticesYExtremoMenor: desdeVerticesYExtremoMenor,
         construirDesdeVerticesYExtremoMenor: desdeVerticesYExtremoMenor,
         puntosParaDibujar: puntosParaDibujar,
+        puntoEnElipse: puntoEnElipse,
+        distanciasFocales: distanciasFocales,
         compararExcentricidad: compararExcentricidad
     };
 }));

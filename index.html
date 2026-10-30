@@ -21,6 +21,9 @@
             <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
                 👩‍🔬 Valeria · Salomé · Gabriela
             </span>
+            <button id="btnAbrirQR" class="btn-volver-menu" title="Escanear Código QR en Celular">📱 QR</button>
+            <button id="btnPantallaCompleta" class="btn-volver-menu" title="Modo Pantalla Completa (F11)">⛶ Pantalla Completa</button>
+            <button id="btnAbrirDocs" class="btn-volver-menu" title="Documentación oficial y Ficha Técnica">📖 Documentación</button>
             <a href="pruebas/pruebas.html" class="btn-volver-menu" title="Ejecutar pruebas unitarias matemáticas">🧪 Pruebas</a>
             <button class="btn-volver-menu" onclick="navegarA('menu')">📋 Menú</button>
         </div>
@@ -301,10 +304,29 @@
                             <label class="item-toggle"><input type="checkbox" id="chkLadoRecto" checked> 📐 Lado Recto</label>
                         </div>
 
+                        <!-- Definición geométrica: hilo del jardinero d1 + d2 = 2a -->
+                        <div class="panel-jardinero">
+                            <label class="item-toggle toggle-jardinero">
+                                <input type="checkbox" id="chkJardinero"> 🧵 Mostrar hilo del jardinero: d₁ + d₂ = 2a
+                            </label>
+                            <div id="controlesJardinero" style="display: none;">
+                                <div class="fila-control">
+                                    <span class="etiqueta-control">Mover el punto P (ángulo t):</span>
+                                    <span class="valor-badge" id="valAnguloP">45°</span>
+                                </div>
+                                <input type="range" id="sliderAnguloP" min="0" max="360" step="1" value="45" aria-label="Ángulo del punto P sobre la elipse">
+                                <button id="btnAnimarP" class="btn btn-secundario" type="button">▶ Recorrer la elipse</button>
+                                <div class="lectura-jardinero" id="lecturaJardinero" aria-live="polite"></div>
+                                <p class="nota-jardinero">💡 También puedes arrastrar el punto P sobre la gráfica. Sin importar dónde esté P, la suma de las dos distancias a los focos siempre es 2a.</p>
+                            </div>
+                        </div>
+
                         <!-- Canvas -->
                         <div class="canvas-contenedor">
                             <canvas id="canvasExplora" width="500" height="500"></canvas>
                         </div>
+
+                        <button class="btn btn-secundario btn-descargar-png" type="button" data-canvas="canvasExplora" data-ecuacion="ecuacionExplora" data-nombre="elipse-explora">📷 Descargar gráfica (PNG)</button>
 
                         <!-- Ecuación en vivo -->
                         <div class="ecuacion-destacada" id="ecuacionExplora" style="margin-bottom: 0;">
@@ -507,6 +529,7 @@
                         <div class="canvas-contenedor">
                             <canvas id="canvasAnaliza" width="500" height="500"></canvas>
                         </div>
+                        <button class="btn btn-secundario btn-descargar-png" type="button" data-canvas="canvasAnaliza" data-ecuacion="ecuacionAnaliza" data-nombre="elipse-analiza">📷 Descargar gráfica (PNG)</button>
                     </div>
                 </div>
             </div>
@@ -614,17 +637,17 @@
 
                         <!-- Selector de 3 modalidades -->
                         <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
+                            <label class="opcion-radio-card">
                                 <input type="radio" name="tipoDatosArma" value="a" checked>
-                                a) Centro, longitud del eje mayor, longitud del eje menor y orientación.
+                                <span><strong style="color: #38bdf8;">a)</strong> Centro, longitud del eje mayor, longitud del eje menor y orientación.</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
+                            <label class="opcion-radio-card">
                                 <input type="radio" name="tipoDatosArma" value="b">
-                                b) Los dos vértices del eje mayor y la longitud del lado recto.
+                                <span><strong style="color: #38bdf8;">b)</strong> Los dos vértices del eje mayor y la longitud del lado recto.</span>
                             </label>
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem;">
+                            <label class="opcion-radio-card">
                                 <input type="radio" name="tipoDatosArma" value="c">
-                                c) Los dos vértices del eje mayor y un extremo del eje menor.
+                                <span><strong style="color: #38bdf8;">c)</strong> Los dos vértices del eje mayor y un extremo del eje menor.</span>
                             </label>
                         </div>
 
@@ -741,6 +764,7 @@
                         <div class="canvas-contenedor">
                             <canvas id="canvasArma" width="500" height="500"></canvas>
                         </div>
+                        <button class="btn btn-secundario btn-descargar-png" type="button" data-canvas="canvasArma" data-ecuacion="ecuacionArma" data-nombre="elipse-armada">📷 Descargar gráfica (PNG)</button>
                     </div>
                 </div>
             </div>
@@ -860,6 +884,18 @@
                 <h2 style="color: #ffffff; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800;">¡Ronda de Retos Completada!</h2>
                 <div id="estrellasFinales" style="font-size: clamp(1.8rem, 4vw, 2.5rem); margin: 16px 0; color: #f59e0b;"></div>
                 <p id="mensajeFinalMati" style="font-size: clamp(1rem, 2.5vw, 1.2rem); color: #cbd5e1; line-height: 1.5; margin-bottom: 24px; font-weight: 600;"></p>
+                
+                <!-- Generador de Diploma Oficial STEAM+ para el evaluador/visitante -->
+                <div style="margin: 20px auto 24px auto; max-width: 460px; background: rgba(15, 23, 42, 0.7); border: 1.5px solid var(--color-borde-destacado); border-radius: 14px; padding: 18px; text-align: center;">
+                    <label for="inputNombreDiploma" style="display: block; font-weight: 700; color: #38bdf8; margin-bottom: 8px; font-size: 0.95rem;">
+                        🎓 ¿Quién realizó los retos? (Nombre para el Diploma):
+                    </label>
+                    <input type="text" id="inputNombreDiploma" placeholder="Escribe tu nombre o el del jurado..." style="text-align: center; font-weight: 700; margin-bottom: 12px; font-size: 1rem;">
+                    <button id="btnDescargarDiploma" class="btn btn-ejemplo" type="button" style="width: 100%; justify-content: center; font-size: 0.95rem;">
+                        🏆 Descargar Diploma Oficial STEAM+ (PNG)
+                    </button>
+                </div>
+
                 <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
                     <button id="btnReiniciarRetos" class="btn btn-primario">🔄 Jugar otra ronda</button>
                     <button class="btn btn-volver-menu">🏠 Volver al menú</button>
@@ -868,6 +904,69 @@
         </section>
 
     </main>
+
+    <!-- ════════════════════════════════════════════════════════
+         MODAL 1: CÓDIGO QR PARA EL JURADO Y VISITANTES EN LA FERIA
+    ════════════════════════════════════════════════════════ -->
+    <div id="modalQR" class="modal-superpuesto" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tituloModalQR">
+        <div class="modal-contenido modal-qr-tarjeta">
+            <button class="btn-cerrar-modal" id="btnCerrarQR" aria-label="Cerrar modal">&times;</button>
+            <div style="font-size: 2.2rem; margin-bottom: 6px;">📱</div>
+            <h3 id="tituloModalQR" style="color: #ffffff; font-size: 1.35rem; font-weight: 800; margin-bottom: 6px;">
+                ¡Pruébalo en tu Celular!
+            </h3>
+            <p style="color: #94a3b8; font-size: 0.92rem; line-height: 1.5; margin-bottom: 16px;">
+                Escanea este código con la cámara de tu teléfono para abrir el <strong>Laboratorio de la Elipse</strong> y probarlo en vivo en tu propio dispositivo.
+            </p>
+            
+            <div class="contenedor-codigo-qr">
+                <img src="img/qr-code.svg" alt="Código QR para abrir el Laboratorio de la Elipse" width="220" height="220" style="display: block; margin: 0 auto; border-radius: 8px;">
+            </div>
+
+            <div class="caja-enlace-qr">
+                <input type="text" id="inputUrlQR" value="https://duranmgabriela05-cloud.github.io/LABORATORIO-RECTA-/" readonly>
+                <button id="btnCopiarEnlaceQR" class="btn btn-primario" type="button" title="Copiar enlace al portapapeles">📋 Copiar</button>
+            </div>
+            
+            <p style="color: #38bdf8; font-size: 0.85rem; font-weight: 600; margin-top: 14px;">
+                ✨ Diseñado por Valeria Hinestroza, Salomé Jiménez y Gabriela Muñoz · Grado 10°
+            </p>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MODAL 2: CENTRO DE DOCUMENTACIÓN OFICIAL Y FICHA TÉCNICA
+    ════════════════════════════════════════════════════════ -->
+    <div id="modalDocs" class="modal-superpuesto" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tituloModalDocs">
+        <div class="modal-contenido modal-docs-tarjeta">
+            <button class="btn-cerrar-modal" id="btnCerrarDocs" aria-label="Cerrar modal">&times;</button>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                <span style="font-size: 1.8rem;">📖</span>
+                <div>
+                    <h3 id="tituloModalDocs" style="color: #ffffff; font-size: 1.25rem; font-weight: 800; margin: 0;">
+                        Documentación Oficial del Proyecto
+                    </h3>
+                    <p style="color: #94a3b8; font-size: 0.86rem; margin: 2px 0 0 0;">
+                        Evidencias y Ficha Técnica según la Rúbrica de la Feria STEAM+ 2026
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pestañas de navegación interna de la documentación -->
+            <div class="tabs-documentacion">
+                <button class="tab-doc activa" data-tab="docFicha">📋 Ficha Técnica</button>
+                <button class="tab-doc" data-tab="docManual">📖 Manual de Uso</button>
+                <button class="tab-doc" data-tab="docAlgoritmo">💻 Pseudocódigo</button>
+                <button class="tab-doc" data-tab="docPruebas">🧪 Tabla de Pruebas (111/111)</button>
+                <button class="tab-doc" data-tab="docSustentacion">🗣️ Guion Sustentación</button>
+            </div>
+
+            <!-- Contenidos de las pestañas -->
+            <div class="cuerpo-documentacion" id="cuerpoDocumentacion">
+                <!-- Se inyecta dinámicamente con JS según la pestaña activa -->
+            </div>
+        </div>
+    </div>
 
     <!-- PIE DE PÁGINA ELEGANTE CON CHIPS DE INTEGRANTES -->
     <footer>

@@ -210,6 +210,23 @@ probar('simplificarRaiz(75) -> "5√3"', Formato.simplificarRaiz(75), '5√3');
 probar('simplificarRaiz(12) -> "2√3"', Formato.simplificarRaiz(12), '2√3');
 probar('simplificarRaiz(4) -> "2"', Formato.simplificarRaiz(4), '2');
 
+// 16. Definición geométrica: d(P,F') + d(P,F) = 2a para cualquier punto P de la elipse
+console.log('\n--- Caso 16: Propiedad focal d1 + d2 = 2a (hilo del jardinero) ---');
+var elHilo = Elipse.crearElipse({ h: 1, k: -3, a: 3, b: Math.sqrt(5), orientacion: 'horizontal' });
+[0, 45, 90, 137, 180, 270, 333].forEach(function (g) {
+    var P = Elipse.puntoEnElipse(elHilo, g);
+    probar('Horizontal t=' + g + '° -> d1 + d2 = 2a = 6', Elipse.distanciasFocales(elHilo, P).suma, 6);
+});
+var elHiloV = Elipse.crearElipse({ h: -2, k: 5, a: 5, b: 4, orientacion: 'vertical' });
+[30, 90, 210].forEach(function (g) {
+    var P = Elipse.puntoEnElipse(elHiloV, g);
+    probar('Vertical t=' + g + '° -> d1 + d2 = 2a = 10', Elipse.distanciasFocales(elHiloV, P).suma, 10);
+});
+var Pv = Elipse.puntoEnElipse(elHilo, 0);
+probar('Vértice A(4,-3): d1 = a + c = 5', Elipse.distanciasFocales(elHilo, Pv).d1, 5);
+probar('Vértice A(4,-3): d2 = a - c = 1', Elipse.distanciasFocales(elHilo, Pv).d2, 1);
+probar('Punto inválido -> ok:false', Elipse.distanciasFocales(elHilo, { x: 'a', y: 0 }).ok, false);
+
 console.log('\n======================================================');
 console.log('📊 RESUMEN: ' + pruebasPasadas + ' superadas, ' + pruebasFalladas + ' falladas de ' + totalPruebas + ' pruebas.');
 console.log('======================================================\n');
