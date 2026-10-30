@@ -376,23 +376,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         '<tr><td style="padding: 5px;">Caso 16</td><td>Hilo del Jardinero d₁ + d₂ = 2a constante</td><td>Invariante para θ = 0°, 45°, 90°, 180°</td><td style="color:#4ade80; text-align:center;">✅ Aprobado</td></tr>' +
                     '</tbody>' +
                 '</table>' +
-            '</div>',
-
-        docSustentacion:
-            '<div style="display: flex; flex-direction: column; gap: 14px;">' +
-                '<h4 style="color: #38bdf8; margin: 0 0 6px 0;">🗣️ Guion de Sustentación para las Estudiantes (3 Minutos)</h4>' +
-                '<div style="background: rgba(15, 23, 42, 0.6); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 8px;">' +
-                    '<strong style="color: #38bdf8;">Minuto 1: Introducción y Planteamiento (Valeria Hinestroza)</strong>' +
-                    '<p style="color: #cbd5e1; font-size: 0.88rem; margin: 4px 0 0 0;">"Buenos días, jurado evaluador. Nuestro proyecto es el Laboratorio Interactivo de la Elipse. Como estudiantes de grado décimo, notamos que visualizar la transición entre la ecuación general de segundo grado y sus propiedades focales suele ser abstracto. Por eso creamos una plataforma 100% construida desde cero en código puro, sin librerías externas ni GeoGebra embebido, que permite experimentar la geometría analítica en tiempo real."</p>' +
-                '</div>' +
-                '<div style="background: rgba(15, 23, 42, 0.6); border-left: 3px solid #10b981; padding: 10px 14px; border-radius: 8px;">' +
-                    '<strong style="color: #10b981;">Minuto 2: Demostración Interactiva en Vivo (Salomé Jiménez)</strong>' +
-                    '<p style="color: #cbd5e1; font-size: 0.88rem; margin: 4px 0 0 0;">"Observen aquí la definición geométrica fundamental: el Hilo del Jardinero. Al mover el punto P a lo largo de la curva, las distancias a los focos d₁ y d₂ varían, pero su suma siempre permanece constante e igual a 2a. Además, en el Modo Comparación demostramos el experimento de la página 195: manteniendo a²=16 fijo y variando b², vemos cómo la elipse pasa de ser casi circular hasta aplastarse como la órbita de un cometa."</p>' +
-                '</div>' +
-                '<div style="background: rgba(15, 23, 42, 0.6); border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 8px;">' +
-                    '<strong style="color: #f59e0b;">Minuto 3: Rigor Matemático y Software (Gabriela Muñoz)</strong>' +
-                    '<p style="color: #cbd5e1; font-size: 0.88rem; margin: 4px 0 0 0;">"En el módulo Analiza implementamos el algoritmo exacto de completación de cuadrados, identificando si la ecuación es real, un punto o imaginaria. Nuestro software cuenta con una suite automatizada de 111 pruebas unitarias aprobadas al 100%, renderizado en alta definición HiDPI y un sistema de Retos gamificado con diplomas descargables. Los invitamos a escanear el código QR en pantalla y probarlo en sus teléfonos."</p>' +
-                '</div>' +
             '</div>'
     };
 
