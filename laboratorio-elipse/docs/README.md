@@ -38,9 +38,9 @@ La aplicación está diseñada pensando en los niños y jóvenes que visitan la 
 
 ### Modo Pruebas Automatizadas (Consola / Node.js):
 ```bash
-node laboratorio-elipse/pruebas/pruebas.js
+node pruebas/pruebas.js
 ```
-* Ejecuta 98 aserciones unitarias cubriendo los ejemplos del libro, ejercicios complementarios, fracciones, radicales y casos límite.
+* Ejecuta 111 aserciones unitarias cubriendo los ejemplos del libro, ejercicios complementarios, fracciones, radicales, invariantes y la propiedad focal del jardinero.
 
 ### Modo Pruebas Visuales (Navegador):
-* Abrir `laboratorio-elipse/pruebas/pruebas.html` en el navegador para ver el informe gráfico de pruebas.
+* Abrir `pruebas/pruebas.html` en el navegador para ver el informe gráfico de pruebas.
