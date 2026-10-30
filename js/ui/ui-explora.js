@@ -228,13 +228,18 @@ const UIExplora = (function () {
         canvas.addEventListener('touchstart', function (e) {
             if (!mostrarJardinero || !e.touches || !e.touches[0]) return;
             arrastrandoP = true;
+            if (e.cancelable) e.preventDefault();
             moverPAHacia(e.touches[0]);
-        }, { passive: true });
+        }, { passive: false });
         canvas.addEventListener('touchmove', function (e) {
             if (!arrastrandoP || !mostrarJardinero || !e.touches || !e.touches[0]) return;
+            if (e.cancelable) e.preventDefault();
             moverPAHacia(e.touches[0]);
-        }, { passive: true });
+        }, { passive: false });
         canvas.addEventListener('touchend', function () {
+            arrastrandoP = false;
+        });
+        canvas.addEventListener('touchcancel', function () {
             arrastrandoP = false;
         });
 

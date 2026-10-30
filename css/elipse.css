@@ -47,9 +47,26 @@
     width: 100%;
 }
 
+@media (min-width: 1024px) {
+    .layout-actividad {
+        grid-template-columns: minmax(360px, 1fr) minmax(440px, 1.25fr);
+        gap: 24px;
+        align-items: start;
+    }
+    .columna-grafica {
+        position: sticky;
+        top: 80px;
+        z-index: 10;
+    }
+}
+
 @media (max-width: 920px) {
     .layout-actividad {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .columna-grafica {
+        position: static;
     }
 }
 
@@ -297,7 +314,15 @@ canvas {
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-    touch-action: manipulation;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@media (min-width: 1024px) {
+    canvas {
+        max-width: 580px;
+    }
 }
 
 /* Toolbar de casillas */
@@ -600,10 +625,32 @@ select.campo-error {
     box-shadow: var(--sombra-tarjeta);
 }
 
-.tarjeta-menu:hover {
-    transform: translateY(-4px);
+.tarjeta-menu:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
     border-color: #38bdf8;
-    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25);
+}
+
+@media (max-width: 640px) {
+    .cuadricula-menu {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .tarjeta-menu {
+        min-height: 85px;
+        padding: 20px;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .tarjeta-menu:hover {
+        transform: translateY(-4px);
+        border-color: #38bdf8;
+        box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25);
+    }
+    .tarjeta-menu:hover .icono-tarjeta {
+        transform: scale(1.1);
+    }
 }
 
 .icono-tarjeta {
@@ -690,6 +737,38 @@ select.campo-error {
 .modal-docs-tarjeta {
     max-width: 880px;
     text-align: left;
+}
+
+@media (max-width: 640px) {
+    .modal-superpuesto {
+        padding: 0;
+        align-items: stretch;
+    }
+    .modal-contenido {
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+        padding: 24px 16px;
+        display: flex;
+        flex-direction: column;
+    }
+    .modal-docs-tarjeta {
+        max-width: 100%;
+    }
+    .cuerpo-documentacion {
+        max-height: none;
+        flex: 1;
+    }
+    .btn-cerrar-modal {
+        top: 12px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.4rem;
+    }
 }
 
 .btn-cerrar-modal {

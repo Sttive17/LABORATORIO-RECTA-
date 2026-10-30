@@ -23,14 +23,14 @@
             <span class="insignia-steam">FERIA STEAM+</span>
         </button>
         <div class="nav-botones">
-            <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+            <span class="chip-nav-autoras">
                 👩‍🔬 Valeria · Salomé · Gabriela
             </span>
-            <button id="btnAbrirQR" class="btn-volver-menu" title="Escanear Código QR en Celular">📱 QR</button>
-            <button id="btnPantallaCompleta" class="btn-volver-menu" title="Modo Pantalla Completa (F11)">⛶ Pantalla Completa</button>
-            <button id="btnAbrirDocs" class="btn-volver-menu" title="Documentación oficial y Ficha Técnica">📖 Documentación</button>
-            <a href="pruebas/pruebas.html" class="btn-volver-menu" title="Ejecutar pruebas unitarias matemáticas">🧪 Pruebas</a>
-            <button class="btn-volver-menu" onclick="navegarA('menu')">📋 Menú</button>
+            <button type="button" id="btnAbrirQR" class="btn-volver-menu" title="Escanear Código QR en Celular" aria-label="Escanear Código QR en Celular">📱 <span class="btn-texto-nav">QR</span></button>
+            <button type="button" id="btnPantallaCompleta" class="btn-volver-menu" title="Modo Pantalla Completa (F11)" aria-label="Modo Pantalla Completa">⛶ <span class="btn-texto-nav">Pantalla Completa</span></button>
+            <button type="button" id="btnAbrirDocs" class="btn-volver-menu" title="Documentación oficial y Ficha Técnica" aria-label="Documentación Oficial">📖 <span class="btn-texto-nav">Documentación</span></button>
+            <a href="pruebas/pruebas.html" class="btn-volver-menu" title="Ejecutar pruebas unitarias matemáticas" aria-label="Suite de pruebas unitarias">🧪 <span class="btn-texto-nav">Pruebas</span></a>
+            <button type="button" class="btn-volver-menu" onclick="navegarA('menu')" aria-label="Ir al menú de actividades">📋 <span class="btn-texto-nav">Menú</span></button>
         </div>
     </header>
 
